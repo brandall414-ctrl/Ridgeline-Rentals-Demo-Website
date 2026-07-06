@@ -68,8 +68,8 @@ small, .text-small { font-size: 0.9375rem; }
   font-family: var(--font-head);
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: 0.86rem;
+  font-weight: 800;
   color: var(--color-canyon);
 }
 
