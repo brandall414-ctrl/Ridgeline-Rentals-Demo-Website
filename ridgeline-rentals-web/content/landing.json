@@ -1,19 +1,19 @@
 {
   "hero": {
     "kicker": "ASHLEY GORGE VIA FERRATA · VERNAL, UTAH",
-    "headline": "Get Your Gear When and Where You Want It.",
-    "subhead": "Self-serve via ferrata rentals in a locker steps from the trailhead. No shop stops. No detours. Just show up and climb.",
+    "headline": "Show up. Gear Up. Climb.",
+    "subhead": "Self-serve via ferrata rentals in a locker steps from the trailhead. No shop stops. No detours. Just grab your gear and go!",
     "primaryCTA": "Get Notified When We Open",
     "secondaryCTA": "See Rates & Info"
   },
   "whatIsViaFerrata": {
     "heading": "What is a Via Ferrata?",
-    "body": "Via ferrata — Italian for 'iron path' — is a protected climbing route featuring steel cables, iron rungs, and suspension bridges bolted into the rock. It lets everyday adventurers experience real vertical terrain in relative safety, using a specialized harness and lanyard system that clips to a continuous cable line as you climb. You don't need to be a technical climber — just fit, unafraid of heights, and equipped with the right gear.",
+    "body": "Via ferrata — Italian for 'iron path' — is a protected climbing route featuring steel cables, iron rungs, and suspension bridges bolted into the rock. It lets everyday adventurers experience real vertical terrain in relative safety, using a specialized harness and lanyard system that clips to a steel cable line as you climb. You don't need to be a technical climber, just fit, unafraid of heights, and equipped with the right gear.",
     "callout": "Ashley Gorge is set to be the longest public via ferrata in the Western Hemisphere."
   },
   "howItWorks": {
     "heading": "Rentals Right at the Trailhead.",
-    "intro": "Skip the drive to Provo. Skip the shop stop. Our smart lockers live minutes from the iron path.",
+    "intro": "Skip the hassle of driving in and out of town for your gear. Our smart lockers are conveniently located right at the trailhead.",
     "steps": [
       { "number": 1, "title": "Reserve Your Gear", "body": "Pick your kit online in minutes." },
       { "number": 2, "title": "Sign the Waiver", "body": "Ours and Uintah County's — done digitally before you arrive." },
@@ -24,12 +24,12 @@
     "lockerTag": "Coming Season 2026"
   },
   "proTips": {
-    "heading": "Pro Tips for the Iron Path",
+    "heading": "Pro Tips for the Trip",
     "tips": [
       { "icon": "💧", "title": "Hydrate Hard", "body": "Bring at least 2 liters of water per person. There's zero shade on most of the course." },
       { "icon": "👟", "title": "Wear Real Shoes", "body": "Hiking shoes work; approach shoes are better. Grip matters." },
       { "icon": "🧤", "title": "Bring Gloves", "body": "Not required, but the metal gets hot in midday sun — most climbers wish they had them." },
-      { "icon": "⏱️", "title": "Plan Your Day", "body": "The full route runs 2–3 hours moving fast, 7–8 if you're taking your time or the course is busy." },
+      { "icon": "⏱️", "title": "Plan Your Day", "body": "The full route runs 2–3 hours moving fast, 7–8 if you're taking your time or if the course is busy." },
       { "icon": "🥨", "title": "Pack Snacks", "body": "A protein bar or two goes a long way. There's nowhere to buy food nearby." }
     ]
   },
@@ -47,6 +47,6 @@
   },
   "contact": {
     "heading": "Questions? Reach Out.",
-    "body": "We're happy to answer anything about gear, the route, or how our locker system works. Best way to get us is by phone or email."
+    "body": "We're happy to answer anything about gear, the route, or how our locker system works. The best way to get us is by phone or email."
   }
 }
