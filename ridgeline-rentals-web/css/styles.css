@@ -70,7 +70,7 @@ small, .text-small { font-size: 0.9375rem; }
   letter-spacing: 0.14em;
   font-size: 0.86rem;
   font-weight: 800;
-  color: var(--color-cream);
+  color: var(--color-canyon);
 }
 
 /* ---------- Layout helpers ---------- */
@@ -203,7 +203,7 @@ body.nav-open .mobile-nav { transform: translateY(0); }
 /* layered canyon silhouettes behind the text */
 .hero__ridges { position: absolute; inset: auto 0 0 0; z-index: -1; width: 100%; height: auto; opacity: 0.9; }
 .hero__inner { max-width: 46rem; color: var(--color-cream); }
-.hero .kicker { color: var(--color-sunset); text-shadow: 0 1px 14px rgba(0, 0, 0, 0.45); }
+.hero .kicker { color: var(--color-cream); text-shadow: 0 3px 14px rgba(0, 0, 0, 0.45); }
 .hero h1 { color: var(--color-cream); margin: 0.85rem 0 1.1rem; text-shadow: 0 2px 30px rgba(0,0,0,0.35); }
 .hero__subhead { color: rgba(241, 232, 210, 0.92); font-size: clamp(1.05rem, 1.6vw, 1.3rem); max-width: 40rem; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
