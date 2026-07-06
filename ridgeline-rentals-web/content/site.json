@@ -1,0 +1,25 @@
+{
+  "brand": {
+    "name": "Ridgeline Rentals",
+    "tagline": "Self-serve via ferrata gear at the Ashley Gorge trailhead",
+    "parentCompany": "A Randall Ventures LLC brand"
+  },
+  "contact": {
+    "phone": "(208) 473-1751",
+    "phoneLink": "tel:+12084731751",
+    "email": "ridgelinerentalsvernal@gmail.com",
+    "emailLink": "mailto:ridgelinerentalsvernal@gmail.com?subject=Ridgeline%20Rentals%20Inquiry",
+    "notifyLink": "mailto:ridgelinerentalsvernal@gmail.com?subject=Notify%20me%20when%20Ridgeline%20opens",
+    "location": "Ashley Gorge Trailhead · ~12 miles north of Vernal, Utah"
+  },
+  "meta": {
+    "launchLine": "Opening Season 2026",
+    "permitLine": "Operated under BLM Special Recreation Permit (pending approval)",
+    "copyright": "© 2026 Randall Ventures LLC · A Ridgeline Rentals Brand"
+  },
+  "nav": [
+    { "label": "Home", "href": "index.html" },
+    { "label": "Rates & Info", "href": "rates.html" },
+    { "label": "Contact", "href": "index.html#contact" }
+  ]
+}

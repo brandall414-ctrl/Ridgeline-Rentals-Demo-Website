@@ -1,0 +1,87 @@
+{
+  "hero": {
+    "headline": "Gear Rental Rates",
+    "subhead": "Straight pricing. No hidden fees. Just what you need to get on the iron path."
+  },
+  "routeInfo": {
+    "heading": "Know the Route Before You Go",
+    "mapCaption": "Ashley Gorge Via Ferrata — courtesy of Uintah County / AGVF"
+  },
+  "requirements": {
+    "heading": "Climber Requirements",
+    "items": [
+      "Weight: between 90 lbs and 265 lbs",
+      "Height: minimum 62\" vertical reach",
+      "Ability to don a climbing harness without help",
+      "Prior climbing or via ferrata experience strongly recommended",
+      "Signed Ridgeline Rentals waiver + Uintah County waiver",
+      "Completed safety video (required before locker PIN is released)"
+    ],
+    "note": "We highly recommend completing waivers and the safety video ahead of time. It'll save you 15 minutes at the trailhead."
+  },
+  "pricing": {
+    "heading": "What It Costs",
+    "items": [
+      {
+        "id": "kit",
+        "image": "assets/images/gear-full-kit.png",
+        "name": "Full Kit",
+        "description": "Everything you need for one climber — helmet, harness, and lanyard.",
+        "prices": [
+          { "label": "1 Kit", "price": "$45" },
+          { "label": "2 Kits", "originalPrice": "$90", "price": "$80" }
+        ]
+      },
+      {
+        "id": "lanyard",
+        "image": "assets/images/gear-lanyard.png",
+        "name": "Via Ferrata Lanyard Only",
+        "description": "For climbers who bring their own helmet and harness.",
+        "prices": [
+          { "label": "1 Lanyard", "price": "$30" },
+          { "label": "2 Lanyards", "originalPrice": "$60", "price": "$50" }
+        ]
+      },
+      {
+        "id": "helmet",
+        "image": "assets/images/gear-helmet.png",
+        "name": "Helmet Only",
+        "description": "UIAA-certified climbing helmet.",
+        "prices": [
+          { "label": "Helmet", "price": "$12" }
+        ]
+      },
+      {
+        "id": "harness",
+        "image": "assets/images/gear-harness.png",
+        "name": "Harness Only",
+        "description": "UIAA-certified mountaineering harness.",
+        "prices": [
+          { "label": "Harness", "price": "$12" }
+        ]
+      }
+    ]
+  },
+  "protection": {
+    "heading": "Optional Gear Protection",
+    "body": "Rentals include a refundable security deposit hold. If you'd rather skip the hold and climb worry-free, add our Gear Protection option at checkout. It covers accidental damage from falls and normal use of the course. Doesn't cover negligence or unreturned gear.",
+    "items": [
+      { "label": "Gear Protection — Full Kit", "price": "$8" },
+      { "label": "Gear Protection — Lanyard Only", "price": "$5" }
+    ],
+    "finePrint": "Without Gear Protection, a refundable hold is placed on your card at rental: $150 per kit or $60 per lanyard. Maximum hold per transaction is $250. Holds are released on the same day you return your gear. Multiple kits or lanyards? Gear Protection stacks — $16 for two kits, $10 for two lanyards, $15 for three lanyards, and so on."
+  },
+  "documents": {
+    "heading": "Fine Print",
+    "body": "Every renter signs both our rental agreement + liability release and Uintah County's waiver before receiving a locker PIN. Review our documents ahead of time so you know what you're signing.",
+    "downloadLabel": "Download Rental Agreement & Liability Release",
+    "downloadHref": "assets/Ridgeline_Rentals_Rental_Agreement.docx",
+    "countyWaiverLabel": "Uintah County Via Ferrata Waiver →",
+    "countyWaiverHref": "https://www.ashleygorgeviaferrata.com/waiver"
+  },
+  "finalCta": {
+    "heading": "Ready to Climb Ashley Gorge?",
+    "body": "We open for the 2026 season. Leave us your email and we'll let you know the moment lockers go live at the trailhead.",
+    "button": "Get Notified When We Open"
+  }
+}

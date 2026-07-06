@@ -1,0 +1,52 @@
+{
+  "hero": {
+    "kicker": "ASHLEY GORGE VIA FERRATA · VERNAL, UTAH",
+    "headline": "Get Your Gear When and Where You Want It.",
+    "subhead": "Self-serve via ferrata rentals in a locker steps from the trailhead. No shop stops. No detours. Just show up and climb.",
+    "primaryCTA": "Get Notified When We Open",
+    "secondaryCTA": "See Rates & Info"
+  },
+  "whatIsViaFerrata": {
+    "heading": "What is a Via Ferrata?",
+    "body": "Via ferrata — Italian for 'iron path' — is a protected climbing route featuring steel cables, iron rungs, and suspension bridges bolted into the rock. It lets everyday adventurers experience real vertical terrain in relative safety, using a specialized harness and lanyard system that clips to a continuous cable line as you climb. You don't need to be a technical climber — just fit, unafraid of heights, and equipped with the right gear.",
+    "callout": "Ashley Gorge is set to be the longest public via ferrata in the Western Hemisphere."
+  },
+  "howItWorks": {
+    "heading": "Rentals Right at the Trailhead.",
+    "intro": "Skip the drive to Provo. Skip the shop stop. Our smart lockers live minutes from the iron path.",
+    "steps": [
+      { "number": 1, "title": "Reserve Your Gear", "body": "Pick your kit online in minutes." },
+      { "number": 2, "title": "Sign the Waiver", "body": "Ours and Uintah County's — done digitally before you arrive." },
+      { "number": 3, "title": "Watch the Safety Video", "body": "A quick guide to gear use and course hazards." },
+      { "number": 4, "title": "Pay and Grab Your PIN", "body": "The locker opens with your unique code." },
+      { "number": 5, "title": "Climb, Then Return", "body": "Drop the gear back in the locker on your way out." }
+    ],
+    "lockerTag": "Coming Season 2026"
+  },
+  "proTips": {
+    "heading": "Pro Tips for the Iron Path",
+    "tips": [
+      { "icon": "💧", "title": "Hydrate Hard", "body": "Bring at least 2 liters of water per person. There's zero shade on most of the course." },
+      { "icon": "👟", "title": "Wear Real Shoes", "body": "Hiking shoes work; approach shoes are better. Grip matters." },
+      { "icon": "🧤", "title": "Bring Gloves", "body": "Not required, but the metal gets hot in midday sun — most climbers wish they had them." },
+      { "icon": "⏱️", "title": "Plan Your Day", "body": "The full route runs 2–3 hours moving fast, 7–8 if you're taking your time or the course is busy." },
+      { "icon": "🥨", "title": "Pack Snacks", "body": "A protein bar or two goes a long way. There's nowhere to buy food nearby." }
+    ]
+  },
+  "trust": {
+    "heading": "Built Right",
+    "items": [
+      { "title": "UIAA-Certified Gear", "body": "Every helmet, harness, and lanyard meets international climbing safety standards." },
+      { "title": "Fully Waivered", "body": "Ridgeline and Uintah County waivers required for all climbers." },
+      { "title": "BLM Permit Pending", "body": "Operated by Randall Ventures LLC under a Special Recreation Permit (in review)." }
+    ]
+  },
+  "gallery": {
+    "heading": "From the Gorge",
+    "intro": "A look at the terrain, the bridges, and the people who've been out on the iron path."
+  },
+  "contact": {
+    "heading": "Questions? Reach Out.",
+    "body": "We're happy to answer anything about gear, the route, or how our locker system works. Best way to get us is by phone or email."
+  }
+}

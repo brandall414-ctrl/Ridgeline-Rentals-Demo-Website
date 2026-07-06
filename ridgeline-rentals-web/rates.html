@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gear Rental Rates — Ridgeline Rentals · Ashley Gorge Via Ferrata</title>
+  <meta name="description" content="Straight pricing on via ferrata gear rentals at Ashley Gorge: full kits, lanyards, helmets, and harnesses. UIAA-certified gear, optional gear protection, no hidden fees." />
+  <meta name="theme-color" content="#262019" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Gear Rental Rates — Ridgeline Rentals" />
+  <meta property="og:description" content="Straight pricing. No hidden fees. Just what you need to get on the iron path." />
+  <meta property="og:image" content="assets/images/canyon-wide.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-page="rates">
+
+  <!-- ============================ HEADER ============================ -->
+  <header class="site-header" data-header>
+    <div class="site-header__inner">
+      <a class="brand" href="index.html" aria-label="Ridgeline Rentals — home">
+        <img class="brand__logo brand__logo--light" src="assets/images/logo-light.png" alt="Ridgeline Rentals" width="115" height="42" />
+        <img class="brand__logo brand__logo--dark" src="assets/images/logo-dark.png" alt="" aria-hidden="true" width="115" height="42" />
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <ul class="nav__list" data-list="nav"></ul>
+      </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-nav" id="mobile-nav" data-mobile-nav>
+      <ul class="mobile-nav__list" data-list="nav"></ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================ HERO (small) ============================ -->
+    <section class="hero hero--sm" data-hero>
+      <div class="hero__bg" style="background-image: url('assets/images/canyon-wide.jpg');"></div>
+      <div class="hero__overlay"></div>
+      <svg class="hero__ridges" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
+        <path fill="rgba(38,32,25,0.32)" d="M0,220 L0,120 C 200,60 380,150 560,110 C 760,66 900,150 1120,100 C 1280,64 1360,120 1440,96 L1440,220 Z" />
+        <path fill="rgba(38,32,25,0.6)" d="M0,220 L0,162 C 220,122 360,182 600,152 C 820,126 980,184 1200,152 C 1320,134 1400,166 1440,152 L1440,220 Z" />
+      </svg>
+      <div class="container">
+        <div class="hero__inner reveal">
+          <p class="kicker">Gear &amp; Pricing</p>
+          <h1 data-content-key="hero.headline">Gear Rental Rates</h1>
+          <p class="hero__subhead" data-content-key="hero.subhead">Straight pricing. No hidden fees. Just what you need to get on the iron path.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ROUTE + REQUIREMENTS ==================== -->
+    <section class="section" id="route">
+      <div class="container grid-2">
+        <div class="reveal reveal--left">
+          <p class="kicker eyebrow">The Route</p>
+          <h2 data-content-key="routeInfo.heading">Know the Route Before You Go</h2>
+          <figure class="map-figure" style="margin-top:1.25rem">
+            <img src="assets/images/route-map.png" alt="Trail map of the Ashley Gorge Via Ferrata route" loading="lazy" />
+            <figcaption data-content-key="routeInfo.mapCaption">Ashley Gorge Via Ferrata — courtesy of Uintah County / AGVF</figcaption>
+          </figure>
+        </div>
+        <div class="req-card reveal reveal--right">
+          <p class="kicker eyebrow">Are You Ready?</p>
+          <h3 data-content-key="requirements.heading">Climber Requirements</h3>
+          <ul class="req-list" data-list="requirements"></ul>
+          <p class="req-note" data-content-key="requirements.note">We highly recommend completing waivers and the safety video ahead of time. It'll save you 15 minutes at the trailhead.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider" style="background: var(--color-cream);" aria-hidden="true">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path fill="#E8DFC6" d="M0,80 L0,46 C 170,22 330,20 500,42 C 660,63 820,14 1000,34 C 1160,52 1300,28 1440,42 L1440,80 Z" /></svg>
+    </div>
+
+    <!-- ==================== PRICING ==================== -->
+    <section class="section section--tint" id="pricing">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker eyebrow">Rentals</p>
+          <h2 data-content-key="pricing.heading">What It Costs</h2>
+        </div>
+        <div class="pricing-grid" data-pricing data-stagger></div>
+      </div>
+    </section>
+
+    <!-- ==================== GEAR PROTECTION ==================== -->
+    <section class="section" id="protection">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker eyebrow">Peace of Mind</p>
+          <h2 data-content-key="protection.heading">Optional Gear Protection</h2>
+          <p style="margin-top:1rem" data-content-key="protection.body">Rentals include a refundable security deposit hold. If you'd rather skip the hold and climb worry-free, add our Gear Protection option at checkout. It covers accidental damage from falls and normal use of the course. Doesn't cover negligence or unreturned gear.</p>
+        </div>
+        <div class="protection-mini" data-list="protection" data-stagger></div>
+        <p class="fine-print reveal" data-content-key="protection.finePrint">Without Gear Protection, a refundable hold is placed on your card at rental: $150 per kit or $60 per lanyard. Maximum hold per transaction is $250. Holds are released on the same day you return your gear. Multiple kits or lanyards? Gear Protection stacks — $16 for two kits, $10 for two lanyards, $15 for three lanyards, and so on.</p>
+      </div>
+    </section>
+
+    <div class="divider" style="background: var(--color-cream);" aria-hidden="true">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path fill="#E8DFC6" d="M0,80 L0,46 C 170,22 330,20 500,42 C 660,63 820,14 1000,34 C 1160,52 1300,28 1440,42 L1440,80 Z" /></svg>
+    </div>
+
+    <!-- ==================== DOCUMENTS ==================== -->
+    <section class="section section--tint" id="documents">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker eyebrow">Waivers &amp; Agreements</p>
+          <h2 data-content-key="documents.heading">Fine Print</h2>
+          <p style="margin-top:1rem" data-content-key="documents.body">Every renter signs both our rental agreement + liability release and Uintah County's waiver before receiving a locker PIN. Review our documents ahead of time so you know what you're signing.</p>
+        </div>
+        <div class="doc-actions reveal">
+          <a class="btn btn--outline doc-link" data-content-key="documents.downloadLabel" data-content-href="documents.downloadHref" href="assets/Ridgeline_Rentals_Rental_Agreement.docx" download>
+            Download Rental Agreement &amp; Liability Release
+          </a>
+          <a class="doc-link" data-content-key="documents.countyWaiverLabel" data-content-href="documents.countyWaiverHref" href="https://www.ashleygorgeviaferrata.com/waiver" target="_blank" rel="noopener">Uintah County Via Ferrata Waiver →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FINAL CTA ==================== -->
+    <section class="section cta-band">
+      <svg class="cta-band__ridges" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden="true">
+        <path fill="currentColor" d="M0,200 L0,120 C 220,70 380,150 600,110 C 820,74 980,150 1200,110 C 1320,88 1400,120 1440,110 L1440,200 Z" />
+      </svg>
+      <div class="container reveal">
+        <h2 data-content-key="finalCta.heading">Ready to Climb Ashley Gorge?</h2>
+        <p data-content-key="finalCta.body">We open for the 2026 season. Leave us your email and we'll let you know the moment lockers go live at the trailhead.</p>
+        <a class="btn btn--primary" data-content-key="finalCta.button" data-content-href="site.contact.notifyLink" href="mailto:ridgelinerentalsvernal@gmail.com?subject=Notify%20me%20when%20Ridgeline%20opens">Get Notified When We Open</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="site-footer">
+    <div class="footer-ridge" aria-hidden="true">
+      <svg viewBox="0 0 1440 96" preserveAspectRatio="none">
+        <path fill="#3B4A38" opacity="0.9" d="M0,0 L1440,0 L1440,54 C 1300,76 1150,44 980,64 C 820,82 680,48 520,66 C 360,84 220,52 80,70 L0,64 Z" />
+      </svg>
+    </div>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img class="footer-brand__logo" src="assets/images/logo-light.png" alt="Ridgeline Rentals" width="148" height="54" />
+          <p data-content-key="site.brand.tagline">Self-serve via ferrata gear at the Ashley Gorge trailhead</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="rates.html">Rates &amp; Info</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h4>Contact</h4>
+          <ul>
+            <li><span class="label">Phone</span><a data-content-key="site.contact.phone" data-content-href="site.contact.phoneLink" href="tel:+12084731751">(208) 473-1751</a></li>
+            <li><span class="label">Email</span><a data-content-key="site.contact.email" data-content-href="site.contact.emailLink" href="mailto:ridgelinerentalsvernal@gmail.com?subject=Ridgeline%20Rentals%20Inquiry">ridgelinerentalsvernal@gmail.com</a></li>
+            <li><span class="label">Location</span><span data-content-key="site.contact.location">Ashley Gorge Trailhead · ~12 miles north of Vernal, Utah</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span data-content-key="site.meta.copyright">© 2026 Randall Ventures LLC · A Ridgeline Rentals Brand</span>
+        · <span data-content-key="site.meta.permitLine">Operated under BLM Special Recreation Permit (pending approval)</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================ TEMPLATES ============================ -->
+  <template data-tpl="nav">
+    <li class="nav__item"><a class="nav__link" data-field="label" data-field-href="href"></a></li>
+  </template>
+  <template data-tpl="requirements">
+    <li class="req-item reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-4.5"/></svg>
+      <span data-field="."></span>
+    </li>
+  </template>
+  <template data-tpl="protection">
+    <div class="protection-item reveal">
+      <span class="protection-item__label" data-field="label"></span>
+      <span class="protection-item__price" data-field="price"></span>
+    </div>
+  </template>
+  <template data-tpl="price-card">
+    <article class="price-card card reveal">
+      <div class="price-card__media"><img alt="" loading="lazy" /></div>
+      <h3 class="price-card__name" data-field="name"></h3>
+      <p class="price-card__desc" data-field="description"></p>
+      <div class="price-card__prices" data-prices></div>
+    </article>
+  </template>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
