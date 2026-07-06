@@ -70,7 +70,7 @@ small, .text-small { font-size: 0.9375rem; }
   letter-spacing: 0.14em;
   font-size: 0.86rem;
   font-weight: 800;
-  color: var(--color-canyon);
+  color: var(--color-cream);
 }
 
 /* ---------- Layout helpers ---------- */
