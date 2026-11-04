@@ -24,12 +24,12 @@
 <header class="site-header site-header--over">
   <div class="wrap site-header__inner">
     <a class="brand" href="index.html" aria-label="Trailside Rentals home"><svg viewBox="0 0 220 100" role="img" aria-label="Trailside Rentals"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 46 L24 31 L32 35 L48 19 L56 24 L72 9 L81 13"/><path d="M81 13 H111 M81 18 H111 M81 18 L86 13 L91 18 L96 13 L101 18 L106 13 L111 18"/><path d="M111 13 L118 6 L132 20 L142 16 L160 30 L170 26 L189 40 L198 37 L217 46"/></g><text x="110" y="86" text-anchor="middle" font-family="Oswald, Arial Narrow, sans-serif" font-weight="700" font-size="47" letter-spacing="1.2" fill="currentColor">TRAILSIDE</text><text x="111" y="99" text-anchor="middle" font-family="Work Sans, sans-serif" font-weight="600" font-size="10" letter-spacing="5.4" fill="currentColor">RENTALS</text></svg></a>
-    <nav class="nav" aria-label="Primary"><ul><li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="index.html#about">About</a></li><li><a href="agreement.html">Agreement</a></li></ul></nav>
+    <nav class="nav" aria-label="Primary"><ul><li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="index.html#location">Location</a></li><li><a href="agreement.html">Agreement</a></li></ul></nav>
     <a class="btn btn--ink btn--sm header-cta" href="book.html">Book gear</a>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menu"><span></span></button>
   </div>
   <div class="mobile-menu" id="mobile-menu">
-    <ul><li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="index.html#about">About</a></li><li><a href="agreement.html">Agreement</a></li></ul>
+    <ul><li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="index.html#location">Location</a></li><li><a href="agreement.html">Agreement</a></li></ul>
     <a class="btn btn--white" href="book.html" style="width:100%">Book gear</a>
   </div>
 </header>
@@ -98,16 +98,29 @@
     </div>
   </section>
 
-  <section class="bleed bleed--media-left bleed--white about" id="about">
+  <section class="bleed bleed--white location" id="location">
     <div class="bleed__text">
-      <h2 data-reveal>Hi, I'm Ben.</h2>
-      <p class="lede" data-reveal style="--i:1">I own Trailside Rentals. I'm from Boise, Idaho, and I've been climbing for a long time. Via ferratas are newer for me, and the first time I did Ashley Gorge, I loved it.</p>
-      <p data-reveal style="--i:2">Getting the gear was the hard part. Nobody rented early enough for the start we wanted, and picking up meant driving from our campsite back into town and out again. So I thought, why not put the gear right at the trailhead? That's Trailside: certified gear in a locker where the climb starts, ready when you are.</p>
-      <p data-reveal style="--i:3">When I'm not on the rock, I'm mountain biking, skiing or hiking. Pretty much anything outdoors.</p>
-      <div class="about__tags" data-reveal style="--i:4"><span>Climbing</span><span>Mountain biking</span><span>Skiing</span><span>Hiking</span></div>
-      <p class="about__sig" data-reveal style="--i:5">Ben Randall, owner</p>
+      <h2 data-reveal>Right in the parking lot</h2>
+      <p class="lede" data-reveal style="--i:1; margin-top:20px">The lockers sit at the Ashley Gorge trailhead, about 15 minutes north of Vernal. Park, grab your gear and start the approach. No stop in town.</p>
+      <ul class="loc-list" data-reveal style="--i:2">
+        <li><span>Trailhead</span><strong>7810 N Ashley Springs Rd<br>Vernal, UT 84078</strong></li>
+        <li><span>Lockers</span><strong>Trailhead parking lot</strong></li>
+        <li><span>Cell service</span><strong>None at the trailhead. Save directions and your pass before you leave town.</strong></li>
+      </ul>
+      <div class="btn-row" data-reveal style="--i:3; margin-top:28px">
+        <a class="btn btn--ink" href="https://www.google.com/maps/dir/?api=1&amp;destination=40.5689978,-109.6150586" target="_blank" rel="noopener">Get directions</a>
+      </div>
     </div>
-    <div class="bleed__media" data-wipe><img src="assets/photos/ben-randall.jpg" alt="Ben Randall smiling on the iron rungs of the Ashley Gorge via ferrata" loading="lazy" style="object-position:50% 40%" /></div>
+    <div class="bleed__media map">
+      <div class="map__toggle" role="group" aria-label="Map view">
+        <button type="button" data-map="trailhead" aria-pressed="true">Trailhead</button>
+        <button type="button" data-map="vernal" aria-pressed="false">From Vernal</button>
+      </div>
+      <iframe id="map-frame" title="Map of the Ashley Gorge via ferrata trailhead" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://maps.google.com/maps?q=40.5689978,-109.6150586&amp;t=k&amp;z=16&amp;output=embed"
+        data-trailhead="https://maps.google.com/maps?q=40.5689978,-109.6150586&amp;t=k&amp;z=16&amp;output=embed"
+        data-vernal="https://maps.google.com/maps?q=40.5689978,-109.6150586&amp;t=m&amp;z=11&amp;output=embed"></iframe>
+    </div>
   </section>
 
   <section class="section section--ink" id="before-you-go">

@@ -523,3 +523,16 @@ p { margin: 0 0 1em; max-width: 62ch; }
 .summary .step-actions { flex-wrap: nowrap; }
 .summary .step-actions .btn { padding: 0 18px; }
 .summary .step-actions .btn--ink { flex: 1; }
+
+/* ---------- location ---------- */
+.loc-list { list-style: none; margin: 32px 0 0; padding: 0; }
+.loc-list li { display: grid; grid-template-columns: 120px 1fr; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line-strong); }
+.loc-list li:last-child { border-bottom: 1px solid var(--line-strong); }
+.loc-list span { color: var(--muted); font-size: .9rem; }
+.loc-list strong { color: var(--ink); font-weight: 500; }
+.map { min-height: 70vh; background: #cfcfcb; }
+.map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.map__toggle { position: absolute; z-index: 2; top: 16px; left: 16px; display: inline-flex; background: var(--white); border: 1.5px solid var(--ink); }
+.map__toggle button { border: 0; background: transparent; padding: 10px 16px; cursor: pointer; font-weight: 500; font-size: .9rem; }
+.map__toggle button[aria-pressed="true"] { background: var(--ink); color: var(--white); }
+@media (max-width: 959px) { .map { min-height: 460px; } }

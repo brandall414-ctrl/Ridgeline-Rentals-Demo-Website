@@ -95,5 +95,14 @@
       if (it) el.textContent = "$" + cfg.priceFor(it, Number(days || 1));
     });
   }
+  /* ---------- location map: trailhead satellite vs. wider map from Vernal ---------- */
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-map]");
+    const f = document.getElementById("map-frame");
+    if (!b || !f) return;
+    f.src = f.getAttribute("data-" + b.dataset.map);
+    document.querySelectorAll("[data-map]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  });
+
   document.querySelectorAll("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
 })();
