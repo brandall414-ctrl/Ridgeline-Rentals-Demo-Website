@@ -34,7 +34,7 @@ The booking page is a working front end with no backend yet:
 - Pricing: `price` is the 1-day rate and `extraDay` is added for the second day (kit $45/$60, lanyard $30/$40, helmet or harness $12/$17).
 - Safety video: must play to the end (scrubbing allowed) before the agreement unlocks. The clip in `assets/video/` is a placeholder; swap the files named in `config.js` when the real video is ready.
 - Signatures: each signer can adopt a signature generated from their typed legal name, or draw one. The record notes which method was used.
-- **Placeholder photo:** `assets/photos/hero-bridge-wide.jpg` / `hero-bridge-tall.jpg` / `og-image.jpg` use a photo Trailside doesn't own. Replace before the site goes public. `hero-bridge-ai.jpg` is a fallback.
+- Hero image (`hero-canyon-wide.jpg` / `hero-canyon-tall.jpg`) is a Gemini-generated view of the gorge. Swap in a real photo from the trailhead when you have one.
 
 ## Brand
 

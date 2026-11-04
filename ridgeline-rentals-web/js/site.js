@@ -7,18 +7,25 @@
   window.addEventListener("load", () => root.classList.add("is-loaded"));
   setTimeout(() => root.classList.add("is-loaded"), 1800); // weak signal fallback
 
-  /* ---------- header: white over photos, solid after, hides on scroll down ---------- */
+  /* ---------- header ----------
+     Hides while you scroll down. Comes back only when you scroll up on
+     purpose (60px or more), or after you stop scrolling for 3 seconds. */
   const header = document.querySelector(".site-header");
   const heroEl = document.querySelector(".panel--hero, .page-hero");
-  let lastY = window.scrollY;
+  let lastY = window.scrollY, upTravel = 0, idleTimer = null;
+  const SHOW_AFTER_UP = 60, IDLE_MS = 3000;
+  function showHeader() { header && header.classList.remove("is-hidden"); }
   function onHeader() {
     if (!header) return;
-    const y = window.scrollY;
+    const y = window.scrollY, dy = y - lastY;
     const heroH = heroEl ? heroEl.offsetHeight - 90 : 10;
     header.classList.toggle("is-solid", y > heroH || !header.classList.contains("site-header--over"));
-    if (!header.classList.contains("menu-open")) header.classList.toggle("is-hidden", y > 300 && y > lastY + 4);
-    if (y < lastY - 4) header.classList.remove("is-hidden");
+    if (header.classList.contains("menu-open") || y < 120) { showHeader(); upTravel = 0; }
+    else if (dy > 0) { upTravel = 0; header.classList.add("is-hidden"); }
+    else if (dy < 0) { upTravel -= dy; if (upTravel >= SHOW_AFTER_UP) showHeader(); }
     lastY = y;
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(showHeader, IDLE_MS);
   }
 
   /* ---------- stacked panels: the covered panel dims and pushes back ---------- */
