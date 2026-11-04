@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book Gear | Trailside Rentals</title>
+  <meta name="description" content="Check availability and reserve via ferrata gear at the Ashley Gorge trailhead." />
+  <meta name="theme-color" content="#F1F1EF" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Book Gear | Trailside Rentals" />
+  <meta property="og:description" content="Check availability and reserve via ferrata gear at the Ashley Gorge trailhead." />
+  <meta property="og:image" content="assets/photos/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-page="book">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html" aria-label="Trailside Rentals home"><svg viewBox="0 0 220 100" role="img" aria-label="Trailside Rentals"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 46 L24 31 L32 35 L48 19 L56 24 L72 9 L81 13"/><path d="M81 13 H111 M81 18 H111 M81 18 L86 13 L91 18 L96 13 L101 18 L106 13 L111 18"/><path d="M111 13 L118 6 L132 20 L142 16 L160 30 L170 26 L189 40 L198 37 L217 46"/></g><text x="110" y="86" text-anchor="middle" font-family="Oswald, Arial Narrow, sans-serif" font-weight="700" font-size="47" letter-spacing="1.2" fill="currentColor">TRAILSIDE</text><text x="111" y="99" text-anchor="middle" font-family="Work Sans, sans-serif" font-weight="600" font-size="10" letter-spacing="5.4" fill="currentColor">RENTALS</text></svg></a>
+    <nav class="nav" aria-label="Primary"><ul>
+      <li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="agreement.html">Agreement</a></li><li><a href="index.html#contact">Contact</a></li>
+    </ul></nav>
+    <a class="btn btn--ink btn--sm header-cta" href="book.html">Book gear</a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menu"><span></span></button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <ul><li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="agreement.html">Agreement</a></li><li><a href="index.html#contact">Contact</a></li></ul>
+    <a class="btn btn--ink" href="book.html" style="width:100%">Book gear</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="wrap" style="padding-top:clamp(28px,5vw,56px)">
+    <h1 style="font-size:clamp(2.8rem,7vw,5.5rem)">Book gear</h1>
+    <p class="demo-note" style="margin-top:20px"><span class="dot dot--blue" style="margin-top:7px"></span><span><strong>Demo.</strong> Bookings open for the 2027 season. Availability is sample data, and no payment is taken.</span></p>
+    <ol class="progress" id="progress" aria-label="Booking steps"></ol>
+    <div class="booking">
+      <div id="steps">
+        <!-- Step 1 -->
+        <section class="step-panel" data-step="0" aria-labelledby="s1">
+          <div class="card">
+            <div class="card__head">
+              <div><h2 id="s1">Pick your dates</h2><p class="hint">Tap a start day. Numbers show full kits left.</p></div>
+              <div class="cal-nav"><button class="icon-btn" type="button" id="cal-prev" aria-label="Previous month"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3 5 8l5 5"/></svg></button><span class="month" id="cal-month" aria-live="polite"></span><button class="icon-btn" type="button" id="cal-next" aria-label="Next month"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m6 3 5 5-5 5"/></svg></button></div>
+            </div>
+            <div class="cal" id="cal" role="grid"></div>
+            <div class="legend"><span><i class="sw sw--avail"></i>Available</span><span><i class="sw sw--sel"></i>Your dates</span><span><i class="sw sw--closed"></i>Closed</span><span><i class="sw"></i>Sold out or past</span></div>
+            <div class="length-row" id="length-row" hidden>
+              <span class="sel" id="sel-date"></span>
+              <div class="seg" role="group" aria-label="Rental length"><button type="button" data-days="1" aria-pressed="true">1 day</button><button type="button" data-days="2" aria-pressed="false">2 days</button></div>
+              <span class="small" id="len-note"></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__head"><div><h2>Choose your gear</h2><p class="hint">One full kit or lanyard per climber.</p></div></div>
+            <div class="items" id="items"></div>
+          </div>
+          <div class="card">
+            <div class="card__head"><div><h2>Card hold or Gear Protection</h2><p class="hint">Covers accidental damage. Doesn't cover misuse or unreturned gear.</p></div></div>
+            <div class="choice" id="protection">
+              <label><input type="radio" name="protection" value="deposit" checked><span><strong>Refundable card hold</strong><span class="meta">$150 per kit, $80 per lanyard. Released when your gear is back.</span></span><span id="hold-amt"></span></label>
+              <label><input type="radio" name="protection" value="protection"><span><strong>Gear Protection</strong><span class="meta">$8 per kit, $5 per lanyard. No hold on your card.</span></span><span id="prot-amt"></span></label>
+            </div>
+          </div>
+        </section>
+        <!-- Step 2 -->
+        <section class="step-panel" data-step="1" aria-labelledby="s2">
+          <div class="card">
+            <div class="card__head"><div><h2 id="s2">Who's renting</h2><p class="hint">Your confirmation and locker code go to this email.</p></div></div>
+            <div class="grid-3">
+              <div class="field"><label for="lead-name">Full legal name</label><input id="lead-name" autocomplete="name" required><span class="err"></span></div>
+              <div class="field"><label for="lead-email">Email</label><input id="lead-email" type="email" autocomplete="email" required><span class="err"></span></div>
+              <div class="field"><label for="lead-phone">Mobile phone</label><input id="lead-phone" type="tel" autocomplete="tel" required><span class="err"></span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__head"><div><h2>Climbers</h2><p class="hint">Climber 1 is you. Every adult signs their own agreement. A parent signs for anyone aged 14 to 17.</p></div></div>
+            <div id="climbers"></div>
+          </div>
+        </section>
+        <!-- Step 3 -->
+        <section class="step-panel" data-step="2" aria-labelledby="s3">
+          <div class="card">
+            <div class="card__head"><div><h2 id="s3">Safety video</h2><p class="hint">Required before any locker code is released.</p></div></div>
+            <div class="video-box"><img src="assets/photos/climber-cable.jpg" alt=""><div><span class="play"><svg width="22" height="22" viewBox="0 0 22 22"><path d="M7 4v14l11-7z" fill="#000"/></svg></span><p style="margin:0 auto;color:#fff">Video coming soon. About 6 minutes on fitting your harness, clipping in and route hazards.</p></div></div>
+            <div class="ack" style="margin-top:8px"><label style="border-top:0"><input type="checkbox" id="video-done"><span>All climbers have watched the safety video, or will before pickup.</span></label></div>
+          </div>
+          <div class="card">
+            <div class="card__head"><div><h2>Sign the agreement</h2><p class="hint" id="sign-hint"></p></div></div>
+            <div class="signers" id="signers"></div>
+            <div id="sign-area"></div>
+          </div>
+        </section>
+        <!-- Step 4 -->
+        <section class="step-panel" data-step="3" aria-labelledby="s4">
+          <div class="card">
+            <div class="card__head"><div><h2 id="s4">Review</h2><p class="hint">Check everything before you confirm.</p></div></div>
+            <ul class="status-list" id="review"></ul>
+          </div>
+          <div class="card">
+            <h2>Payment</h2>
+            <p class="hint" style="margin-bottom:0">Card payment through Stripe goes here. It isn't connected in this demo, so confirming won't charge anything.</p>
+          </div>
+        </section>
+        <!-- Done -->
+        <section class="step-panel" data-step="4">
+          <div class="card confirm">
+            <p class="small" style="margin:0">Demo booking confirmed</p>
+            <p class="ref" id="ref"></p>
+            <p class="lede">In the live version, your receipt, signed agreements and locker code are emailed to <strong id="conf-email"></strong>. Save them before you drive out. There's no signal at the gorge.</p>
+            <ul class="status-list" id="conf-list"></ul>
+            <div class="btn-row" style="margin-top:24px"><button class="btn btn--line" type="button" id="dl-signed">Download signed agreements</button><a class="btn btn--ink" href="book.html">Start a new booking</a></div>
+          </div>
+        </section>
+      </div>
+      <aside class="card summary" id="summary" aria-live="polite">
+        <h2>Your rental</h2>
+        <p class="dates" id="sum-dates">No dates picked yet</p>
+        <ul class="line-items" id="sum-lines"></ul>
+        <div class="total"><span>Total</span><strong id="sum-total">$0</strong></div>
+        <p class="hold-note" id="sum-hold"></p>
+        <p class="form-error" id="step-error" role="alert" hidden></p>
+        <div class="step-actions"><button class="btn btn--line" type="button" data-act="back">Back</button><button class="btn btn--ink" type="button" data-act="next">Continue</button></div>
+      </aside>
+    </div>
+  </section>
+  <div class="mobile-bar" id="mobile-bar"><div class="tot"><strong id="mb-total">$0</strong><span id="mb-dates">Pick a date</span></div><div class="acts"><button class="btn btn--line btn--sm" type="button" data-act="back">Back</button><button class="btn btn--ink btn--sm" type="button" data-act="next">Continue</button></div></div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <svg viewBox="0 0 220 100" role="img" aria-label="Trailside Rentals"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 46 L24 31 L32 35 L48 19 L56 24 L72 9 L81 13"/><path d="M81 13 H111 M81 18 H111 M81 18 L86 13 L91 18 L96 13 L101 18 L106 13 L111 18"/><path d="M111 13 L118 6 L132 20 L142 16 L160 30 L170 26 L189 40 L198 37 L217 46"/></g><text x="110" y="86" text-anchor="middle" font-family="Oswald, Arial Narrow, sans-serif" font-weight="700" font-size="47" letter-spacing="1.2" fill="currentColor">TRAILSIDE</text><text x="111" y="99" text-anchor="middle" font-family="Work Sans, sans-serif" font-weight="600" font-size="10" letter-spacing="5.4" fill="currentColor">RENTALS</text></svg>
+        <p style="margin-top:16px">Self-serve via ferrata gear at the Ashley Gorge trailhead, Vernal, Utah.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="book.html">Book gear</a></li>
+          <li><a href="rates.html">Rates</a></li>
+          <li><a href="agreement.html">Rental agreement</a></li>
+          <li><a href="index.html#before-you-go">Before you go</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a data-contact="phone" href="tel:+12084731751">(208) 473-1751</a></li>
+          <li><a data-contact="email" href="mailto:trailsiderentalsvernal@gmail.com">trailsiderentalsvernal@gmail.com</a></li>
+          <li><a href="https://www.ashleygorgeviaferrata.com/waiver" rel="noopener" target="_blank">Uintah County waiver</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> Randall Ventures LLC. Trailside Rentals is a Randall Ventures LLC brand.</span>
+      <span>Operating under a BLM Special Recreation Permit (finalizing).</span>
+    </div>
+  </div>
+</footer>
+<script src="js/config.js"></script>
+<script src="js/agreement.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/site.js"></script>
+</body>
+</html>
