@@ -7,7 +7,7 @@
 (function () {
   "use strict";
 
-  const VERSION = "2026-11-03.1";
+  const VERSION = "2026-11-03.2";
   const B = "Trailside Rentals";
 
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -52,7 +52,7 @@ ${table(null, [
   ["Phone / Email", f.contact ? esc(f.contact) : blank],
   ["Rental Date", f.rentalDates ? esc(f.rentalDates) : blank],
   ["Rental Location", "Ashley Gorge Via Ferrata Trailhead, Vernal, Utah"],
-  ["Return Deadline", f.returnDeadline ? esc(f.returnDeadline) : "24 hours from time of gear dispensing"],
+  ["Return Deadline", f.returnDeadline ? esc(f.returnDeadline) : "24 hours from time of gear dispensing (1-day rental) or 48 hours (2-day rental)"],
 ])}
 
 <h3>2. Gear Issued</h3>
@@ -93,7 +93,7 @@ ${ul([
   "Accidental damage to gear resulting directly from a fall or normal use of the via ferrata course is covered. Renter will not be charged for such damage.",
   "The Damage Waiver does NOT cover damage resulting from abuse, negligence, improper use, or intentional misuse of equipment.",
   "The Damage Waiver does NOT cover non-return of gear under any circumstances.",
-  "If gear is not returned within 24 hours, Renter's payment card will be charged the full replacement cost of all unreturned items (Helmet: $50.00 | Harness: $60.00 | Lanyard: $80.00), regardless of whether the Damage Waiver was purchased.",
+  "If gear is not returned within 24 hours after the Return Deadline, Renter's payment card will be charged the full replacement cost of all unreturned items (Helmet: $50.00 | Harness: $60.00 | Lanyard: $80.00), regardless of whether the Damage Waiver was purchased.",
   `By purchasing the Damage Waiver, Renter explicitly authorizes ${B} to charge their payment card on file for the full replacement cost of any unreturned gear without further notice.`,
 ])}
 <p>Renter selects (check one):<br>
@@ -102,7 +102,7 @@ ${opt("protection")} Option B — Damage Waiver purchased (${money(item("kit").p
 
 <h3>6. Return Policy</h3>
 ${ul([
-  `All gear must be returned to the ${B} smart locker at the Ashley Gorge Via Ferrata trailhead within 24 hours of the recorded dispensing time.`,
+  `All gear must be returned to the ${B} smart locker at the Ashley Gorge Via Ferrata trailhead by the Return Deadline: within 24 hours of the recorded dispensing time for a 1-day rental, or within 48 hours for a 2-day rental.`,
   "Renter will receive a return PIN code via email or SMS to complete the return process. Gear must be secured inside the locker and the return confirmed through the system.",
   `Late returns will be charged an additional rental-day fee (${money(item("kit").price)} for a full kit; ${money(item("lanyard").price)} for lanyard-only) for each 24-hour period past the return deadline.`,
   "No refunds will be issued once gear has been dispensed from the locker.",

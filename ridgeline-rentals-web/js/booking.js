@@ -136,7 +136,7 @@
       b.setAttribute("aria-pressed", String(d === state.days));
       b.disabled = d === 2 && ok !== true;
     });
-    $("#len-note").textContent = ok !== true ? ok + ", so this is a 1-day rental." : `Rentals are ${cfg.maxDays} days max.`;
+    $("#len-note").textContent = ok !== true ? ok + ", so this is a 1-day rental (24 hours)." : state.days === 1 ? "24 hours from pickup." : "48 hours from pickup.";
   }
 
   /* ---------- items ---------- */
@@ -152,6 +152,8 @@
         <div class="stepper" role="group" aria-label="${it.name} quantity"><button type="button" data-dec="${it.id}" aria-label="Remove one ${it.name}" ${q <= 0 || left == null ? "disabled" : ""}>−</button><output aria-live="polite">${q}</output><button type="button" data-inc="${it.id}" aria-label="Add one ${it.name}" ${left == null || q >= left ? "disabled" : ""}>+</button></div></div>`;
     }).join("");
   }
+
+  const returnDeadline = () => `${state.days * 24} hours from the time gear is taken from the locker (${state.days}-day rental)`;
 
   /* ---------- pricing ---------- */
   const itemById = (id) => cfg.items.find((i) => i.id === id);
@@ -179,6 +181,7 @@
     $("#sum-dates").textContent = dates;
     $("#sum-lines").innerHTML = p.lines.length ? p.lines.map(([l, a]) => `<li><span>${esc(l)}</span><span>${money(a)}</span></li>`).join("") : `<li class="empty">Add gear to see your total.</li>`;
     $("#sum-total").textContent = money(p.total);
+    $("#sum-return").textContent = ks.length ? `Return within ${state.days * 24} hours of pickup.` : "";
     $("#sum-hold").textContent = p.hold ? `Plus a refundable ${money(p.hold)} hold on your card, released when the gear is back.` : (p.lines.length ? "No card hold with Gear Protection." : "");
     $("#hold-amt").textContent = p.dep ? money(p.dep) + " hold" : "";
     $("#prot-amt").textContent = p.prot ? "+" + money(p.prot) : "";
@@ -236,6 +239,7 @@
       renterName: s.name,
       contact: s.i === 0 ? `${state.lead.phone} / ${state.lead.email}` : `Booked by ${state.lead.name} (${state.lead.email})`,
       rentalDates: ks.map((k) => fmt(parse(k), { weekday: "long", month: "long", day: "numeric", year: "numeric" })).join(" and "),
+      returnDeadline: returnDeadline(),
       gear: { ...state.qty },
       protection: state.protection,
     };
@@ -346,20 +350,50 @@
       ["Gear", cfg.items.filter((i) => state.qty[i.id]).map((i) => `${state.qty[i.id]} × ${i.name}`).join(", ")],
       ["Climbers", state.climbers.map((c) => esc(c.name) + (c.age === "minor" ? " (14–17)" : "")).join(", ")],
       ["Agreements", `${list.filter((s) => state.signatures[sigKey(s)]).length} of ${list.length} signed`],
+      ["Return", `Within ${state.days * 24} hours of pickup`],
       ["Safety video", state.videoDone ? "Confirmed" : "Not confirmed"],
       ["Damage cover", state.protection === "protection" ? "Gear Protection" : `Card hold of ${money(p.hold)}`],
       ["Total", money(p.total)],
     ].map(([a, b]) => `<li><span>${a}</span><strong style="color:#000">${b}</strong></li>`).join("");
   }
-  function confirmBooking() {
+  async function confirmBooking() {
     state.ref = "TR-" + Math.random().toString(36).slice(2, 8).toUpperCase();
-    const record = { ref: state.ref, createdAt: new Date().toISOString(), dates: rangeKeys(), qty: state.qty, protection: state.protection, total: pricing().total, lead: state.lead, climbers: state.climbers, signatures: Object.values(state.signatures).map(({ agreementHtml, ...r }) => r) };
+    const booking = { ref: state.ref, dates: rangeKeys(), days: state.days, qty: { ...state.qty } };
+    // Live version: this runs on the server only after Stripe confirms payment
+    // and every adult has signed.
+    const L = window.TrailsideLocker;
+    const startDay = parse(rangeKeys()[0]);
+    const validFrom = startDay;
+    const validTo = new Date(addDays(startDay, state.days + 1).getTime() - 60000);
+    const doors = await L.assignDoors(booking);
+    const access = await L.createAccessCode(booking, doors, validFrom, validTo);
+    state.pass = { ref: state.ref, doors, code: access.code, validFrom, validTo, days: state.days, lead: state.lead.name };
+    const record = { ...booking, createdAt: new Date().toISOString(), protection: state.protection, total: pricing().total, lead: state.lead, climbers: state.climbers, doors, signatures: Object.values(state.signatures).map(({ agreementHtml, ...r }) => r) };
     try { const all = JSON.parse(localStorage.getItem("trailside_demo_bookings") || "[]"); all.push(record); localStorage.setItem("trailside_demo_bookings", JSON.stringify(all)); } catch (e) { /* storage unavailable: demo still works */ }
     $("#ref").textContent = state.ref;
     $("#conf-email").textContent = state.lead.email;
+    $("#pass").innerHTML = passHtml(state.pass);
     $("#conf-list").innerHTML = [
-      ["Dates", $("#sum-dates").textContent], ["Total", money(pricing().total)], ["Agreements on file", Object.keys(state.signatures).length], ["Locker code", "Sent after payment, once everyone has signed"],
+      ["Dates", $("#sum-dates").textContent], ["Total", money(pricing().total)], ["Return", `Within ${state.days * 24} hours of pickup`], ["Agreements on file", Object.keys(state.signatures).length],
     ].map(([a, b]) => `<li><span>${a}</span><strong style="color:#000">${b}</strong></li>`).join("");
+  }
+  function passHtml(p) {
+    const when = (d) => d.toLocaleString("en-US", { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+    return `<div class="pass__top"><span>Trailside Rentals</span><span>${esc(p.ref)}</span></div>
+      <p class="pass__label">Locker code</p>
+      <p class="pass__code">${esc(p.code.slice(0, 3))} ${esc(p.code.slice(3))}</p>
+      <ul class="pass__doors">${p.doors.map((d) => `<li><strong>Unit ${esc(d.unit)}, door ${d.door}</strong><span>${esc(d.items)}</span></li>`).join("")}</ul>
+      <p class="pass__meta">Pick up any time from ${when(p.validFrom)}. Return within ${p.days * 24} hours of pickup. Code stops working ${when(p.validTo)}.</p>
+      <p class="pass__meta">Lockers: Ashley Gorge trailhead parking lot. No cell service there, so keep this pass on your phone.</p>`;
+  }
+  function downloadPass() {
+    const css = "body{margin:0;background:#F1F1EF;font-family:system-ui,sans-serif;padding:20px}.pass{max-width:420px;margin:0 auto;background:#000;color:#fff;border-radius:24px;padding:24px}.pass__top{display:flex;justify-content:space-between;font-size:13px;opacity:.7}.pass__label{margin:28px 0 0;font-size:13px;opacity:.7}.pass__code{font-size:56px;font-weight:700;letter-spacing:.08em;margin:4px 0 20px}.pass__doors{list-style:none;padding:0;margin:0}.pass__doors li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.2)}.pass__doors span{opacity:.7}.pass__meta{font-size:13px;opacity:.8;margin:14px 0 0;line-height:1.5}";
+    const html = `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Trailside pass ${state.pass.ref}</title><style>${css}</style><div class="pass">${passHtml(state.pass)}</div>`;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([html], { type: "text/html" }));
+    a.download = `Trailside-pass-${state.pass.ref}.html`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   }
   function downloadSigned() {
     const docs = Object.values(state.signatures).map((r) => `<section style="page-break-after:always">${r.agreementHtml}
@@ -486,6 +520,7 @@
     $$("[data-act=next]").forEach((b) => b.addEventListener("click", next));
     $$("[data-act=back]").forEach((b) => b.addEventListener("click", () => go(Math.max(0, state.step - 1))));
     $("#dl-signed").addEventListener("click", downloadSigned);
+    $("#dl-pass").addEventListener("click", downloadPass);
     renderAll();
     go(0, true);
   });

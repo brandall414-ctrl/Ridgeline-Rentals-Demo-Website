@@ -29,7 +29,8 @@ The booking page is a working front end with no backend yet:
 - Availability is simulated (`demoBookings: true` in config). Replace `demoBooked()` with a call to the real availability API.
 - No payment is taken. Stripe Checkout goes where `confirmBooking()` is.
 - Signatures are captured with the signer's typed name, drawn signature, each confirmed statement, e-sign consent, timestamp, time zone, agreement version and a SHA-256 hash of the exact text shown. In the demo they're kept in the browser only and can be downloaded on the confirmation screen. Live, they need to be saved server-side and emailed to each signer.
-- Locker codes are not generated yet. The plan is a locker adapter (mock now, supplier API later) that issues a code only after payment and all signatures.
+- Locker doors and codes come from a mock adapter in `js/locker.js`. When the real lockers arrive, write an adapter with the same three functions (assignDoors, createAccessCode, revokeCode) that calls the supplier API from the server, and swap it in. The confirmation page shows a pass with the door and code that can be saved to a phone for use with no signal.
+- Return rule: 1-day rentals are due back within 24 hours of pickup, 2-day rentals within 48 hours.
 
 ## Brand
 

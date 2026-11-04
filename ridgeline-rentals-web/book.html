@@ -113,9 +113,11 @@
           <div class="card confirm">
             <p class="small" style="margin:0">Demo booking confirmed</p>
             <p class="ref" id="ref"></p>
-            <p class="lede">In the live version, your receipt, signed agreements and locker code are emailed to <strong id="conf-email"></strong>. Save them before you drive out. There's no signal at the gorge.</p>
-            <ul class="status-list" id="conf-list"></ul>
-            <div class="btn-row" style="margin-top:24px"><button class="btn btn--line" type="button" id="dl-signed">Download signed agreements</button><a class="btn btn--ink" href="book.html">Start a new booking</a></div>
+            <p class="lede">In the live version, your receipt, signed agreements and this pass are also emailed to <strong id="conf-email"></strong>.</p>
+            <div class="pass" id="pass"></div>
+            <div class="btn-row" style="margin-top:16px"><button class="btn btn--ink" type="button" id="dl-pass">Save pass to phone</button><button class="btn btn--line" type="button" id="dl-signed">Download signed agreements</button></div>
+            <ul class="status-list" id="conf-list" style="margin-top:28px"></ul>
+            <p class="small" style="margin-top:20px">Demo: the door and code come from a stand-in locker system. <a href="book.html">Start a new booking</a></p>
           </div>
         </section>
       </div>
@@ -124,6 +126,7 @@
         <p class="dates" id="sum-dates">No dates picked yet</p>
         <ul class="line-items" id="sum-lines"></ul>
         <div class="total"><span>Total</span><strong id="sum-total">$0</strong></div>
+        <p class="hold-note" id="sum-return"></p>
         <p class="hold-note" id="sum-hold"></p>
         <p class="form-error" id="step-error" role="alert" hidden></p>
         <div class="step-actions"><button class="btn btn--line" type="button" data-act="back">Back</button><button class="btn btn--ink" type="button" data-act="next">Continue</button></div>
@@ -166,6 +169,7 @@
 </footer>
 <script src="js/config.js"></script>
 <script src="js/agreement.js"></script>
+<script src="js/locker.js"></script>
 <script src="js/booking.js"></script>
 <script src="js/site.js"></script>
 </body>
