@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Book Gear | Trailside Rentals</title>
   <meta name="description" content="Check availability and reserve via ferrata gear at the Ashley Gorge trailhead." />
-  <meta name="theme-color" content="#F1F1EF" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="view-transition" content="same-origin" />
   <link rel="icon" href="favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <meta property="og:type" content="website" />
@@ -15,34 +16,37 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600&family=Homemade+Apple&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body data-page="book">
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="site-header">
+<header class="site-header site-header--over">
   <div class="wrap site-header__inner">
     <a class="brand" href="index.html" aria-label="Trailside Rentals home"><svg viewBox="0 0 220 100" role="img" aria-label="Trailside Rentals"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 46 L24 31 L32 35 L48 19 L56 24 L72 9 L81 13"/><path d="M81 13 H111 M81 18 H111 M81 18 L86 13 L91 18 L96 13 L101 18 L106 13 L111 18"/><path d="M111 13 L118 6 L132 20 L142 16 L160 30 L170 26 L189 40 L198 37 L217 46"/></g><text x="110" y="86" text-anchor="middle" font-family="Oswald, Arial Narrow, sans-serif" font-weight="700" font-size="47" letter-spacing="1.2" fill="currentColor">TRAILSIDE</text><text x="111" y="99" text-anchor="middle" font-family="Work Sans, sans-serif" font-weight="600" font-size="10" letter-spacing="5.4" fill="currentColor">RENTALS</text></svg></a>
-    <nav class="nav" aria-label="Primary"><ul>
-      <li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="agreement.html">Agreement</a></li><li><a href="index.html#contact">Contact</a></li>
-    </ul></nav>
+    <nav class="nav" aria-label="Primary"><ul><li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="index.html#about">About</a></li><li><a href="agreement.html">Agreement</a></li></ul></nav>
     <a class="btn btn--ink btn--sm header-cta" href="book.html">Book gear</a>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menu"><span></span></button>
   </div>
   <div class="mobile-menu" id="mobile-menu">
-    <ul><li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="agreement.html">Agreement</a></li><li><a href="index.html#contact">Contact</a></li></ul>
-    <a class="btn btn--ink" href="book.html" style="width:100%">Book gear</a>
+    <ul><li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="index.html#about">About</a></li><li><a href="agreement.html">Agreement</a></li></ul>
+    <a class="btn btn--white" href="book.html" style="width:100%">Book gear</a>
   </div>
 </header>
 
 <main id="main">
-  <section class="wrap" style="padding-top:clamp(28px,5vw,56px)">
-    <h1 style="font-size:clamp(2.8rem,7vw,5.5rem)">Book gear</h1>
-    <p class="demo-note" style="margin-top:20px"><span class="dot dot--blue" style="margin-top:7px"></span><span><strong>Demo.</strong> Bookings open for the 2027 season. Availability is sample data, and no payment is taken.</span></p>
+  <section class="page-hero page-hero--short">
+    <img src="assets/photos/bridge-climbers.jpg" alt="Climbers crossing a suspension bridge" fetchpriority="high" />
+    <div class="wrap">
+      <h1 class="rise"><span class="line"><span>Book gear</span></span></h1>
+      
+    </div>
+  </section>
+  <section class="wrap" style="padding-top:clamp(28px,4vw,48px)">
+    <p class="demo-note"><span class="dot dot--blue" style="margin-top:7px"></span><span><strong>Demo.</strong> Bookings open for the 2027 season. Availability is sample data, and no payment is taken.</span></p>
     <ol class="progress" id="progress" aria-label="Booking steps"></ol>
     <div class="booking">
       <div id="steps">
-        <!-- Step 1 -->
         <section class="step-panel" data-step="0" aria-labelledby="s1">
           <div class="card">
             <div class="card__head">
@@ -69,10 +73,9 @@
             </div>
           </div>
         </section>
-        <!-- Step 2 -->
         <section class="step-panel" data-step="1" aria-labelledby="s2">
           <div class="card">
-            <div class="card__head"><div><h2 id="s2">Who's renting</h2><p class="hint">Your confirmation and locker code go to this email.</p></div></div>
+            <div class="card__head"><div><h2 id="s2">Who's renting</h2><p class="hint">You must be 18 or older. Your confirmation and pass go to this email.</p></div></div>
             <div class="grid-3">
               <div class="field"><label for="lead-name">Full legal name</label><input id="lead-name" autocomplete="name" required><span class="err"></span></div>
               <div class="field"><label for="lead-email">Email</label><input id="lead-email" type="email" autocomplete="email" required><span class="err"></span></div>
@@ -84,20 +87,25 @@
             <div id="climbers"></div>
           </div>
         </section>
-        <!-- Step 3 -->
         <section class="step-panel" data-step="2" aria-labelledby="s3">
           <div class="card">
-            <div class="card__head"><div><h2 id="s3">Safety video</h2><p class="hint">Required before any locker code is released.</p></div></div>
-            <div class="video-box"><img src="assets/photos/climber-cable.jpg" alt=""><div><span class="play"><svg width="22" height="22" viewBox="0 0 22 22"><path d="M7 4v14l11-7z" fill="#000"/></svg></span><p style="margin:0 auto;color:#fff">Video coming soon. About 6 minutes on fitting your harness, clipping in and route hazards.</p></div></div>
-            <div class="ack" style="margin-top:8px"><label style="border-top:0"><input type="checkbox" id="video-done"><span>All climbers have watched the safety video, or will before pickup.</span></label></div>
+            <div class="card__head"><div><h2 id="s3">Safety video</h2><p class="hint">Required. Watch it all the way through to unlock the agreement.</p></div></div>
+            <div class="video-wrap">
+              <video id="safety-video" controls playsinline preload="metadata"></video>
+              <div>
+                <p>The full video covers fitting your harness and helmet, clipping in and out of the cable, passing other climbers, and the hazards on this route: exposure, heat, lightning and loose rock.</p>
+                <p class="small">Placeholder clip for the demo. The real video is coming.</p>
+                <div class="video-status" id="video-status" aria-live="polite"><span id="video-status-text">Not watched yet</span><span class="bar"><i id="video-bar"></i></span></div>
+              </div>
+            </div>
           </div>
-          <div class="card">
+          <div class="card locked is-locked" id="sign-card">
+            <p class="lock-note">Watch the safety video to the end to unlock signing.</p>
             <div class="card__head"><div><h2>Sign the agreement</h2><p class="hint" id="sign-hint"></p></div></div>
             <div class="signers" id="signers"></div>
             <div id="sign-area"></div>
           </div>
         </section>
-        <!-- Step 4 -->
         <section class="step-panel" data-step="3" aria-labelledby="s4">
           <div class="card">
             <div class="card__head"><div><h2 id="s4">Review</h2><p class="hint">Check everything before you confirm.</p></div></div>
@@ -108,7 +116,6 @@
             <p class="hint" style="margin-bottom:0">Card payment through Stripe goes here. It isn't connected in this demo, so confirming won't charge anything.</p>
           </div>
         </section>
-        <!-- Done -->
         <section class="step-panel" data-step="4">
           <div class="card confirm">
             <p class="small" style="margin:0">Demo booking confirmed</p>
@@ -129,7 +136,7 @@
         <p class="hold-note" id="sum-return"></p>
         <p class="hold-note" id="sum-hold"></p>
         <p class="form-error" id="step-error" role="alert" hidden></p>
-        <div class="step-actions"><button class="btn btn--line" type="button" data-act="back">Back</button><button class="btn btn--ink" type="button" data-act="next">Continue</button></div>
+        <div class="step-actions"><button class="btn btn--line btn--plain" type="button" data-act="back">Back</button><button class="btn btn--ink" type="button" data-act="next">Continue</button></div>
       </aside>
     </div>
   </section>

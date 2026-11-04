@@ -7,7 +7,7 @@
 (function () {
   "use strict";
 
-  const VERSION = "2026-11-03.2";
+  const VERSION = "2026-11-03.3";
   const B = "Trailside Rentals";
 
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -75,13 +75,13 @@ ${ul([
 ])}
 
 <h3>4. Rental Terms &amp; Pricing</h3>
-<p>Standard Rental Pricing (per item, per rental day)</p>
-${table(["Rental Option", "Price per Day"], [
-  [`Full Kit (Helmet + Harness + Lanyard)`, money(item("kit").price)],
-  ["Lanyard Only", money(item("lanyard").price)],
-  ["Helmet Only", money(item("helmet").price)],
-  ["Harness Only", money(item("harness").price)],
-])}
+<p>Standard Rental Pricing (per item). A 1-day rental runs 24 hours from dispensing; a 2-day rental runs 48 hours.</p>
+${table(["Rental Option", "1-Day Rental", "2-Day Rental"], [
+  ["Full Kit (Helmet + Harness + Lanyard)", "kit"],
+  ["Lanyard Only", "lanyard"],
+  ["Helmet Only", "helmet"],
+  ["Harness Only", "harness"],
+].map(([label, id]) => [label, money(cfg.priceFor(item(id), 1)), money(cfg.priceFor(item(id), 2))]))}
 
 <h3>5. Security Deposit &amp; Damage Waiver</h3>
 <p><strong>Option A — Standard Rental (Security Deposit)</strong></p>

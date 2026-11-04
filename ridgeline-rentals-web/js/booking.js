@@ -136,7 +136,7 @@
       b.setAttribute("aria-pressed", String(d === state.days));
       b.disabled = d === 2 && ok !== true;
     });
-    $("#len-note").textContent = ok !== true ? ok + ", so this is a 1-day rental (24 hours)." : state.days === 1 ? "24 hours from pickup." : "48 hours from pickup.";
+    $("#len-note").textContent = ok !== true ? ok + ", so this is a 1-day rental (24 hours)." : state.days === 1 ? "24 hours from pickup." : "48 hours from pickup. A small add-on per item for the second day.";
   }
 
   /* ---------- items ---------- */
@@ -148,7 +148,7 @@
       const left = state.start ? rangeLeft(it.id) : null;
       const q = state.qty[it.id];
       const meta = left == null ? "Pick a date to see availability" : left === 0 ? "None left for these dates" : `${left} available`;
-      return `<div class="item-row"><img src="${it.img}" alt=""><div><strong>${it.name}</strong><span class="meta">${money(it.price)} per day · ${meta}</span></div>
+      return `<div class="item-row"><img src="${it.img}" alt=""><div><strong>${it.name}</strong><span class="meta">${money(cfg.priceFor(it, 1))} for 1 day · ${money(cfg.priceFor(it, 2))} for 2 days · ${meta}</span></div>
         <div class="stepper" role="group" aria-label="${it.name} quantity"><button type="button" data-dec="${it.id}" aria-label="Remove one ${it.name}" ${q <= 0 || left == null ? "disabled" : ""}>−</button><output aria-live="polite">${q}</output><button type="button" data-inc="${it.id}" aria-label="Add one ${it.name}" ${left == null || q >= left ? "disabled" : ""}>+</button></div></div>`;
     }).join("");
   }
@@ -164,7 +164,7 @@
     cfg.items.forEach((it) => {
       const q = state.qty[it.id];
       if (!q) return;
-      const amt = q * it.price * state.days;
+      const amt = q * cfg.priceFor(it, state.days);
       total += amt;
       lines.push([`${q} × ${it.name}${state.days > 1 ? `, ${state.days} days` : ""}`, amt]);
     });
@@ -195,7 +195,7 @@
     const n = climberCount();
     while (state.climbers.length < n) state.climbers.push({ name: "", age: "adult", guardian: 0, weightOk: false });
     state.climbers.length = n;
-    if (state.climbers[0]) { state.climbers[0].name = state.lead.name; state.climbers[0].age = "adult"; }
+    if (state.climbers[0]) state.climbers[0].name = state.lead.name;
   }
   function renderClimbers() {
     syncClimbers();
@@ -206,7 +206,7 @@
         <h3>Climber ${i + 1}${lead ? ' <span class="tag">You</span>' : ""}</h3>
         <div class="grid-2">
           <div class="field"><label for="c-name-${i}">Full legal name</label><input id="c-name-${i}" data-f="name" value="${esc(c.name)}" ${lead ? 'readonly aria-describedby="lead-note"' : ""} autocomplete="off"><span class="err"></span>${lead ? '<span class="small" id="lead-note">From your details above.</span>' : ""}</div>
-          <div class="field"><label for="c-age-${i}">Age</label><select id="c-age-${i}" data-f="age" ${lead ? "disabled" : ""}><option value="adult" ${c.age === "adult" ? "selected" : ""}>18 or older</option><option value="minor" ${c.age === "minor" ? "selected" : ""}>14 to 17</option></select></div>
+          <div class="field"><label for="c-age-${i}">Age</label><select id="c-age-${i}" data-f="age"><option value="adult" ${c.age === "adult" ? "selected" : ""}>18 or older</option><option value="minor" ${c.age === "minor" ? "selected" : ""}>14 to 17</option></select></div>
         </div>
         ${c.age === "minor" ? `<div class="field" style="margin-top:16px"><label for="c-guard-${i}">Parent or guardian on the route</label><select id="c-guard-${i}" data-f="guardian">${adults.map(({ c: a, i: ai }) => `<option value="${ai}" ${Number(c.guardian) === ai ? "selected" : ""}>${esc(a.name || "Climber " + (ai + 1))}</option>`).join("")}</select><span class="small">They'll sign the agreement for this climber and must climb with them.</span></div>` : ""}
         <div class="ack" style="margin-top:12px"><label><input type="checkbox" data-f="weightOk" ${c.weightOk ? "checked" : ""}><span>Weighs 90–265 lbs and has a 62" vertical reach.</span></label></div>
@@ -261,7 +261,7 @@
     const rec = state.signatures[sigKey(s)];
     const area = $("#sign-area");
     if (rec) {
-      area.innerHTML = `<div class="panel" style="background:var(--juniper-soft)"><p style="margin:0 0 8px"><strong style="color:#000">${esc(s.name)} signed</strong> on ${new Date(rec.signedAt).toLocaleString("en-US")}.</p><img src="${rec.signature}" alt="Signature of ${esc(s.name)}" style="max-height:80px;background:#fff;border-radius:8px"><p class="small" style="margin:8px 0 0">Agreement version ${rec.agreementVersion}</p><button type="button" class="link-btn" id="resign">Clear and sign again</button></div>`;
+      area.innerHTML = `<div class="panel-box" style="background:var(--juniper-soft);border-top-color:var(--juniper)"><p style="margin:0 0 8px"><strong style="color:#000">${esc(s.name)} signed</strong> on ${new Date(rec.signedAt).toLocaleString("en-US")}.</p><img src="${rec.signature}" alt="Signature of ${esc(s.name)}" style="max-height:80px;background:#fff"><p class="small" style="margin:8px 0 0">Agreement version ${rec.agreementVersion}</p><button type="button" class="link-btn" id="resign">Clear and sign again</button></div>`;
       $("#resign").onclick = () => { delete state.signatures[sigKey(s)]; renderSigners(); };
       return;
     }
@@ -272,19 +272,23 @@
       <div class="doc-scroll" id="doc-scroll" tabindex="0" aria-label="Rental agreement text"><div class="doc">${AG.render(fillFor(s))}</div></div>
       <p class="scroll-status" id="scroll-status">Scroll to the end to unlock signing.</p>
       <fieldset id="sign-fields" disabled style="border:0;padding:0;margin:0">
-        <div class="ack"><p class="ack-count" id="ack-count" style="margin:12px 0 0"></p>${acks.map((a, n) => `<label><input type="checkbox" data-ack="${n}"><span>${esc(a)}</span></label>`).join("")}</div>
+        <div class="ack legal"><p class="ack-count" id="ack-count" style="margin:12px 0 0"></p>${acks.map((a, n) => `<label><input type="checkbox" data-ack="${n}"><span>${esc(a)}</span></label>`).join("")}</div>
         <div class="grid-2" style="margin-top:20px">
           <div class="field"><label for="typed-name">Type your full legal name</label><input id="typed-name" autocomplete="off" placeholder="${esc(s.name)}"><span class="err" id="typed-err"></span></div>
           <div class="field"><span class="lab">Date</span><input value="${fmt(today, { month: "long", day: "numeric", year: "numeric" })}" readonly></div>
         </div>
-        <div class="field" style="margin-top:16px"><span class="lab" id="sig-lab">Draw your signature</span>
-          <div class="sig-pad" id="sig-pad"><canvas id="sig-canvas" aria-labelledby="sig-lab"></canvas><span class="placeholder">Sign here with your finger or mouse</span></div>
+        <div class="field" style="margin-top:16px"><span class="lab" id="sig-lab">Signature</span>
+          <div class="sig-modes" role="group" aria-label="Signature style"><button type="button" data-mode="type" aria-pressed="true">From my name</button><button type="button" data-mode="draw" aria-pressed="false">Draw it</button></div>
+          <div class="sig-pad" id="sig-pad"><canvas id="sig-canvas" aria-labelledby="sig-lab"></canvas><span class="placeholder" id="sig-placeholder">Your signature appears here when you type your name above</span></div>
           <div class="sig-line"><span class="small">Electronic signature</span><button type="button" class="link-btn" id="sig-clear">Clear</button></div>
         </div>
-        <div class="ack"><label><input type="checkbox" id="consent"><span>${esc(AG.CONSENT)}</span></label></div>
+        <div class="ack legal"><label><input type="checkbox" id="consent"><span>${esc(AG.CONSENT)}</span></label></div>
         <button type="button" class="btn btn--ink" id="sign-btn" style="margin-top:16px" disabled>Sign agreement</button>
       </fieldset>`;
     const sc = $("#doc-scroll");
+    const pad = { hasInk: false, mode: "type", ctx: null };
+    const norm = (v) => v.trim().toLowerCase().replace(/\s+/g, " ");
+    const nameOk = () => { const t = norm($("#typed-name").value); return !!t && t === norm(s.name); };
     const unlock = () => {
       if (sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 24) {
         $("#sign-fields").disabled = false;
@@ -294,26 +298,45 @@
       }
     };
     sc.addEventListener("scroll", unlock, { passive: true });
-    const pad = { hasInk: false };
     const check = () => {
       const boxes = $$("[data-ack]", area);
       const n = boxes.filter((b) => b.checked).length;
       $("#ack-count").textContent = `${n} of ${boxes.length} confirmed`;
-      const typed = $("#typed-name").value.trim().toLowerCase().replace(/\s+/g, " ");
-      const nameOk = typed && typed === s.name.trim().toLowerCase().replace(/\s+/g, " ");
-      $("#typed-err").textContent = typed && !nameOk ? "Type your name exactly as it appears above." : "";
-      $("#sign-btn").disabled = !(n === boxes.length && nameOk && pad.hasInk && $("#consent").checked);
+      const typed = norm($("#typed-name").value);
+      $("#typed-err").textContent = typed && !nameOk() ? "Type your name exactly as it appears above." : "";
+      $("#sign-btn").disabled = !(n === boxes.length && nameOk() && pad.hasInk && $("#consent").checked);
     };
-    area.oninput = check; area.onchange = check;
+    function clearPad() {
+      const cv = $("#sig-canvas");
+      if (pad.ctx) pad.ctx.clearRect(0, 0, cv.width, cv.height);
+      pad.hasInk = false; $("#sig-pad").classList.remove("has-ink");
+    }
+    // "From my name": renders the typed legal name in a handwriting font
+    function drawTyped() {
+      if (pad.mode !== "type" || !pad.ctx) return;
+      clearPad();
+      if (!nameOk()) return;
+      const cv = $("#sig-canvas"), w = cv.clientWidth, h = cv.clientHeight, ctx = pad.ctx;
+      const text = $("#typed-name").value.trim().replace(/\s+/g, " ");
+      let size = Math.min(44, h * 0.34);
+      ctx.font = `${size}px "Homemade Apple", cursive`;
+      while (ctx.measureText(text).width > w - 40 && size > 14) { size -= 2; ctx.font = `${size}px "Homemade Apple", cursive`; }
+      ctx.fillStyle = "#0b1a33";
+      ctx.fillText(text, 20, h * 0.62);
+      pad.hasInk = true; $("#sig-pad").classList.add("has-ink");
+    }
+    area.oninput = (e) => { if (e.target.id === "typed-name") drawTyped(); check(); };
+    area.onchange = check;
     check();
     $("#sign-btn").onclick = async () => {
       const text = sc.innerText;
       state.signatures[sigKey(s)] = {
         signer: s.name, minors: s.minors, email: s.i === 0 ? state.lead.email : null,
         acknowledgments: acks, consent: AG.CONSENT, typedName: $("#typed-name").value.trim(),
+        signatureMethod: pad.mode === "type" ? "adopted typed signature" : "hand drawn",
         signature: $("#sig-canvas").toDataURL("image/png"),
         signedAt: new Date().toISOString(), timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        agreementVersion: AG.VERSION, agreementSha256: await AG.hash(text), agreementHtml: AG.render(fillFor(s)),
+        videoWatched: state.videoDone, agreementVersion: AG.VERSION, agreementSha256: await AG.hash(text), agreementHtml: AG.render(fillFor(s)),
         userAgent: navigator.userAgent,
       };
       state.signerIdx = null;
@@ -325,20 +348,54 @@
       const ratio = window.devicePixelRatio || 1;
       cv.width = wrap.clientWidth * ratio; cv.height = wrap.clientHeight * ratio;
       const ctx = cv.getContext("2d");
-      ctx.scale(ratio, ratio); ctx.lineWidth = 2.2; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#000";
+      ctx.scale(ratio, ratio); ctx.lineWidth = 2.2; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#0b1a33";
+      pad.ctx = ctx;
       let drawing = false, last = null;
       const pos = (e) => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
-      cv.onpointerdown = (e) => { drawing = true; last = pos(e); cv.setPointerCapture(e.pointerId); };
+      cv.onpointerdown = (e) => { if (pad.mode !== "draw") return; drawing = true; last = pos(e); cv.setPointerCapture(e.pointerId); };
       cv.onpointermove = (e) => {
         if (!drawing) return;
         const p = pos(e); ctx.beginPath(); ctx.moveTo(last[0], last[1]); ctx.lineTo(p[0], p[1]); ctx.stroke(); last = p;
         if (!pad.hasInk) { pad.hasInk = true; wrap.classList.add("has-ink"); check(); }
       };
       cv.onpointerup = cv.onpointercancel = () => { drawing = false; };
-      $("#sig-clear").onclick = () => { ctx.clearRect(0, 0, cv.width, cv.height); pad.hasInk = false; wrap.classList.remove("has-ink"); check(); };
+      $("#sig-clear").onclick = () => { clearPad(); if (pad.mode === "type") $("#typed-name").value = ""; check(); };
+      $$(".sig-modes button", area).forEach((b) => b.onclick = () => {
+        pad.mode = b.dataset.mode;
+        $$(".sig-modes button", area).forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+        $("#sig-placeholder").textContent = pad.mode === "type" ? "Your signature appears here when you type your name above" : "Sign here with your finger or mouse";
+        cv.style.cursor = pad.mode === "draw" ? "crosshair" : "default";
+        clearPad(); drawTyped(); check();
+      });
+      cv.style.cursor = "default";
+      if (document.fonts && document.fonts.load) document.fonts.load('40px "Homemade Apple"').then(() => { drawTyped(); check(); }).catch(() => {});
+      drawTyped();
     }
     // short agreements on tall screens: unlock if there's nothing to scroll
     requestAnimationFrame(unlock);
+  }
+
+  /* ---------- safety video: must play to the end (scrubbing allowed) ---------- */
+  function setupVideo() {
+    const v = $("#safety-video");
+    v.poster = cfg.safetyVideo.poster;
+    v.innerHTML = `<source src="${cfg.safetyVideo.webm}" type="video/webm"><source src="${cfg.safetyVideo.src}" type="video/mp4">`;
+    v.load();
+    const bar = $("#video-bar"), status = $("#video-status"), text = $("#video-status-text");
+    v.addEventListener("timeupdate", () => {
+      if (state.videoDone || !v.duration) return;
+      const pct = Math.min(100, (v.currentTime / v.duration) * 100);
+      bar.style.width = pct + "%";
+      text.textContent = `Watching: ${Math.round(pct)}%`;
+    });
+    v.addEventListener("ended", () => {
+      state.videoDone = true;
+      bar.style.width = "100%";
+      text.textContent = "Watched to the end";
+      status.classList.add("is-done");
+      $("#sign-card").classList.remove("is-locked");
+      clearError();
+    });
   }
 
   /* ---------- review & confirm ---------- */
@@ -351,7 +408,7 @@
       ["Climbers", state.climbers.map((c) => esc(c.name) + (c.age === "minor" ? " (14–17)" : "")).join(", ")],
       ["Agreements", `${list.filter((s) => state.signatures[sigKey(s)]).length} of ${list.length} signed`],
       ["Return", `Within ${state.days * 24} hours of pickup`],
-      ["Safety video", state.videoDone ? "Confirmed" : "Not confirmed"],
+      ["Safety video", state.videoDone ? "Watched to the end" : "Not watched"],
       ["Damage cover", state.protection === "protection" ? "Gear Protection" : `Card hold of ${money(p.hold)}`],
       ["Total", money(p.total)],
     ].map(([a, b]) => `<li><span>${a}</span><strong style="color:#000">${b}</strong></li>`).join("");
@@ -400,7 +457,7 @@
       <h3>Signature</h3><p>Typed name: <strong>${esc(r.typedName)}</strong>${r.minors.length ? `<br>Signing for minors: ${esc(r.minors.join(", "))}` : ""}</p>
       <img src="${r.signature}" style="max-width:360px;border-bottom:1px solid #000"><p>Signed ${esc(r.signedAt)} (${esc(r.timeZone)})<br>Agreement version ${esc(r.agreementVersion)} · SHA-256 ${esc(r.agreementSha256)}</p>
       <h3>Statements confirmed</h3><ul>${r.acknowledgments.map((a) => `<li>${esc(a)}</li>`).join("")}</ul><p><em>${esc(r.consent)}</em></p></section>`).join("");
-    const html = `<!doctype html><meta charset="utf-8"><title>Trailside Rentals signed agreements ${state.ref}</title><style>body{font-family:system-ui,sans-serif;max-width:800px;margin:40px auto;padding:0 20px;line-height:1.5}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:6px;text-align:left}</style><h1>Booking ${state.ref}</h1>${docs}`;
+    const html = `<!doctype html><meta charset="utf-8"><title>Trailside Rentals signed agreements ${state.ref}</title><style>body{font-family:'Times New Roman',Times,serif;max-width:800px;margin:40px auto;padding:0 20px;line-height:1.5}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:6px;text-align:left}</style><h1>Booking ${state.ref}</h1>${docs}`;
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([html], { type: "text/html" }));
     a.download = `Trailside-signed-agreements-${state.ref}.html`;
@@ -427,11 +484,12 @@
       ok = setErr($("#lead-phone"), state.lead.phone.replace(/\D/g, "").length >= 10 ? "" : "Enter a 10-digit phone number.") && ok;
       state.climbers.forEach((c, i) => { if (i) ok = setErr($(`#c-name-${i}`), c.name.trim().split(/\s+/).length < 2 ? "Enter first and last name." : "") && ok; });
       if (!ok) return "Fix the highlighted fields.";
+      if (state.climbers[0] && state.climbers[0].age !== "adult") return "The person booking has to be 18 or older. A parent or guardian should book and add the 14 to 17 year old as a climber.";
       if (state.climbers.some((c) => !c.weightOk)) return "Confirm the weight and reach requirement for every climber.";
       return "";
     }
     if (step === 2) {
-      if (!state.videoDone) return "Confirm the safety video.";
+      if (!state.videoDone) return "Watch the safety video all the way through.";
       const list = signers();
       const left = list.filter((s) => !state.signatures[sigKey(s)]);
       if (left.length) return `Still waiting on ${left.map((s) => s.name).join(", ")} to sign.`;
@@ -516,7 +574,7 @@
       if (f === "name") refreshGuardianLabels();
     });
     $("#signers").addEventListener("click", (e) => { const b = e.target.closest("[data-signer]"); if (b) { state.signerIdx = Number(b.dataset.signer); renderSigners(); } });
-    $("#video-done").addEventListener("change", (e) => (state.videoDone = e.target.checked));
+    setupVideo();
     $$("[data-act=next]").forEach((b) => b.addEventListener("click", next));
     $$("[data-act=back]").forEach((b) => b.addEventListener("click", () => go(Math.max(0, state.step - 1))));
     $("#dl-signed").addEventListener("click", downloadSigned);

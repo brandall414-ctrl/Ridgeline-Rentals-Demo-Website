@@ -20,13 +20,15 @@ window.TRAILSIDE = {
   maxDays: 2,                  // longest rental a customer can book
   lowStockAt: 4,               // show "only X left" at or below this
 
-  // Price is per item, per day. A 2-day rental pays the day rate twice.
+  // price = 1-day rental. extraDay = added for each day after the first,
+  // so a 2-day kit is 45 + 15 = $60.
   items: [
     {
       id: "kit",
       name: "Full kit",
       detail: "Helmet, harness and via ferrata lanyard",
       price: 45,
+      extraDay: 15,
       stock: 16,
       perClimber: true,
       protection: 8,   // Gear Protection fee, per rental
@@ -38,6 +40,7 @@ window.TRAILSIDE = {
       name: "Lanyard only",
       detail: "Energy-absorbing via ferrata lanyard. Bring your own helmet and harness.",
       price: 30,
+      extraDay: 10,
       stock: 8,
       perClimber: true,
       protection: 5,
@@ -49,6 +52,7 @@ window.TRAILSIDE = {
       name: "Helmet only",
       detail: "UIAA / EN 12492 certified climbing helmet",
       price: 12,
+      extraDay: 5,
       stock: 4,
       perClimber: false,
       protection: 0,
@@ -60,6 +64,7 @@ window.TRAILSIDE = {
       name: "Harness only",
       detail: "UIAA / EN 12277 certified harness",
       price: 12,
+      extraDay: 5,
       stock: 4,
       perClimber: false,
       protection: 0,
@@ -76,7 +81,20 @@ window.TRAILSIDE = {
     "2027-07-04": "Lockers closed for the holiday",
   },
 
+  // Safety video every renter must watch to the end before signing.
+  // Placeholder clip until the real video is filmed.
+  safetyVideo: {
+    src: "assets/video/safety-video-placeholder.mp4",
+    webm: "assets/video/safety-video-placeholder.webm",
+    poster: "assets/video/safety-video-poster.jpg",
+  },
+
   // Demo only: fake existing bookings so the calendar shows real-looking
   // availability. Remove once the booking backend is connected.
   demoBookings: true,
+};
+
+// Price for one item for a rental of `days` days.
+window.TRAILSIDE.priceFor = function (item, days) {
+  return item.price + item.extraDay * Math.max(0, days - 1);
 };

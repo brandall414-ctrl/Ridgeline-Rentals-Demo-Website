@@ -31,9 +31,13 @@ The booking page is a working front end with no backend yet:
 - Signatures are captured with the signer's typed name, drawn signature, each confirmed statement, e-sign consent, timestamp, time zone, agreement version and a SHA-256 hash of the exact text shown. In the demo they're kept in the browser only and can be downloaded on the confirmation screen. Live, they need to be saved server-side and emailed to each signer.
 - Locker doors and codes come from a mock adapter in `js/locker.js`. When the real lockers arrive, write an adapter with the same three functions (assignDoors, createAccessCode, revokeCode) that calls the supplier API from the server, and swap it in. The confirmation page shows a pass with the door and code that can be saved to a phone for use with no signal.
 - Return rule: 1-day rentals are due back within 24 hours of pickup, 2-day rentals within 48 hours.
+- Pricing: `price` is the 1-day rate and `extraDay` is added for the second day (kit $45/$60, lanyard $30/$40, helmet or harness $12/$17).
+- Safety video: must play to the end (scrubbing allowed) before the agreement unlocks. The clip in `assets/video/` is a placeholder; swap the files named in `config.js` when the real video is ready.
+- Signatures: each signer can adopt a signature generated from their typed legal name, or draw one. The record notes which method was used.
+- **Placeholder photo:** `assets/photos/hero-bridge-wide.jpg` / `hero-bridge-tall.jpg` / `og-image.jpg` use a photo Trailside doesn't own. Replace before the site goes public. `hero-bridge-ai.jpg` is a fallback.
 
 ## Brand
 
-- Fonts: Oswald (headings) and Work Sans (body), from Google Fonts.
+- Fonts: Oswald (headings) and Work Sans (body), from Google Fonts. Legal text uses Times New Roman. Auto signatures use Homemade Apple.
 - Colors: paper `#F1F1EF`, black, graphite `#3B3D3F`, glacier blue `#9FCBE6` / `#2B6A91`, juniper green `#4C6B4F` (used for "available").
 - Logo: inline SVG in each page header and footer; icon files are `favicon.ico`, `apple-touch-icon.png`, `assets/icon-512.png`.

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rental Agreement | Trailside Rentals</title>
   <meta name="description" content="Read the Trailside Rentals gear rental agreement and liability release before you book." />
-  <meta name="theme-color" content="#F1F1EF" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="view-transition" content="same-origin" />
   <link rel="icon" href="favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <meta property="og:type" content="website" />
@@ -20,30 +21,33 @@
 </head>
 <body data-page="agreement">
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="site-header">
+<header class="site-header site-header--over">
   <div class="wrap site-header__inner">
     <a class="brand" href="index.html" aria-label="Trailside Rentals home"><svg viewBox="0 0 220 100" role="img" aria-label="Trailside Rentals"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 46 L24 31 L32 35 L48 19 L56 24 L72 9 L81 13"/><path d="M81 13 H111 M81 18 H111 M81 18 L86 13 L91 18 L96 13 L101 18 L106 13 L111 18"/><path d="M111 13 L118 6 L132 20 L142 16 L160 30 L170 26 L189 40 L198 37 L217 46"/></g><text x="110" y="86" text-anchor="middle" font-family="Oswald, Arial Narrow, sans-serif" font-weight="700" font-size="47" letter-spacing="1.2" fill="currentColor">TRAILSIDE</text><text x="111" y="99" text-anchor="middle" font-family="Work Sans, sans-serif" font-weight="600" font-size="10" letter-spacing="5.4" fill="currentColor">RENTALS</text></svg></a>
-    <nav class="nav" aria-label="Primary"><ul>
-      <li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="agreement.html" aria-current="page">Agreement</a></li><li><a href="index.html#contact">Contact</a></li>
-    </ul></nav>
+    <nav class="nav" aria-label="Primary"><ul><li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="index.html#about">About</a></li><li><a href="agreement.html" aria-current="page">Agreement</a></li></ul></nav>
     <a class="btn btn--ink btn--sm header-cta" href="book.html">Book gear</a>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menu"><span></span></button>
   </div>
   <div class="mobile-menu" id="mobile-menu">
-    <ul><li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="agreement.html">Agreement</a></li><li><a href="index.html#contact">Contact</a></li></ul>
-    <a class="btn btn--ink" href="book.html" style="width:100%">Book gear</a>
+    <ul><li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="index.html#about">About</a></li><li><a href="agreement.html">Agreement</a></li></ul>
+    <a class="btn btn--white" href="book.html" style="width:100%">Book gear</a>
   </div>
 </header>
 
 <main id="main">
-  <section class="page-head">
+  <section class="page-hero page-hero--short">
+    <img src="assets/photos/canyon-clouds.jpg" alt="Canyon walls under clouds" fetchpriority="high" />
     <div class="wrap">
-      <h1>Rental agreement</h1>
-      <p class="lede">Every renter signs this agreement during booking. Read it ahead of time so you know what you're agreeing to.</p>
-      <div class="btn-row no-print"><a class="btn btn--line btn--sm" href="assets/Trailside_Rentals_Rental_Agreement.docx" download>Download Word copy</a><button class="btn btn--line btn--sm" type="button" onclick="window.print()">Print</button></div>
+      <h1 class="rise"><span class="line"><span>Agreement</span></span></h1>
+      <p class="lede hero-fade">Every renter signs this during booking. Read it ahead of time.</p>
     </div>
   </section>
-  <section class="wrap" style="padding-bottom:80px"><article class="doc" id="doc"></article></section>
+  <section class="section" style="padding-top:clamp(40px,6vw,80px)">
+    <div class="wrap">
+      <div class="btn-row" style="margin-bottom:20px"><a class="btn btn--line btn--sm" href="assets/Trailside_Rentals_Rental_Agreement.docx" download>Download Word copy</a><button class="btn btn--line btn--sm" type="button" onclick="window.print()">Print</button></div>
+      <article class="doc legal" id="doc"></article>
+    </div>
+  </section>
 </main>
 <script>document.addEventListener("DOMContentLoaded",function(){document.getElementById("doc").innerHTML=window.TrailsideAgreement.render();});</script>
 
