@@ -2,194 +2,285 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Trailside Rentals | Via Ferrata Gear at the Ashley Gorge Trailhead, Vernal, Utah</title>
-  <meta name="description" content="Self-serve via ferrata gear rentals in lockers at the Ashley Gorge trailhead near Vernal, Utah. Book online, sign once, pick up your kit at the trailhead." />
-  <meta name="theme-color" content="#000000" />
-  <meta name="view-transition" content="same-origin" />
+  <meta name="description" content="Self-serve via ferrata gear lockers at the Ashley Gorge trailhead in Vernal, Utah. Book online, sign your agreement, and pick up your kit in the parking lot." />
+  <meta name="theme-color" content="#FFFFFF" />
   <link rel="icon" href="favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Trailside Rentals | Via Ferrata Gear at the Ashley Gorge Trailhead, Vernal, Utah" />
-  <meta property="og:description" content="Self-serve via ferrata gear rentals in lockers at the Ashley Gorge trailhead near Vernal, Utah. Book online, sign once, pick up your kit at the trailhead." />
+  <meta property="og:title" content="Trailside Rentals" />
+  <meta property="og:description" content="Via ferrata gear lockers at the Ashley Gorge trailhead, Vernal, Utah." />
   <meta property="og:image" content="assets/photos/og-image.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preload" as="image" href="assets/route/climber-cutout.webp" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Work+Sans:wght@600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/apple.css" />
+  <link rel="stylesheet" href="css/home.css" />
 </head>
-<body data-page="home">
-<a class="skip-link" href="#main">Skip to content</a>
-<header class="site-header site-header--over">
-  <div class="wrap site-header__inner">
-    <a class="brand" href="index.html" aria-label="Trailside Rentals home"><svg viewBox="0 0 220 100" role="img" aria-label="Trailside Rentals"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 46 L24 31 L32 35 L48 19 L56 24 L72 9 L81 13"/><path d="M81 13 H111 M81 18 H111 M81 18 L86 13 L91 18 L96 13 L101 18 L106 13 L111 18"/><path d="M111 13 L118 6 L132 20 L142 16 L160 30 L170 26 L189 40 L198 37 L217 46"/></g><text x="110" y="86" text-anchor="middle" font-family="Oswald, Arial Narrow, sans-serif" font-weight="700" font-size="47" letter-spacing="1.2" fill="currentColor">TRAILSIDE</text><text x="111" y="99" text-anchor="middle" font-family="Work Sans, sans-serif" font-weight="600" font-size="10" letter-spacing="5.4" fill="currentColor">RENTALS</text></svg></a>
-    <nav class="nav" aria-label="Primary"><ul><li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="index.html#location">Location</a></li><li><a href="agreement.html">Agreement</a></li></ul></nav>
-    <a class="btn btn--ink btn--sm header-cta" href="book.html">Book gear</a>
-    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menu"><span></span></button>
-  </div>
-  <div class="mobile-menu" id="mobile-menu">
-    <ul><li><a href="index.html#how-it-works">How it works</a></li><li><a href="index.html#gear">Gear</a></li><li><a href="rates.html">Rates</a></li><li><a href="index.html#location">Location</a></li><li><a href="agreement.html">Agreement</a></li></ul>
-    <a class="btn btn--white" href="book.html" style="width:100%">Book gear</a>
-  </div>
-</header>
+<body class="h-page is-loading">
+  <a class="h-skip" href="#main">Skip to content</a>
 
-<main id="main">
-  <div class="stack">
-    <section class="panel panel--hero" aria-label="Intro">
-      <picture>
-        <source media="(max-width: 699px)" srcset="assets/photos/hero-canyon-tall.jpg" />
-        <img class="panel__img" src="assets/photos/hero-canyon-wide.jpg" alt="View down Ashley Gorge past a via ferrata cable and carabiner" fetchpriority="high" />
-      </picture>
-      <div class="panel__shade"></div><div class="panel__dim"></div>
-      <div class="wrap panel__body">
-        <span class="hero-tag hero-fade"><span class="dot dot--live"></span>Opening March 2027 at Ashley Gorge</span>
-        <h1 class="rise"><span class="line"><span>Gear up</span></span> <span class="line"><span>at the</span></span> <span class="line"><span>trailhead.</span></span></h1>
-        <div class="panel__row hero-fade">
-          <p class="lede">Self-serve via ferrata kits in lockers at the Ashley Gorge trailhead. Book online, sign your agreement, then grab your gear on the way to the wall.</p>
-          <div class="btn-row"><a class="btn btn--white" href="book.html">Book gear</a><a class="btn btn--line-white" href="rates.html">See rates</a></div>
+  <header class="h-nav" id="h-nav">
+    <div class="h-nav__in">
+      <a class="h-brand" href="index.html" aria-label="Trailside Rentals home">
+        <svg viewBox="0 0 220 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 46 L24 31 L32 35 L48 19 L56 24 L72 9 L81 13"/><path d="M81 13 H111 M81 18 H111 M81 18 L86 13 L91 18 L96 13 L101 18 L106 13 L111 18"/><path d="M111 13 L118 6 L132 20 L142 16 L160 30 L170 26 L189 40 L198 37 L217 46"/></g><text x="110" y="86" text-anchor="middle" font-family="Oswald, Arial Narrow, sans-serif" font-weight="700" font-size="47" letter-spacing="1.2" fill="currentColor">TRAILSIDE</text><text x="111" y="99" text-anchor="middle" font-family="Work Sans, sans-serif" font-weight="600" font-size="10" letter-spacing="5.4" fill="currentColor">RENTALS</text></svg>
+      </a>
+      <nav class="h-links" aria-label="Main">
+        <a href="#route">The route</a>
+        <a href="#gear">Gear</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="rates.html">Rates</a>
+        <a href="#location">Location</a>
+      </nav>
+      <div class="h-nav__end">
+        <a class="a-btn h-nav__book" href="book.html">Book gear</a>
+        <button class="h-menu-btn" type="button" aria-expanded="false" aria-controls="h-menu" aria-label="Menu"><i></i><i></i></button>
+      </div>
+    </div>
+    <div class="h-menu" id="h-menu" hidden>
+      <a href="#route">The route</a>
+      <a href="#gear">Gear</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="rates.html">Rates</a>
+      <a href="#location">Location</a>
+      <a href="agreement.html">Rental agreement</a>
+    </div>
+  </header>
+
+  <!-- The cable down the left edge. Two carabiners ride it and pass each bolt one at a time. -->
+  <div class="rail" aria-hidden="true">
+    <svg id="rail" width="100%" height="100%">
+      <defs>
+        <linearGradient id="tether-fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      </defs>
+      <g id="rail-root">
+        <line id="cable" class="cable" x1="0" x2="0" y1="-20" y2="4000"/>
+        <line id="cable-twist" class="cable-twist" x1="0" x2="0" y1="-20" y2="4000"/>
+        <g id="bolts"></g>
+        <path id="arm-a" class="arm"/>
+        <path id="arm-b" class="arm"/>
+        <path id="tether" class="tether"/>
+        <g id="pouch"><rect x="-6" y="-11" width="12" height="22" rx="4" class="pouch"/></g>
+        <g id="biner-a" class="biner"><g class="biner__swing"><path class="biner__body" d="M-1 -17 C -9 -17 -10 -12 -10 -6 L -10 8 C -10 15 -6 18 0 18 C 7 18 10 14 10 8 L 10 -9 C 10 -14 7 -17 2 -17 Z"/><path class="biner__gate" d="M10 -9 L 10 8"/></g></g>
+        <g id="biner-b" class="biner"><g class="biner__swing"><path class="biner__body" d="M-1 -17 C -9 -17 -10 -12 -10 -6 L -10 8 C -10 15 -6 18 0 18 C 7 18 10 14 10 8 L 10 -9 C 10 -14 7 -17 2 -17 Z"/><path class="biner__gate" d="M10 -9 L 10 8"/></g></g>
+      </g>
+    </svg>
+  </div>
+
+  <main id="main">
+
+    <!-- ============ cover ============ -->
+    <section class="cover" data-pitch data-tone="light" aria-labelledby="cover-title">
+      <div class="cover__wall" id="cover-wall">
+        <img class="cover__shadow" src="assets/route/climber-shadow.webp" alt="" aria-hidden="true" />
+        <img class="cover__climber" src="assets/route/climber-cutout.webp" width="779" height="1500"
+             alt="A climber clipped into the steel cable, leaning out from a sandstone wall on the Ashley Gorge via ferrata" />
+      </div>
+      <div class="wrap cover__copy">
+        <h1 class="cover__title" id="cover-title">
+          <span class="line"><span>Clip in</span></span>
+          <span class="line"><span>at the</span></span>
+          <span class="line"><span>trailhead.</span></span>
+        </h1>
+        <p class="cover__lede">Via ferrata gear in lockers at the Ashley Gorge trailhead in Vernal, Utah. Book on your phone, grab your kit in the parking lot, and climb.</p>
+        <div class="cover__bottom">
+        <div class="cover__cta">
+          <a class="a-btn" href="book.html">Book gear</a>
+          <a class="h-link" href="#route">See the route <svg viewBox="0 0 8 13" aria-hidden="true"><path d="m1.5 1.5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <p class="cover__note">Lockers open March 2027. Full kits from <span data-price="kit:1"></span> a day.</p>
+        </div>
+      </div>
+      <div class="cover__scroll" aria-hidden="true"><span></span></div>
+    </section>
+
+    <!-- ============ intro ============ -->
+    <section class="intro" id="route" data-pitch data-tone="dark" aria-labelledby="intro-title">
+      <div class="wrap">
+        <h2 class="intro__title" id="intro-title" data-split>Steel cable, iron rungs and a lot of air.</h2>
+        <p class="intro__body" data-rise>A via ferrata is a climbing route with a steel cable bolted to the rock. You wear a harness with two carabiners and keep at least one on the cable the whole way. You don't need rope skills, just the right gear and a good head for heights.</p>
+        <dl class="intro__facts" data-rise>
+          <div><dt>Climber weight</dt><dd>90–265 lb</dd></div>
+          <div><dt>Time on the route</dt><dd>2–8 hrs</dd></div>
+          <div><dt>Minimum age</dt><dd>14, with a parent</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ 3D route walk ============ -->
+    <section class="walk" data-pitch data-tone="dark" aria-label="A walk along the route">
+      <div class="walk__stage">
+        <div class="walk__world" id="walk-world">
+          <p class="walk__word" data-z="-200">Start in the parking lot.</p>
+          <img class="walk__photo" data-z="-900"  data-x="-1" src="assets/route/approach-sun.webp" alt="Morning sun over the approach trail above the gorge" loading="lazy" />
+          <img class="walk__photo" data-z="-1500" data-x="1"  src="assets/route/traverse-canyon.webp" alt="A climber on the cable, traversing a sandstone wall high above the canyon" loading="lazy" />
+          <p class="walk__word" data-z="-2200">Traverse the wall.</p>
+          <img class="walk__photo" data-z="-2900" data-x="-1" src="assets/route/traverse-overhang.webp" alt="A climber moving under an overhang on the traverse" loading="lazy" />
+          <img class="walk__photo" data-z="-3500" data-x="1"  src="assets/route/climber-up.webp" alt="A climber looking up from a narrow ledge, clipped to the cable" loading="lazy" />
+          <p class="walk__word" data-z="-4200">Cross the bridges.</p>
+          <img class="walk__photo" data-z="-4900" data-x="-1" src="assets/route/bridge-long.webp" alt="Looking down a long cable bridge stretched across the gorge" loading="lazy" />
+          <img class="walk__photo" data-z="-5500" data-x="1"  src="assets/route/bridge-red.webp" alt="A suspension bridge strung between red rock walls" loading="lazy" />
+          <p class="walk__word" data-z="-6200">Climb the ladder.</p>
+          <img class="walk__photo" data-z="-6900" data-x="-1" src="assets/route/ladder-sky.webp" alt="A climber silhouetted on a hanging ladder against blue sky" loading="lazy" />
+          <img class="walk__photo" data-z="-7500" data-x="1"  src="assets/route/ladder-roof.webp" alt="A hanging ladder dropping from a rock roof" loading="lazy" />
+          <p class="walk__word" data-z="-8200">Top out over the gorge.</p>
+          <img class="walk__photo walk__photo--end" data-z="-9200" data-x="0" src="assets/route/summit-view.webp" alt="The view over Ashley Gorge from the top of the route" loading="lazy" />
+        </div>
+        <div class="walk__progress" aria-hidden="true"><i id="walk-bar"></i></div>
+      </div>
+    </section>
+
+    <!-- ============ ladder clip ============ -->
+    <section class="clip" data-pitch data-tone="dark" aria-labelledby="clip-title">
+      <div class="clip__stage">
+        <h2 class="clip__title" id="clip-title"><span class="clip__l">Two carabiners.</span><span class="clip__r">One always on.</span></h2>
+        <div class="clip__frame" id="clip-frame">
+          <video id="clip-video" muted playsinline loop preload="metadata" poster="assets/route/ladder-poster.jpg" aria-label="A climber going up a hanging ladder on the route">
+            <source src="assets/route/ladder.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <p class="clip__cap" id="clip-cap">Clip the next section before you unclip the last. Every lanyard in the locker has two arms so you're never off the cable.</p>
+      </div>
+    </section>
+
+    <!-- ============ the kit ============ -->
+    <section class="kit" id="gear" data-pitch data-tone="gray" aria-labelledby="kit-title">
+      <div class="kit__pin">
+      <div class="kit__stage">
+        <div class="wrap kit__head">
+          <h2 class="kit__title" id="kit-title">One kit. Everything you clip in with.</h2>
+          <p class="kit__sub">Certified gear, inspected between every rental.</p>
+        </div>
+        <div class="kit__space" id="kit-space">
+          <figure class="kit__part" data-part="helmet"><img src="assets/gear/helmet.png" alt="Blue climbing helmet" loading="lazy" />
+            <figcaption><b>Helmet</b><span>UIAA and EN 12492 certified</span></figcaption></figure>
+          <figure class="kit__part" data-part="harness"><img src="assets/gear/harness.png" alt="Climbing harness with adjustable leg loops" loading="lazy" />
+            <figcaption><b>Harness</b><span>UIAA and EN 12277, adjustable leg loops</span></figcaption></figure>
+          <figure class="kit__part" data-part="lanyard"><img src="assets/gear/lanyard.png" alt="Via ferrata lanyard with two carabiners and an energy absorber" loading="lazy" />
+            <figcaption><b>Via ferrata lanyard</b><span>Two arms and an energy absorber</span></figcaption></figure>
+        </div>
+      </div>
+      </div>
+      <div class="wrap">
+        <div class="prices" data-rise>
+          <div class="price"><b>Full kit</b><span>Helmet, harness and lanyard</span><p><em data-price="kit:1"></em> 1 day</p><p><em data-price="kit:2"></em> 2 days</p></div>
+          <div class="price"><b>Lanyard only</b><span>Bring your own helmet and harness</span><p><em data-price="lanyard:1"></em> 1 day</p><p><em data-price="lanyard:2"></em> 2 days</p></div>
+          <div class="price"><b>Helmet</b><span>Add one if you're missing it</span><p><em data-price="helmet:1"></em> 1 day</p><p><em data-price="helmet:2"></em> 2 days</p></div>
+          <div class="price"><b>Harness</b><span>Add one if you're missing it</span><p><em data-price="harness:1"></em> 1 day</p><p><em data-price="harness:2"></em> 2 days</p></div>
+        </div>
+        <p class="kit__foot">One kit or lanyard per climber. Add Gear Protection at checkout, or we place a refundable card hold. <a href="rates.html">Rates and rules</a></p>
+      </div>
+    </section>
+
+    <!-- ============ how it works ============ -->
+    <section class="how" id="how-it-works" data-pitch data-tone="light" aria-labelledby="how-title">
+      <div class="wrap">
+        <h2 class="how__title" id="how-title" data-split>No counter. No shop hours.</h2>
+        <p class="how__sub" data-rise>Everything happens on your phone before you reach the lot.</p>
+        <div class="how__grid">
+          <ol class="how__steps">
+            <li class="how__step" data-shot="0"><img class="how__inline" src="design/booking-apple/4-calendar.jpg" alt="" loading="lazy" /><h3>Pick your day</h3><p>One day (24 hours) or two (48 hours). You'll see how many kits are left before you book.</p></li>
+            <li class="how__step" data-shot="1"><img class="how__inline" src="design/booking-apple/5-gear.jpg" alt="" loading="lazy" /><h3>Choose your gear</h3><p>A full kit or a lanyard for each climber, plus any helmets or harnesses you're missing.</p></li>
+            <li class="how__step" data-shot="2"><img class="how__inline" src="design/booking-apple/6-agreement.jpg" alt="" loading="lazy" /><h3>Watch and sign</h3><p>A short safety video, then every adult signs. Parents sign for climbers aged 14 to 17.</p></li>
+            <li class="how__step" data-shot="3"><img class="how__inline" src="design/booking-apple/7-checkout.jpg" alt="" loading="lazy" /><h3>Pay</h3><p>Apple Pay or card. You'll see the total before you pay.</p></li>
+            <li class="how__step" data-shot="4"><img class="how__inline" src="design/booking-apple/8-pass.jpg" alt="" loading="lazy" /><h3>Open your locker</h3><p>Save your pass with your locker code. There's no signal at the gorge. Lock the gear back up when you're done.</p></li>
+          </ol>
+          <div class="how__phone" aria-hidden="true">
+            <div class="phone">
+              <img class="phone__shot is-on" src="design/booking-apple/4-calendar.jpg" alt="" />
+              <img class="phone__shot" src="design/booking-apple/5-gear.jpg" alt="" loading="lazy" />
+              <img class="phone__shot" src="design/booking-apple/6-agreement.jpg" alt="" loading="lazy" />
+              <img class="phone__shot" src="design/booking-apple/7-checkout.jpg" alt="" loading="lazy" />
+              <img class="phone__shot" src="design/booking-apple/8-pass.jpg" alt="" loading="lazy" />
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="panel" id="about-route" aria-labelledby="p2">
-      <img class="panel__img" src="assets/photos/climber-cable.jpg" alt="Climber clipped to the cable on a sandstone wall above the canyon" loading="lazy" />
-      <div class="panel__shade"></div><div class="panel__dim"></div>
-      <div class="wrap panel__body">
-        <h2 id="p2" data-reveal>Real cliffs.<br>No rope skills needed.</h2>
-        <p class="lede" data-reveal style="--i:1">A via ferrata is a climbing route built with steel cables, iron rungs and bridges bolted into the rock. You clip a two-armed lanyard to the cable and stay attached the whole way. Ashley Gorge is one of the longest public routes in the country. The route is free. The gear is required.</p>
-        <div class="facts" data-reveal style="--i:2">
-          <div class="fact"><strong>90–265 lb</strong><span>Climber weight</span></div>
-          <div class="fact"><strong>2–8 hrs</strong><span>On the route</span></div>
-          <div class="fact"><strong>14+</strong><span>Age, with a parent</span></div>
+    <!-- ============ photo strip ============ -->
+    <section class="strip" data-pitch data-tone="light" aria-labelledby="strip-title">
+      <div class="strip__stage">
+        <h2 class="strip__title wrap" id="strip-title">From the gorge.</h2>
+        <div class="strip__track" id="strip-track">
+          <figure><img src="assets/route/climber-chain.webp" alt="A climber reaching for an iron rung on a slab" loading="lazy" /></figure>
+          <figure class="w"><img src="assets/route/biner-cable.webp" alt="A carabiner clipped to the steel cable above the canyon" loading="lazy" /></figure>
+          <figure><img src="assets/route/pillar.webp" alt="A cable running up a sandstone pillar" loading="lazy" /></figure>
+          <figure class="w"><img src="assets/route/bridge-wide.webp" alt="A suspension bridge crossing the gorge between pine trees" loading="lazy" /></figure>
+          <figure><img src="assets/route/biner-close.webp" alt="Close-up of a carabiner on the cable" loading="lazy" /></figure>
+          <figure><img src="assets/route/climber-helmet.webp" alt="A climber in a helmet pulling up between juniper trees" loading="lazy" /></figure>
+          <figure class="w"><img src="assets/route/view-sun.webp" alt="Late sun over the Uinta Basin from the rim" loading="lazy" /></figure>
+          <figure><img src="assets/route/cable-edge.webp" alt="The cable running along a rock edge with the canyon below" loading="lazy" /></figure>
         </div>
       </div>
     </section>
 
-  </div>
+    <!-- ============ location ============ -->
+    <section class="loc" id="location" data-pitch data-tone="gray" aria-labelledby="loc-title">
+      <div class="wrap">
+        <h2 class="loc__title" id="loc-title" data-split>Right in the parking lot.</h2>
+        <p class="loc__sub" data-rise>The lockers sit at the Ashley Gorge trailhead, about 15 minutes north of Vernal. Park, grab your gear and start the approach. No stop in town.</p>
+        <div class="loc__grid">
+          <div class="loc__map" data-rise>
+            <iframe id="map-frame" title="Map of the Ashley Gorge via ferrata trailhead" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://maps.google.com/maps?q=40.5689978,-109.6150586&amp;t=k&amp;z=16&amp;output=embed"
+              data-trailhead="https://maps.google.com/maps?q=40.5689978,-109.6150586&amp;t=k&amp;z=16&amp;output=embed"
+              data-vernal="https://maps.google.com/maps?q=40.5689978,-109.6150586&amp;t=m&amp;z=11&amp;output=embed"></iframe>
+            <div class="loc__seg"><div class="seg" role="group" aria-label="Map view"><button type="button" data-map="trailhead" aria-pressed="true">Trailhead</button><button type="button" data-map="vernal" aria-pressed="false">From Vernal</button></div></div>
+          </div>
+          <div class="loc__info" data-rise>
+            <div class="g">
+              <div class="cell"><span class="lbl"><small>Trailhead</small><b>7810 N Ashley Springs Rd<br>Vernal, UT 84078</b></span></div>
+              <div class="cell"><span class="lbl"><small>Lockers</small><b>Trailhead parking lot</b></span></div>
+              <div class="cell"><span class="lbl"><small>Cell service</small><b>None at the trailhead</b></span></div>
+            </div>
+            <p class="g-foot">Save directions and your pass before you leave town.</p>
+            <a class="a-btn loc__btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=40.5689978,-109.6150586" target="_blank" rel="noopener">Get directions</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <section class="bleed bleed--white" id="how-it-works">
-    <div class="bleed__text">
-      <h2 data-reveal>How it works</h2>
-      <p class="lede" data-reveal style="--i:1; margin-top:20px">No counter and no shop hours. Everything happens on your phone before you reach the lot.</p>
-      <ol class="steps">
-        <li data-reveal><div><h3>Pick your dates</h3><p>One day (24 hours) or two (48 hours). You'll see what's left before you book.</p></div></li>
-        <li data-reveal><div><h3>Watch the safety video</h3><p>Fitting the harness, clipping in and the hazards on this route.</p></div></li>
-        <li data-reveal><div><h3>Sign the agreement</h3><p>Every adult climber signs online. Parents sign for climbers aged 14 to 17.</p></div></li>
-        <li data-reveal><div><h3>Get your locker code</h3><p>Save your pass to your phone. There's no signal at the gorge.</p></div></li>
-        <li data-reveal><div><h3>Climb, then return</h3><p>Grab your kit at the trailhead, climb, and lock it back up when you're done.</p></div></li>
-      </ol>
-    </div>
-    <div class="bleed__media" data-wipe><img src="assets/photos/climber-wall-sky.jpg" alt="Climber high on a sandstone wall under a blue sky" loading="lazy" /></div>
-  </section>
+    <!-- ============ before you go ============ -->
+    <section class="know" id="before-you-go" data-pitch data-tone="light" aria-labelledby="know-title">
+      <div class="wrap">
+        <h2 class="know__title" id="know-title" data-split>Before you go.</h2>
+        <div class="know__grid">
+          <div data-rise><h3>There's no cell service at the gorge.</h3><p>Save your pass and locker code before you leave Vernal.</p></div>
+          <div data-rise><h3>Sign the county waiver too.</h3><p>Uintah County requires its own waiver for every climber. <a href="https://www.ashleygorgeviaferrata.com/waiver" target="_blank" rel="noopener">Sign it here</a>.</p></div>
+          <div data-rise><h3>Bring 2 liters of water each.</h3><p>Most of the route is in full sun and there's no water at the trailhead.</p></div>
+          <div data-rise><h3>Wear real shoes.</h3><p>Hiking or approach shoes with good grip. No sandals.</p></div>
+          <div data-rise><h3>Start early.</h3><p>Summer afternoons get hot and storms build fast. Lightning and steel cables don't mix.</p></div>
+          <div data-rise><h3>Pack gloves and snacks.</h3><p>Cables get hot and rough on your hands, and there's nowhere to buy food nearby.</p></div>
+        </div>
+      </div>
+    </section>
 
-  <section class="section" id="gear">
-    <div class="wrap">
-      <div class="gear-head">
-        <div><h2 data-reveal>The kit</h2><p class="lede" data-reveal style="--i:1; margin-top:16px">Certified gear, inspected between every rental.</p></div>
-        <a class="btn btn--line" href="rates.html" data-reveal>Rates and rules</a>
+    <!-- ============ end ============ -->
+    <section class="end" id="contact" data-pitch data-tone="dark" aria-labelledby="end-title">
+      <img class="end__bg" src="assets/route/bridge-wide.webp" alt="" loading="lazy" />
+      <div class="wrap end__in">
+        <h2 class="end__title" id="end-title" data-split>See you at the trailhead.</h2>
+        <a class="a-btn end__btn" href="book.html">Book gear</a>
+        <div class="end__contact">
+          <p><small>Call or text</small><a data-contact="phone" href="tel:+12084731751">(208) 473-1751</a></p>
+          <p><small>Email</small><a data-contact="email" href="mailto:trailsiderentalsvernal@gmail.com">trailsiderentalsvernal@gmail.com</a></p>
+        </div>
       </div>
-      <div class="gear-grid">
-        <article class="gear" data-reveal style="--i:0"><div class="gear__img"><img src="assets/gear/full-kit.png" alt="Helmet, harness and via ferrata lanyard" loading="lazy" /></div><h3>Full kit</h3><p>Helmet, harness and energy-absorbing lanyard. Everything one climber needs.</p><div class="gear__price"><span><b data-price="kit:1">$</b>1 day</span><span><b data-price="kit:2">$</b>2 days</span></div></article>
-        <article class="gear" data-reveal style="--i:1"><div class="gear__img"><img src="assets/gear/lanyard.png" alt="Via ferrata lanyard with two carabiners" loading="lazy" /></div><h3>Lanyard only</h3><p>For climbers who bring their own helmet and harness.</p><div class="gear__price"><span><b data-price="lanyard:1">$</b>1 day</span><span><b data-price="lanyard:2">$</b>2 days</span></div></article>
-        <article class="gear" data-reveal style="--i:2"><div class="gear__img"><img src="assets/gear/helmet.png" alt="Climbing helmet" loading="lazy" /></div><h3>Helmet</h3><p>UIAA and EN 12492 certified. Add one if you are missing it.</p><div class="gear__price"><span><b data-price="helmet:1">$</b>1 day</span><span><b data-price="helmet:2">$</b>2 days</span></div></article>
-        <article class="gear" data-reveal style="--i:3"><div class="gear__img"><img src="assets/gear/harness.png" alt="Climbing harness" loading="lazy" /></div><h3>Harness</h3><p>UIAA and EN 12277 certified, adjustable leg loops.</p><div class="gear__price"><span><b data-price="harness:1">$</b>1 day</span><span><b data-price="harness:2">$</b>2 days</span></div></article>
-      </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <section class="bleed bleed--white location" id="location">
-    <div class="bleed__text">
-      <h2 data-reveal>Right in the parking lot</h2>
-      <p class="lede" data-reveal style="--i:1; margin-top:20px">The lockers sit at the Ashley Gorge trailhead, about 15 minutes north of Vernal. Park, grab your gear and start the approach. No stop in town.</p>
-      <ul class="loc-list" data-reveal style="--i:2">
-        <li><span>Trailhead</span><strong>7810 N Ashley Springs Rd<br>Vernal, UT 84078</strong></li>
-        <li><span>Lockers</span><strong>Trailhead parking lot</strong></li>
-        <li><span>Cell service</span><strong>None at the trailhead. Save directions and your pass before you leave town.</strong></li>
-      </ul>
-      <div class="btn-row" data-reveal style="--i:3; margin-top:28px">
-        <a class="btn btn--ink" href="https://www.google.com/maps/dir/?api=1&amp;destination=40.5689978,-109.6150586" target="_blank" rel="noopener">Get directions</a>
-      </div>
+  <footer class="h-foot">
+    <div class="wrap h-foot__in">
+      <nav aria-label="Footer">
+        <a href="book.html">Book gear</a><a href="rates.html">Rates</a><a href="agreement.html">Rental agreement</a><a href="#before-you-go">Before you go</a><a href="https://www.ashleygorgeviaferrata.com/waiver" target="_blank" rel="noopener">Uintah County waiver</a>
+      </nav>
+      <p>© <span data-year>2026</span> Randall Ventures LLC. Trailside Rentals is a Randall Ventures LLC brand. Operating under a BLM Special Recreation Permit (finalizing).</p>
     </div>
-    <div class="bleed__media map">
-      <div class="map__toggle" role="group" aria-label="Map view">
-        <button type="button" data-map="trailhead" aria-pressed="true">Trailhead</button>
-        <button type="button" data-map="vernal" aria-pressed="false">From Vernal</button>
-      </div>
-      <iframe id="map-frame" title="Map of the Ashley Gorge via ferrata trailhead" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-        src="https://maps.google.com/maps?q=40.5689978,-109.6150586&amp;t=k&amp;z=16&amp;output=embed"
-        data-trailhead="https://maps.google.com/maps?q=40.5689978,-109.6150586&amp;t=k&amp;z=16&amp;output=embed"
-        data-vernal="https://maps.google.com/maps?q=40.5689978,-109.6150586&amp;t=m&amp;z=11&amp;output=embed"></iframe>
-    </div>
-  </section>
+  </footer>
 
-  <section class="section section--ink" id="before-you-go">
-    <div class="wrap on-dark">
-      <h2 data-reveal>Before you go</h2>
-      <div class="tips">
-        <div class="tip tip--flag" data-reveal><h3>There's no cell service at the gorge</h3><p>Save your pass and locker code before you leave Vernal.</p></div>
-        <div class="tip" data-reveal style="--i:1"><h3>Sign the county waiver too</h3><p>Uintah County requires its own waiver for every climber. <a href="https://www.ashleygorgeviaferrata.com/waiver" target="_blank" rel="noopener">Sign it here.</a></p></div>
-        <div class="tip" data-reveal><h3>Bring 2 liters of water each</h3><p>Most of the route is in full sun and there's no water at the trailhead.</p></div>
-        <div class="tip" data-reveal style="--i:1"><h3>Wear real shoes</h3><p>Hiking or approach shoes with good grip. No sandals.</p></div>
-        <div class="tip" data-reveal><h3>Start early</h3><p>Summer afternoons get hot, and storms build fast. Lightning and steel cables don't mix.</p></div>
-        <div class="tip" data-reveal style="--i:1"><h3>Pack gloves and snacks</h3><p>Cables get hot and rough on your hands. There's nowhere to buy food nearby.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" style="padding-bottom:0">
-    <div class="wrap"><h2 data-reveal>From the gorge</h2></div>
-    <div class="marquee" aria-label="Photos from Ashley Gorge"><div class="marquee__track"><figure><img src="assets/photos/bridge-climbers.jpg" alt="Climbers crossing a suspension bridge" loading="lazy" /></figure><figure><img src="assets/photos/climber-smile.jpg" alt="Smiling climber on iron rungs, seen from above" loading="lazy" /></figure><figure><img src="assets/photos/canyon-overlook.jpg" alt="Overlook down Ashley Gorge" loading="lazy" /></figure><figure><img src="assets/photos/climber-arms-out.jpg" alt="Climber leaning out from the cable" loading="lazy" /></figure><figure><img src="assets/photos/bridge-down.jpg" alt="Looking along a suspension bridge across the canyon" loading="lazy" /></figure><figure><img src="assets/photos/climber-ridge.jpg" alt="Climber on a narrow ridge above the canyon" loading="lazy" /></figure><figure><img src="assets/photos/canyon-clouds.jpg" alt="Canyon walls under clouds" loading="lazy" /></figure><figure><img src="assets/photos/climber-traverse.jpg" alt="Climber traversing a rock face" loading="lazy" /></figure><figure aria-hidden="true"><img src="assets/photos/bridge-climbers.jpg" alt="" loading="lazy" /></figure><figure aria-hidden="true"><img src="assets/photos/climber-smile.jpg" alt="" loading="lazy" /></figure><figure aria-hidden="true"><img src="assets/photos/canyon-overlook.jpg" alt="" loading="lazy" /></figure><figure aria-hidden="true"><img src="assets/photos/climber-arms-out.jpg" alt="" loading="lazy" /></figure><figure aria-hidden="true"><img src="assets/photos/bridge-down.jpg" alt="" loading="lazy" /></figure><figure aria-hidden="true"><img src="assets/photos/climber-ridge.jpg" alt="" loading="lazy" /></figure><figure aria-hidden="true"><img src="assets/photos/canyon-clouds.jpg" alt="" loading="lazy" /></figure><figure aria-hidden="true"><img src="assets/photos/climber-traverse.jpg" alt="" loading="lazy" /></figure></div></div>
-  </section>
-
-  <section class="cta" id="contact">
-    <div class="wrap cta__inner on-dark">
-      <div>
-        <h2 data-reveal>Questions before you climb?</h2>
-        <p class="lede" data-reveal style="--i:1; margin-top:20px">Call, text or email. We'll help with gear, sizing, the route and how the lockers work.</p>
-        <a class="btn btn--glacier" href="book.html" data-reveal style="--i:2">Book gear</a>
-      </div>
-      <ul class="contact-list" data-reveal style="--i:1">
-        <li><span>Call or text</span><a data-contact="phone" href="tel:+12084731751">(208) 473-1751</a></li>
-        <li><span>Email</span><a data-contact="email" href="mailto:trailsiderentalsvernal@gmail.com">trailsiderentalsvernal@gmail.com</a></li>
-        <li><span>Lockers</span><span style="color:#fff">Ashley Gorge trailhead, Vernal, Utah</span></li>
-      </ul>
-    </div>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <div class="wrap">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <svg viewBox="0 0 220 100" role="img" aria-label="Trailside Rentals"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 46 L24 31 L32 35 L48 19 L56 24 L72 9 L81 13"/><path d="M81 13 H111 M81 18 H111 M81 18 L86 13 L91 18 L96 13 L101 18 L106 13 L111 18"/><path d="M111 13 L118 6 L132 20 L142 16 L160 30 L170 26 L189 40 L198 37 L217 46"/></g><text x="110" y="86" text-anchor="middle" font-family="Oswald, Arial Narrow, sans-serif" font-weight="700" font-size="47" letter-spacing="1.2" fill="currentColor">TRAILSIDE</text><text x="111" y="99" text-anchor="middle" font-family="Work Sans, sans-serif" font-weight="600" font-size="10" letter-spacing="5.4" fill="currentColor">RENTALS</text></svg>
-        <p style="margin-top:16px">Self-serve via ferrata gear at the Ashley Gorge trailhead, Vernal, Utah.</p>
-      </div>
-      <div>
-        <h4>Explore</h4>
-        <ul>
-          <li><a href="book.html">Book gear</a></li>
-          <li><a href="rates.html">Rates</a></li>
-          <li><a href="agreement.html">Rental agreement</a></li>
-          <li><a href="index.html#before-you-go">Before you go</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <ul>
-          <li><a data-contact="phone" href="tel:+12084731751">(208) 473-1751</a></li>
-          <li><a data-contact="email" href="mailto:trailsiderentalsvernal@gmail.com">trailsiderentalsvernal@gmail.com</a></li>
-          <li><a href="https://www.ashleygorgeviaferrata.com/waiver" rel="noopener" target="_blank">Uintah County waiver</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© <span data-year>2026</span> Randall Ventures LLC. Trailside Rentals is a Randall Ventures LLC brand.</span>
-      <span>Operating under a BLM Special Recreation Permit (finalizing).</span>
-    </div>
-  </div>
-</footer>
-<script src="js/config.js"></script>
-<script src="js/site.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/home.js"></script>
 </body>
 </html>

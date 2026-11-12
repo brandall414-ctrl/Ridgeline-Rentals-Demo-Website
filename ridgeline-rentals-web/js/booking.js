@@ -1,10 +1,11 @@
 /* ==========================================================================
-   Trailside Rentals — booking flow (demo)
-   Steps: dates & gear -> climbers -> video & agreement -> review -> done.
+   Trailside Rentals — booking flow (demo, Apple-style screens)
+   Screens: 0 dates · 1 gear · 2 climbers · 3 video + agreement · 4 review/pay · 5 done
+   Spec: design/booking-apple/BOOKING-STYLE.md
    Availability is simulated (see demoBooked). Payment is not connected.
    When the backend exists, replace:
      - demoBooked()          -> GET /api/availability
-     - confirmBooking()      -> POST /api/bookings (then Stripe Checkout)
+     - confirmBooking()      -> POST /api/bookings (after Stripe confirms payment)
      - signature records     -> POST /api/agreements
    ========================================================================== */
 (function () {
@@ -15,6 +16,7 @@
   const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const money = (n) => "$" + (Math.round(n * 100) / 100).toLocaleString("en-US", { minimumFractionDigits: n % 1 ? 2 : 0 });
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- dates ---------- */
   const pad = (n) => String(n).padStart(2, "0");
@@ -27,8 +29,8 @@
   const seasonEnd = parse(cfg.seasonEnd);
   const firstDay = today > seasonStart ? today : seasonStart;
 
-  /* ---------- availability ---------- */
-  function seeded(str) { // deterministic 0..1 from a string
+  /* ---------- availability (demo) ---------- */
+  function seeded(str) {
     let h = 2166136261;
     for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
     return ((h >>> 0) % 10000) / 10000;
@@ -38,7 +40,7 @@
     const d = parse(dayKey), dow = d.getDay();
     const weekend = dow === 5 || dow === 6 || dow === 0;
     const r = seeded(dayKey + item.id);
-    if (dow === 6 && seeded(dayKey) > 0.86) return item.stock; // some sold-out Saturdays
+    if (dow === 6 && seeded(dayKey) > 0.86) return item.stock;
     const load = weekend ? 0.35 + r * 0.6 : r * 0.45;
     return Math.min(item.stock, Math.floor(item.stock * load));
   }
@@ -72,88 +74,72 @@
     lead: { name: "", email: "", phone: "" },
     climbers: [],
     videoDone: false,
-    signatures: {}, // keyed by climber index of the adult signer
+    signatures: {},
     signerIdx: null,
     ref: null,
   };
-  const STEPS = ["Dates & gear", "Climbers", "Video & agreement", "Review"];
+  const NAMES = ["Dates", "Gear", "Climbers", "Agreement", "Review", "Done"];
+  const PROGRESS = 5; // screens 0–4 show progress
 
   /* ---------- calendar ---------- */
   function renderCalendar() {
-    const cal = $("#cal");
     const y = state.view.getFullYear(), m = state.view.getMonth();
     $("#cal-month").textContent = state.view.toLocaleDateString("en-US", { month: "long", year: "numeric" });
     $("#cal-prev").disabled = new Date(y, m, 1) <= new Date(firstDay.getFullYear(), firstDay.getMonth(), 1);
     $("#cal-next").disabled = new Date(y, m + 1, 1) > seasonEnd;
-    const sel = new Set(rangeKeys());
-    let html = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => `<div class="dow" aria-hidden="true">${d.slice(0, 2)}</div>`).join("");
+    const sel = rangeKeys();
+    let html = ["S", "M", "T", "W", "T", "F", "S"].map((d) => `<div class="dow" aria-hidden="true">${d}</div>`).join("");
     const lead = new Date(y, m, 1).getDay();
-    for (let i = 0; i < lead; i++) html += `<div class="day is-blank" aria-hidden="true"></div>`;
+    for (let i = 0; i < lead; i++) html += `<span class="d blank" aria-hidden="true"></span>`;
     const n = new Date(y, m + 1, 0).getDate();
     for (let d = 1; d <= n; d++) {
       const k = key(new Date(y, m, d));
       const s = dayStatus(k);
-      const cls = ["day"]; let q = ""; let dis = false; let label = fmt(parse(k), { weekday: "long", month: "long", day: "numeric" });
+      const cls = ["d"]; let dis = false;
+      let label = fmt(parse(k), { weekday: "long", month: "long", day: "numeric" });
       if (s.state === "off") { dis = true; label += ", not available"; }
-      else if (s.state === "closed") { cls.push("is-closed"); dis = true; q = "Closed"; label += ", closed: " + s.reason; }
-      else if (s.state === "soldout") { cls.push("is-soldout"); dis = true; q = "Full"; label += ", sold out"; }
+      else if (s.state === "closed") { cls.push("closed"); dis = true; label += ", closed: " + s.reason; }
+      else if (s.state === "soldout") { dis = true; label += ", sold out"; }
       else {
-        const left = s.left.kit;
-        if (left <= cfg.lowStockAt) cls.push("is-low");
-        q = left > 0 ? `<b>${left}</b><span class="long"> ${left <= cfg.lowStockAt ? "left" : "kits"}</span>` : `<span>Lanyards</span>`;
-        label += `, ${left} full kits and ${s.left.lanyard} lanyards available`;
+        if (s.left.kit <= cfg.lowStockAt) cls.push("low");
+        label += `, ${s.left.kit} full kits left`;
       }
-      if (sel.has(k)) cls.push(k === state.start ? "is-start" : (k === rangeKeys().slice(-1)[0] ? "is-end" : "is-in"));
-      html += `<button type="button" class="${cls.join(" ")}" data-day="${k}" ${dis ? "disabled" : ""} aria-label="${esc(label)}" aria-pressed="${sel.has(k)}"><span class="n">${d}</span><span class="q">${q}</span></button>`;
+      if (k === sel[0]) cls.push("sel"); else if (sel.includes(k)) cls.push("in");
+      html += `<button type="button" class="${cls.join(" ")}" data-day="${k}" ${dis ? "disabled" : ""} aria-label="${esc(label)}" aria-pressed="${sel.includes(k)}"><span class="n">${d}</span><span class="dot"></span></button>`;
     }
-    cal.innerHTML = html;
+    $("#cal").innerHTML = html;
   }
-
   function nextDayOk(startKey) {
-    const nk = key(addDays(parse(startKey), 1));
-    const s = dayStatus(nk);
+    const s = dayStatus(key(addDays(parse(startKey), 1)));
     return s.state === "open" ? true : s.state === "closed" ? "The next day is closed" : s.state === "soldout" ? "The next day is sold out" : "The next day is outside the season";
   }
-
-  function selectDay(k) {
-    state.start = k;
-    const ok = nextDayOk(k);
-    if (ok !== true) state.days = 1;
-    clampQty();
-    renderAll();
-  }
-
   function renderLength() {
-    const row = $("#length-row");
-    if (!state.start) { row.hidden = true; return; }
-    row.hidden = false;
-    const ks = rangeKeys();
-    const s = parse(ks[0]), e = parse(ks[ks.length - 1]);
-    $("#sel-date").textContent = state.days === 1 ? fmt(s, { weekday: "long", month: "long", day: "numeric" }) : `${fmt(s)} to ${fmt(e)}`;
-    const ok = nextDayOk(state.start);
-    $$("#length-row .seg button").forEach((b) => {
+    const ok = state.start ? nextDayOk(state.start) : true;
+    $$("#len button").forEach((b) => {
       const d = Number(b.dataset.days);
       b.setAttribute("aria-pressed", String(d === state.days));
-      b.disabled = d === 2 && ok !== true;
+      b.disabled = !state.start || (d === 2 && ok !== true);
     });
-    $("#len-note").textContent = ok !== true ? ok + ", so this is a 1-day rental (24 hours)." : state.days === 1 ? "24 hours from pickup." : "48 hours from pickup. A small add-on per item for the second day.";
+    const ks = rangeKeys();
+    let note = "Pick a date first.";
+    if (ks.length) {
+      const range = ks.length === 1 ? fmt(parse(ks[0]), { weekday: "short", month: "short", day: "numeric" }) : `${fmt(parse(ks[0]))} to ${fmt(parse(ks[1]))}`;
+      note = ok !== true ? `${range}. ${ok}, so this is a 1-day rental.` : `${range}. Return within ${state.days * 24} hours of pickup.`;
+    }
+    $("#len-note").textContent = note;
   }
 
-  /* ---------- items ---------- */
-  function clampQty() {
-    cfg.items.forEach((it) => { state.qty[it.id] = Math.max(0, Math.min(state.qty[it.id], rangeLeft(it.id))); });
-  }
+  /* ---------- gear ---------- */
+  function clampQty() { cfg.items.forEach((it) => { state.qty[it.id] = Math.max(0, Math.min(state.qty[it.id], rangeLeft(it.id))); }); }
   function renderItems() {
     $("#items").innerHTML = cfg.items.map((it) => {
-      const left = state.start ? rangeLeft(it.id) : null;
+      const left = state.start ? rangeLeft(it.id) : 0;
       const q = state.qty[it.id];
-      const meta = left == null ? "Pick a date to see availability" : left === 0 ? "None left for these dates" : `${left} available`;
-      return `<div class="item-row"><img src="${it.img}" alt=""><div><strong>${it.name}</strong><span class="meta">${money(cfg.priceFor(it, 1))} for 1 day · ${money(cfg.priceFor(it, 2))} for 2 days · ${meta}</span></div>
-        <div class="stepper" role="group" aria-label="${it.name} quantity"><button type="button" data-dec="${it.id}" aria-label="Remove one ${it.name}" ${q <= 0 || left == null ? "disabled" : ""}>−</button><output aria-live="polite">${q}</output><button type="button" data-inc="${it.id}" aria-label="Add one ${it.name}" ${left == null || q >= left ? "disabled" : ""}>+</button></div></div>`;
+      const sub = `${money(cfg.priceFor(it, state.days))} for ${state.days} day${state.days > 1 ? "s" : ""}${left <= cfg.lowStockAt ? ` · ${left ? left + " left" : "none left"}` : ""}`;
+      return `<div class="cell"><img class="thumb" src="${it.img}" alt=""><div class="lbl"><b>${it.name}</b><small>${sub}</small></div>
+        <span class="stepper" role="group" aria-label="${it.name} quantity"><button type="button" data-dec="${it.id}" aria-label="Remove one ${it.name}" ${q <= 0 ? "disabled" : ""}>−</button><i></i><button type="button" data-inc="${it.id}" aria-label="Add one ${it.name}" ${q >= left ? "disabled" : ""}>+</button></span><span class="qty ${q ? "" : "zero"}" aria-live="polite">${q}</span></div>`;
     }).join("");
   }
-
-  const returnDeadline = () => `${state.days * 24} hours from the time gear is taken from the locker (${state.days}-day rental)`;
 
   /* ---------- pricing ---------- */
   const itemById = (id) => cfg.items.find((i) => i.id === id);
@@ -166,7 +152,7 @@
       if (!q) return;
       const amt = q * cfg.priceFor(it, state.days);
       total += amt;
-      lines.push([`${q} × ${it.name}${state.days > 1 ? `, ${state.days} days` : ""}`, amt]);
+      lines.push([`${q} × ${it.name}, ${state.days} day${state.days > 1 ? "s" : ""}`, amt]);
     });
     const prot = state.qty.kit * itemById("kit").protection + state.qty.lanyard * itemById("lanyard").protection;
     const dep = state.qty.kit * itemById("kit").deposit + state.qty.lanyard * itemById("lanyard").deposit;
@@ -174,20 +160,24 @@
     else hold = dep;
     return { lines, total, hold, prot, dep };
   }
-  function renderSummary() {
+  const datesShort = () => { const ks = rangeKeys(); const s = (k) => fmt(parse(k), { month: "short", day: "numeric" }); return !ks.length ? "" : ks.length === 1 ? s(ks[0]) : `${s(ks[0])}–${parse(ks[1]).getDate()}`; };
+  const datesLong = () => { const ks = rangeKeys(); const o = { weekday: "short", month: "short", day: "numeric" }; return !ks.length ? "" : ks.length === 1 ? fmt(parse(ks[0]), o) : `${fmt(parse(ks[0]), o)} – ${fmt(parse(ks[1]), o)}`; };
+  function renderBar() {
     const p = pricing();
-    const ks = rangeKeys();
-    const dates = ks.length ? (ks.length === 1 ? fmt(parse(ks[0]), { weekday: "long", month: "long", day: "numeric", year: "numeric" }) : `${fmt(parse(ks[0]))} to ${fmt(parse(ks[1]), { weekday: "short", month: "short", day: "numeric", year: "numeric" })}`) : "No dates picked yet";
-    $("#sum-dates").textContent = dates;
-    $("#sum-lines").innerHTML = p.lines.length ? p.lines.map(([l, a]) => `<li><span>${esc(l)}</span><span>${money(a)}</span></li>`).join("") : `<li class="empty">Add gear to see your total.</li>`;
-    $("#sum-total").textContent = money(p.total);
-    $("#sum-return").textContent = ks.length ? `Return within ${state.days * 24} hours of pickup.` : "";
-    $("#sum-hold").textContent = p.hold ? `Plus a refundable ${money(p.hold)} hold on your card, released when the gear is back.` : (p.lines.length ? "No card hold with Gear Protection." : "");
+    $("#prot-amt").textContent = p.prot ? money(p.prot) : "";
     $("#hold-amt").textContent = p.dep ? money(p.dep) + " hold" : "";
-    $("#prot-amt").textContent = p.prot ? "+" + money(p.prot) : "";
-    $("#mb-total").textContent = money(p.total);
-    const short = (k) => fmt(parse(k), { month: "short", day: "numeric" });
-    $("#mb-dates").textContent = ks.length ? (ks.length === 1 ? short(ks[0]) : `${short(ks[0])} to ${short(ks[1])}`) : "Pick a date";
+    const main = $("#bar-main"), sub = $("#bar-sub"), btn = $("#a-next");
+    btn.textContent = "Continue";
+    if (state.step === 0) {
+      if (!state.start) { main.textContent = "Pick a date"; sub.textContent = "1 or 2 day rentals"; }
+      else { main.textContent = datesShort(); sub.textContent = `${rangeLeft("kit")} kits left`; }
+    } else if (state.step === 3) {
+      const list = signers(); const n = list.filter((s) => state.signatures[sigKey(s)]).length;
+      main.textContent = `${n} of ${list.length} signed`; sub.textContent = state.videoDone ? "Video watched" : "Video not finished";
+    } else {
+      main.textContent = money(p.total);
+      sub.textContent = `${climberCount()} climber${climberCount() === 1 ? "" : "s"} · ${state.days} day${state.days > 1 ? "s" : ""}`;
+    }
   }
 
   /* ---------- climbers ---------- */
@@ -202,88 +192,74 @@
     const adults = state.climbers.map((c, i) => ({ c, i })).filter(({ c }) => c.age === "adult");
     $("#climbers").innerHTML = state.climbers.map((c, i) => {
       const lead = i === 0;
-      return `<div class="climber" data-i="${i}">
-        <h3>Climber ${i + 1}${lead ? ' <span class="tag">You</span>' : ""}</h3>
-        <div class="grid-2">
-          <div class="field"><label for="c-name-${i}">Full legal name</label><input id="c-name-${i}" data-f="name" value="${esc(c.name)}" ${lead ? 'readonly aria-describedby="lead-note"' : ""} autocomplete="off"><span class="err"></span>${lead ? '<span class="small" id="lead-note">From your details above.</span>' : ""}</div>
-          <div class="field"><label for="c-age-${i}">Age</label><select id="c-age-${i}" data-f="age"><option value="adult" ${c.age === "adult" ? "selected" : ""}>18 or older</option><option value="minor" ${c.age === "minor" ? "selected" : ""}>14 to 17</option></select></div>
-        </div>
-        ${c.age === "minor" ? `<div class="field" style="margin-top:16px"><label for="c-guard-${i}">Parent or guardian on the route</label><select id="c-guard-${i}" data-f="guardian">${adults.map(({ c: a, i: ai }) => `<option value="${ai}" ${Number(c.guardian) === ai ? "selected" : ""}>${esc(a.name || "Climber " + (ai + 1))}</option>`).join("")}</select><span class="small">They'll sign the agreement for this climber and must climb with them.</span></div>` : ""}
-        <div class="ack" style="margin-top:12px"><label><input type="checkbox" data-f="weightOk" ${c.weightOk ? "checked" : ""}><span>Weighs 90–265 lbs and has a 62" vertical reach.</span></label></div>
+      return `<p class="g-label">Climber ${i + 1}${lead ? " (you)" : ""}</p>
+      <div class="g" data-i="${i}">
+        ${lead ? `<div class="cell"><div class="lbl"><b id="c-name-0">${esc(c.name) || "Your name"}</b><small>18 or older</small></div></div>`
+               : `<div class="f-cell"><label for="c-name-${i}">Full legal name</label><input id="c-name-${i}" data-f="name" value="${esc(c.name)}" placeholder="First and last name" autocomplete="off"><span class="err"></span></div>
+                  <div class="cell"><div class="seg" role="group" aria-label="Climber ${i + 1} age"><button type="button" data-age="adult" aria-pressed="${c.age === "adult"}">18 or older</button><button type="button" data-age="minor" aria-pressed="${c.age === "minor"}">14 to 17</button></div></div>`}
+        ${c.age === "minor" ? `<div class="f-cell"><label for="c-guard-${i}">Parent or guardian on the route</label><select id="c-guard-${i}" data-f="guardian">${adults.map(({ c: a, i: ai }) => `<option value="${ai}" ${Number(c.guardian) === ai ? "selected" : ""}>${esc(a.name || "Climber " + (ai + 1))}</option>`).join("")}</select></div>` : ""}
+        <label class="cell tap"><span class="lbl">90–265 lbs, 62" reach</span><input class="sw" type="checkbox" role="switch" data-f="weightOk" ${c.weightOk ? "checked" : ""} aria-label="Climber ${i + 1} meets weight and reach"></label>
       </div>`;
-    }).join("");
+    }).join("") + `<p class="g-foot">A parent or guardian signs the agreement for climbers aged 14 to 17 and must climb with them.</p>`;
   }
-
-  // update parent/guardian dropdown labels without re-rendering (keeps focus)
   function refreshGuardianLabels() {
-    $$("#climbers select[data-f=guardian] option").forEach((o) => {
-      const a = state.climbers[Number(o.value)];
-      if (a) o.textContent = a.name || "Climber " + (Number(o.value) + 1);
-    });
+    $$("#climbers select[data-f=guardian] option").forEach((o) => { const a = state.climbers[Number(o.value)]; if (a) o.textContent = a.name || "Climber " + (Number(o.value) + 1); });
   }
 
   /* ---------- signing ---------- */
   function signers() {
     return state.climbers.map((c, i) => ({ c, i })).filter(({ c }) => c.age === "adult").map(({ c, i }) => ({
-      i, name: c.name, minors: state.climbers.map((m, mi) => ({ m, mi })).filter(({ m }) => m.age === "minor" && Number(m.guardian) === i).map(({ m }) => m.name),
+      i, name: c.name, minors: state.climbers.filter((m) => m.age === "minor" && Number(m.guardian) === i).map((m) => m.name),
     }));
   }
   function sigKey(s) { return `${s.i}|${s.name.trim().toLowerCase()}|${s.minors.join(",")}`; }
-  function pruneSignatures() {
-    const valid = new Set(signers().map(sigKey));
-    Object.keys(state.signatures).forEach((k) => { if (!valid.has(k)) delete state.signatures[k]; });
-  }
+  function pruneSignatures() { const valid = new Set(signers().map(sigKey)); Object.keys(state.signatures).forEach((k) => { if (!valid.has(k)) delete state.signatures[k]; }); }
+  const returnDeadline = () => `${state.days * 24} hours from the time gear is taken from the locker (${state.days}-day rental)`;
   function fillFor(s) {
-    const ks = rangeKeys();
     return {
       renterName: s.name,
       contact: s.i === 0 ? `${state.lead.phone} / ${state.lead.email}` : `Booked by ${state.lead.name} (${state.lead.email})`,
-      rentalDates: ks.map((k) => fmt(parse(k), { weekday: "long", month: "long", day: "numeric", year: "numeric" })).join(" and "),
-      returnDeadline: returnDeadline(),
-      gear: { ...state.qty },
-      protection: state.protection,
+      rentalDates: rangeKeys().map((k) => fmt(parse(k), { weekday: "long", month: "long", day: "numeric", year: "numeric" })).join(" and "),
+      returnDeadline: returnDeadline(), gear: { ...state.qty }, protection: state.protection,
     };
   }
   function renderSigners() {
     pruneSignatures();
     const list = signers();
     if (state.signerIdx == null || !list.some((s) => s.i === state.signerIdx)) {
-      const firstOpen = list.find((s) => !state.signatures[sigKey(s)]);
-      state.signerIdx = (firstOpen || list[0]).i;
+      const open = list.find((s) => !state.signatures[sigKey(s)]);
+      state.signerIdx = (open || list[0]).i;
     }
     const done = list.filter((s) => state.signatures[sigKey(s)]).length;
-    $("#sign-hint").textContent = `${done} of ${list.length} adult${list.length > 1 ? "s" : ""} signed. Each adult signs on this device or their own.`;
-    $("#signers").innerHTML = list.map((s) => `<button type="button" class="signer-chip" data-signer="${s.i}" aria-current="${s.i === state.signerIdx}">${esc(s.name)}${state.signatures[sigKey(s)] ? ' <span class="ok" aria-label="signed">✓ Signed</span>' : ""}</button>`).join("");
+    $("#sign-hint").textContent = list.length > 1 ? `${done} of ${list.length} adults signed. Each adult signs here or on their own phone.` : (done ? "Signed." : "Sign the rental agreement.");
+    $("#signers").innerHTML = list.length > 1 ? list.map((s) => `<button type="button" class="signer" data-signer="${s.i}" aria-current="${s.i === state.signerIdx}">${esc(s.name.split(" ")[0])}${state.signatures[sigKey(s)] ? ' <span class="tick" aria-label="signed">✓</span>' : ""}</button>`).join("") : "";
     renderSignArea();
+    renderBar();
   }
   function renderSignArea() {
     const s = signers().find((x) => x.i === state.signerIdx);
     const rec = state.signatures[sigKey(s)];
     const area = $("#sign-area");
     if (rec) {
-      area.innerHTML = `<div class="panel-box" style="background:var(--juniper-soft);border-top-color:var(--juniper)"><p style="margin:0 0 8px"><strong style="color:#000">${esc(s.name)} signed</strong> on ${new Date(rec.signedAt).toLocaleString("en-US")}.</p><img src="${rec.signature}" alt="Signature of ${esc(s.name)}" style="max-height:80px;background:#fff"><p class="small" style="margin:8px 0 0">Agreement version ${rec.agreementVersion}</p><button type="button" class="link-btn" id="resign">Clear and sign again</button></div>`;
+      area.innerHTML = `<div class="signed-card"><b>${esc(s.name)} signed <span class="ok-text">✓</span></b><img src="${rec.signature}" alt="Signature of ${esc(s.name)}"><span class="g-foot" style="padding:0">${new Date(rec.signedAt).toLocaleString("en-US")} · version ${rec.agreementVersion}</span><button type="button" class="sig-tools" style="border:0;background:none;padding:0;justify-content:flex-start" id="resign"><span style="color:var(--a-accent)">Clear and sign again</span></button></div>`;
       $("#resign").onclick = () => { delete state.signatures[sigKey(s)]; renderSigners(); };
       return;
     }
     const minorAck = s.minors.length ? [`I am the parent or legal guardian of ${s.minors.join(" and ")}, I have authority to sign for them, and I will be on the course with them at all times.`] : [];
     const acks = AG.ACKS.concat(minorAck);
     area.innerHTML = `
-      <p class="small" style="margin-top:0">Signing as <strong style="color:#000">${esc(s.name)}</strong>${s.minors.length ? ` and for ${esc(s.minors.join(", "))}` : ""}. Scroll to the end of the agreement to continue.</p>
-      <div class="doc-scroll" id="doc-scroll" tabindex="0" aria-label="Rental agreement text"><div class="doc">${AG.render(fillFor(s))}</div></div>
-      <p class="scroll-status" id="scroll-status">Scroll to the end to unlock signing.</p>
-      <fieldset id="sign-fields" disabled style="border:0;padding:0;margin:0">
-        <div class="ack legal"><p class="ack-count" id="ack-count" style="margin:12px 0 0"></p>${acks.map((a, n) => `<label><input type="checkbox" data-ack="${n}"><span>${esc(a)}</span></label>`).join("")}</div>
-        <div class="grid-2" style="margin-top:20px">
-          <div class="field"><label for="typed-name">Type your full legal name</label><input id="typed-name" autocomplete="off" placeholder="${esc(s.name)}"><span class="err" id="typed-err"></span></div>
-          <div class="field"><span class="lab">Date</span><input value="${fmt(today, { month: "long", day: "numeric", year: "numeric" })}" readonly></div>
-        </div>
-        <div class="field" style="margin-top:16px"><span class="lab" id="sig-lab">Signature</span>
-          <div class="sig-modes" role="group" aria-label="Signature style"><button type="button" data-mode="type" aria-pressed="true">From my name</button><button type="button" data-mode="draw" aria-pressed="false">Draw it</button></div>
-          <div class="sig-pad" id="sig-pad"><canvas id="sig-canvas" aria-labelledby="sig-lab"></canvas><span class="placeholder" id="sig-placeholder">Your signature appears here when you type your name above</span></div>
-          <div class="sig-line"><span class="small">Electronic signature</span><button type="button" class="link-btn" id="sig-clear">Clear</button></div>
-        </div>
-        <div class="ack legal"><label><input type="checkbox" id="consent"><span>${esc(AG.CONSENT)}</span></label></div>
-        <button type="button" class="btn btn--ink" id="sign-btn" style="margin-top:16px" disabled>Sign agreement</button>
+      <p class="g-label">${esc(s.name)}${s.minors.length ? `, signing for ${esc(s.minors.join(", "))}` : ""}</p>
+      <div class="doc-card" id="doc-scroll" tabindex="0" aria-label="Rental agreement text">${AG.render(fillFor(s))}</div>
+      <p class="read-state" id="read-state"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 2v10M3 8l4 4 4-4"/></svg><span>Scroll to the end to continue</span></p>
+      <fieldset id="sign-fields" disabled style="border:0;padding:0;margin:0;min-width:0">
+        <p class="g-label">Confirm each statement <span id="ack-count"></span></p>
+        <div class="g">${acks.map((a, n) => `<label class="cell tap legal"><span class="lbl">${esc(a)}</span><input class="sw" type="checkbox" role="switch" data-ack="${n}"></label>`).join("")}</div>
+        <p class="g-label">Signature</p>
+        <div class="g"><div class="f-cell"><label for="typed-name">Type your full legal name</label><input id="typed-name" autocomplete="off" placeholder="${esc(s.name)}"><span class="err" id="typed-err"></span></div></div>
+        <div class="sigbox" id="sig-pad" style="margin-top:10px"><canvas id="sig-canvas" aria-label="Signature"></canvas><span class="ph" id="sig-ph">Your signature appears when you type your name</span></div>
+        <div class="sig-tools"><span id="sig-mode-note">Generated from your typed name · ${fmt(today, { month: "short", day: "numeric", year: "numeric" })}</span><button type="button" id="sig-mode">Draw instead</button></div>
+        <div class="g" style="margin-top:14px"><label class="cell tap legal"><span class="lbl">${esc(AG.CONSENT)}</span><input class="sw" type="checkbox" role="switch" id="consent"></label></div>
+        <button type="button" class="a-btn block" id="sign-btn" disabled>Sign</button>
       </fieldset>`;
     const sc = $("#doc-scroll");
     const pad = { hasInk: false, mode: "type", ctx: null };
@@ -292,7 +268,8 @@
     const unlock = () => {
       if (sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 24) {
         $("#sign-fields").disabled = false;
-        const st = $("#scroll-status"); st.textContent = "You've reached the end. Confirm each statement below."; st.classList.add("is-done");
+        const st = $("#read-state"); st.classList.add("done");
+        st.innerHTML = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="m2 7.5 3 3 7-7"/></svg><span>Read to the end</span>`;
         sc.removeEventListener("scroll", unlock);
         setupPad();
       }
@@ -301,54 +278,49 @@
     const check = () => {
       const boxes = $$("[data-ack]", area);
       const n = boxes.filter((b) => b.checked).length;
-      $("#ack-count").textContent = `${n} of ${boxes.length} confirmed`;
+      $("#ack-count").textContent = `· ${n} of ${boxes.length}`;
       const typed = norm($("#typed-name").value);
       $("#typed-err").textContent = typed && !nameOk() ? "Type your name exactly as it appears above." : "";
       $("#sign-btn").disabled = !(n === boxes.length && nameOk() && pad.hasInk && $("#consent").checked);
     };
-    function clearPad() {
-      const cv = $("#sig-canvas");
-      if (pad.ctx) pad.ctx.clearRect(0, 0, cv.width, cv.height);
-      pad.hasInk = false; $("#sig-pad").classList.remove("has-ink");
-    }
-    // "From my name": renders the typed legal name in a handwriting font
+    function clearPad() { const cv = $("#sig-canvas"); if (pad.ctx) pad.ctx.clearRect(0, 0, cv.width, cv.height); pad.hasInk = false; $("#sig-pad").classList.remove("inked"); }
     function drawTyped() {
       if (pad.mode !== "type" || !pad.ctx) return;
       clearPad();
       if (!nameOk()) return;
       const cv = $("#sig-canvas"), w = cv.clientWidth, h = cv.clientHeight, ctx = pad.ctx;
       const text = $("#typed-name").value.trim().replace(/\s+/g, " ");
-      let size = Math.min(44, h * 0.34);
+      let size = Math.min(40, h * 0.32);
       ctx.font = `${size}px "Homemade Apple", cursive`;
       while (ctx.measureText(text).width > w - 40 && size > 14) { size -= 2; ctx.font = `${size}px "Homemade Apple", cursive`; }
-      ctx.fillStyle = "#0b1a33";
+      ctx.fillStyle = "#13284a";
       ctx.fillText(text, 20, h * 0.62);
-      pad.hasInk = true; $("#sig-pad").classList.add("has-ink");
+      pad.hasInk = true; $("#sig-pad").classList.add("inked");
     }
     area.oninput = (e) => { if (e.target.id === "typed-name") drawTyped(); check(); };
     area.onchange = check;
     check();
     $("#sign-btn").onclick = async () => {
-      const text = sc.innerText;
       state.signatures[sigKey(s)] = {
         signer: s.name, minors: s.minors, email: s.i === 0 ? state.lead.email : null,
         acknowledgments: acks, consent: AG.CONSENT, typedName: $("#typed-name").value.trim(),
         signatureMethod: pad.mode === "type" ? "adopted typed signature" : "hand drawn",
         signature: $("#sig-canvas").toDataURL("image/png"),
         signedAt: new Date().toISOString(), timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        videoWatched: state.videoDone, agreementVersion: AG.VERSION, agreementSha256: await AG.hash(text), agreementHtml: AG.render(fillFor(s)),
+        videoWatched: state.videoDone, agreementVersion: AG.VERSION, agreementSha256: await AG.hash(sc.innerText), agreementHtml: AG.render(fillFor(s)),
         userAgent: navigator.userAgent,
       };
       state.signerIdx = null;
+      clearError();
       renderSigners();
-      $("#signers").scrollIntoView({ behavior: "smooth", block: "center" });
+      $("#sign-hint").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     };
     function setupPad() {
       const wrap = $("#sig-pad"), cv = $("#sig-canvas");
       const ratio = window.devicePixelRatio || 1;
       cv.width = wrap.clientWidth * ratio; cv.height = wrap.clientHeight * ratio;
       const ctx = cv.getContext("2d");
-      ctx.scale(ratio, ratio); ctx.lineWidth = 2.2; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#0b1a33";
+      ctx.scale(ratio, ratio); ctx.lineWidth = 2.2; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#13284a";
       pad.ctx = ctx;
       let drawing = false, last = null;
       const pos = (e) => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
@@ -356,26 +328,24 @@
       cv.onpointermove = (e) => {
         if (!drawing) return;
         const p = pos(e); ctx.beginPath(); ctx.moveTo(last[0], last[1]); ctx.lineTo(p[0], p[1]); ctx.stroke(); last = p;
-        if (!pad.hasInk) { pad.hasInk = true; wrap.classList.add("has-ink"); check(); }
+        if (!pad.hasInk) { pad.hasInk = true; wrap.classList.add("inked"); check(); }
       };
       cv.onpointerup = cv.onpointercancel = () => { drawing = false; };
-      $("#sig-clear").onclick = () => { clearPad(); if (pad.mode === "type") $("#typed-name").value = ""; check(); };
-      $$(".sig-modes button", area).forEach((b) => b.onclick = () => {
-        pad.mode = b.dataset.mode;
-        $$(".sig-modes button", area).forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-        $("#sig-placeholder").textContent = pad.mode === "type" ? "Your signature appears here when you type your name above" : "Sign here with your finger or mouse";
+      $("#sig-mode").onclick = () => {
+        pad.mode = pad.mode === "type" ? "draw" : "type";
+        $("#sig-mode").textContent = pad.mode === "type" ? "Draw instead" : "Use my typed name";
+        $("#sig-mode-note").textContent = pad.mode === "type" ? "Generated from your typed name" : "Sign with your finger or mouse";
+        $("#sig-ph").textContent = pad.mode === "type" ? "Your signature appears when you type your name" : "Sign here";
         cv.style.cursor = pad.mode === "draw" ? "crosshair" : "default";
         clearPad(); drawTyped(); check();
-      });
-      cv.style.cursor = "default";
+      };
       if (document.fonts && document.fonts.load) document.fonts.load('40px "Homemade Apple"').then(() => { drawTyped(); check(); }).catch(() => {});
       drawTyped();
     }
-    // short agreements on tall screens: unlock if there's nothing to scroll
     requestAnimationFrame(unlock);
   }
 
-  /* ---------- safety video: must play to the end (scrubbing allowed) ---------- */
+  /* ---------- safety video ---------- */
   function setupVideo() {
     const v = $("#safety-video");
     v.poster = cfg.safetyVideo.poster;
@@ -386,200 +356,191 @@
       if (state.videoDone || !v.duration) return;
       const pct = Math.min(100, (v.currentTime / v.duration) * 100);
       bar.style.width = pct + "%";
-      text.textContent = `Watching: ${Math.round(pct)}%`;
+      text.textContent = `${Math.round(pct)}% watched`;
     });
     v.addEventListener("ended", () => {
       state.videoDone = true;
       bar.style.width = "100%";
       text.textContent = "Watched to the end";
-      status.classList.add("is-done");
+      status.classList.add("done");
       $("#sign-card").classList.remove("is-locked");
-      clearError();
+      clearError(); renderBar();
     });
   }
 
-  /* ---------- review & confirm ---------- */
+  /* ---------- review ---------- */
   function renderReview() {
     const p = pricing();
     const list = signers();
-    $("#review").innerHTML = [
-      ["Dates", $("#sum-dates").textContent],
-      ["Gear", cfg.items.filter((i) => state.qty[i.id]).map((i) => `${state.qty[i.id]} × ${i.name}`).join(", ")],
-      ["Climbers", state.climbers.map((c) => esc(c.name) + (c.age === "minor" ? " (14–17)" : "")).join(", ")],
-      ["Agreements", `${list.filter((s) => state.signatures[sigKey(s)]).length} of ${list.length} signed`],
-      ["Return", `Within ${state.days * 24} hours of pickup`],
-      ["Safety video", state.videoDone ? "Watched to the end" : "Not watched"],
-      ["Damage cover", state.protection === "protection" ? "Gear Protection" : `Card hold of ${money(p.hold)}`],
-      ["Total", money(p.total)],
-    ].map(([a, b]) => `<li><span>${a}</span><strong style="color:#000">${b}</strong></li>`).join("");
+    $("#rv-dates").textContent = datesLong();
+    $("#rv-gear").textContent = `${cfg.items.filter((i) => state.qty[i.id]).map((i) => `${state.qty[i.id]} ${i.name.toLowerCase()}`).join(", ")} · ${climberCount()} climber${climberCount() === 1 ? "" : "s"}`;
+    $("#review").innerHTML = p.lines.map(([l, a]) => `<div class="cell"><span class="lbl">${esc(l)}</span><span class="num">${money(a)}</span></div>`).join("") +
+      `<div class="cell"><span class="lbl">Agreements</span><span class="ok-text">${list.filter((s) => state.signatures[sigKey(s)]).length} of ${list.length} signed</span></div>` +
+      `<div class="cell"><span class="lbl">Safety video</span><span class="ok-text">Watched</span></div>` +
+      `<div class="cell"><span class="lbl">Return</span><span class="val">Within ${state.days * 24} hours</span></div>`;
+    $("#rv-total").textContent = money(p.total);
+    $("#rv-hold").textContent = p.hold ? `Plus a refundable ${money(p.hold)} card hold, released when your gear is back.` : "";
   }
+
+  /* ---------- confirm ---------- */
   async function confirmBooking() {
     state.ref = "TR-" + Math.random().toString(36).slice(2, 8).toUpperCase();
     const booking = { ref: state.ref, dates: rangeKeys(), days: state.days, qty: { ...state.qty } };
-    // Live version: this runs on the server only after Stripe confirms payment
-    // and every adult has signed.
     const L = window.TrailsideLocker;
     const startDay = parse(rangeKeys()[0]);
     const validFrom = startDay;
     const validTo = new Date(addDays(startDay, state.days + 1).getTime() - 60000);
     const doors = await L.assignDoors(booking);
     const access = await L.createAccessCode(booking, doors, validFrom, validTo);
-    state.pass = { ref: state.ref, doors, code: access.code, validFrom, validTo, days: state.days, lead: state.lead.name };
+    state.pass = { ref: state.ref, doors, code: access.code, validFrom, validTo, days: state.days };
     const record = { ...booking, createdAt: new Date().toISOString(), protection: state.protection, total: pricing().total, lead: state.lead, climbers: state.climbers, doors, signatures: Object.values(state.signatures).map(({ agreementHtml, ...r }) => r) };
-    try { const all = JSON.parse(localStorage.getItem("trailside_demo_bookings") || "[]"); all.push(record); localStorage.setItem("trailside_demo_bookings", JSON.stringify(all)); } catch (e) { /* storage unavailable: demo still works */ }
-    $("#ref").textContent = state.ref;
-    $("#conf-email").textContent = state.lead.email;
+    try { const all = JSON.parse(localStorage.getItem("trailside_demo_bookings") || "[]"); all.push(record); localStorage.setItem("trailside_demo_bookings", JSON.stringify(all)); } catch (e) { /* storage unavailable */ }
     $("#pass").innerHTML = passHtml(state.pass);
-    $("#conf-list").innerHTML = [
-      ["Dates", $("#sum-dates").textContent], ["Total", money(pricing().total)], ["Return", `Within ${state.days * 24} hours of pickup`], ["Agreements on file", Object.keys(state.signatures).length],
-    ].map(([a, b]) => `<li><span>${a}</span><strong style="color:#000">${b}</strong></li>`).join("");
+  }
+  const LOGO = '<svg viewBox="0 0 220 52" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 46 L24 31 L32 35 L48 19 L56 24 L72 9 L81 13"/><path d="M81 13 H111 M81 18 H111"/><path d="M111 13 L118 6 L132 20 L142 16 L160 30 L170 26 L189 40 L198 37 L217 46"/></svg>';
+  function qrSvg(seedStr) {
+    // Placeholder pattern only. The real pass will carry a scannable code from the locker system.
+    let seed = 0; for (const ch of seedStr) seed = (seed * 31 + ch.charCodeAt(0)) % 233280;
+    const r = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+    const finder = (x, y) => `<rect x="${x}" y="${y}" width="7" height="7"/><rect x="${x + 1}" y="${y + 1}" width="5" height="5" fill="#fff"/><rect x="${x + 2}" y="${y + 2}" width="3" height="3"/>`;
+    let s = '<svg viewBox="0 0 25 25" width="100%" height="100%" shape-rendering="crispEdges" aria-hidden="true"><g fill="#000">';
+    for (let y = 0; y < 25; y++) for (let x = 0; x < 25; x++) {
+      const inF = (x < 8 && y < 8) || (x > 16 && y < 8) || (x < 8 && y > 16);
+      if (!inF && r() > 0.52) s += `<rect x="${x}" y="${y}" width="1" height="1"/>`;
+    }
+    return s + finder(0, 0) + finder(18, 0) + finder(0, 18) + "</g></svg>";
   }
   function passHtml(p) {
-    const when = (d) => d.toLocaleString("en-US", { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
-    return `<div class="pass__top"><span>Trailside Rentals</span><span>${esc(p.ref)}</span></div>
-      <p class="pass__label">Locker code</p>
-      <p class="pass__code">${esc(p.code.slice(0, 3))} ${esc(p.code.slice(3))}</p>
-      <ul class="pass__doors">${p.doors.map((d) => `<li><strong>Unit ${esc(d.unit)}, door ${d.door}</strong><span>${esc(d.items)}</span></li>`).join("")}</ul>
-      <p class="pass__meta">Pick up any time from ${when(p.validFrom)}. Return within ${p.days * 24} hours of pickup. Code stops working ${when(p.validTo)}.</p>
-      <p class="pass__meta">Lockers: Ashley Gorge trailhead parking lot. No cell service there, so keep this pass on your phone.</p>`;
+    const d = (x) => x.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+    return `<div class="top"><b>${LOGO}Trailside</b><span>${esc(p.ref)}</span></div>
+      <span class="lab" style="margin-top:18px">Locker code</span>
+      <p class="code">${esc(p.code.slice(0, 3))} ${esc(p.code.slice(3))}</p>
+      <div class="grid"><div><span class="lab">Pickup</span><b>${d(p.validFrom)}</b></div><div><span class="lab">Return within</span><b>${p.days * 24} hours</b></div><div><span class="lab">Doors</span><b>${p.doors.map((x) => x.unit + x.door).join(" · ")}</b></div></div>
+      <div class="qr">${qrSvg(p.code)}</div>
+      <p class="note">Ashley Gorge trailhead lockers · works with no signal</p>`;
   }
-  function downloadPass() {
-    const css = "body{margin:0;background:#F1F1EF;font-family:system-ui,sans-serif;padding:20px}.pass{max-width:420px;margin:0 auto;background:#000;color:#fff;border-radius:24px;padding:24px}.pass__top{display:flex;justify-content:space-between;font-size:13px;opacity:.7}.pass__label{margin:28px 0 0;font-size:13px;opacity:.7}.pass__code{font-size:56px;font-weight:700;letter-spacing:.08em;margin:4px 0 20px}.pass__doors{list-style:none;padding:0;margin:0}.pass__doors li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.2)}.pass__doors span{opacity:.7}.pass__meta{font-size:13px;opacity:.8;margin:14px 0 0;line-height:1.5}";
-    const html = `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Trailside pass ${state.pass.ref}</title><style>${css}</style><div class="pass">${passHtml(state.pass)}</div>`;
+  function download(name, html) {
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([html], { type: "text/html" }));
-    a.download = `Trailside-pass-${state.pass.ref}.html`;
-    a.click();
+    a.download = name; a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }
+  function downloadPass() {
+    const css = "body{margin:0;background:#F3F3F1;font-family:-apple-system,system-ui,sans-serif;padding:24px}.wpass{max-width:380px;margin:0 auto;border-radius:20px;background:linear-gradient(180deg,#1C2B36,#121A20);color:#fff;padding:18px 20px 22px}.top{display:flex;justify-content:space-between;align-items:center;font-size:14px}.top b{display:inline-flex;gap:8px;align-items:center}.top svg{width:30px;height:12px}.lab{display:block;font-size:11px;color:rgba(255,255,255,.6)}.code{font-size:40px;font-weight:600;letter-spacing:.06em;margin:2px 0 0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.grid b{display:block;font-size:15px}.qr{margin:18px auto 0;width:136px;height:136px;background:#fff;border-radius:10px;padding:10px}.note{font-size:12px;opacity:.7;text-align:center}";
+    download(`Trailside-pass-${state.pass.ref}.html`, `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Trailside pass ${state.pass.ref}</title><style>${css}</style><div class="wpass">${passHtml(state.pass)}</div>`);
   }
   function downloadSigned() {
     const docs = Object.values(state.signatures).map((r) => `<section style="page-break-after:always">${r.agreementHtml}
-      <h3>Signature</h3><p>Typed name: <strong>${esc(r.typedName)}</strong>${r.minors.length ? `<br>Signing for minors: ${esc(r.minors.join(", "))}` : ""}</p>
-      <img src="${r.signature}" style="max-width:360px;border-bottom:1px solid #000"><p>Signed ${esc(r.signedAt)} (${esc(r.timeZone)})<br>Agreement version ${esc(r.agreementVersion)} · SHA-256 ${esc(r.agreementSha256)}</p>
+      <h3>Signature</h3><p>Typed name: <strong>${esc(r.typedName)}</strong> (${esc(r.signatureMethod)})${r.minors.length ? `<br>Signing for minors: ${esc(r.minors.join(", "))}` : ""}</p>
+      <img src="${r.signature}" style="max-width:360px;border-bottom:1px solid #000"><p>Signed ${esc(r.signedAt)} (${esc(r.timeZone)})<br>Agreement version ${esc(r.agreementVersion)} · SHA-256 ${esc(r.agreementSha256)}<br>Safety video watched: ${r.videoWatched ? "yes" : "no"}</p>
       <h3>Statements confirmed</h3><ul>${r.acknowledgments.map((a) => `<li>${esc(a)}</li>`).join("")}</ul><p><em>${esc(r.consent)}</em></p></section>`).join("");
-    const html = `<!doctype html><meta charset="utf-8"><title>Trailside Rentals signed agreements ${state.ref}</title><style>body{font-family:'Times New Roman',Times,serif;max-width:800px;margin:40px auto;padding:0 20px;line-height:1.5}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:6px;text-align:left}</style><h1>Booking ${state.ref}</h1>${docs}`;
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([html], { type: "text/html" }));
-    a.download = `Trailside-signed-agreements-${state.ref}.html`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    download(`Trailside-signed-agreements-${state.ref}.html`, `<!doctype html><meta charset="utf-8"><title>Trailside Rentals signed agreements ${state.ref}</title><style>body{font-family:'Times New Roman',Times,serif;max-width:800px;margin:40px auto;padding:0 20px;line-height:1.5}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:6px;text-align:left}</style><h1>Booking ${state.ref}</h1>${docs}`);
   }
 
   /* ---------- validation ---------- */
   function setErr(input, msg) {
-    const f = input.closest(".field");
+    const f = input && input.closest(".f-cell");
     if (f) { f.classList.toggle("has-error", !!msg); const e = $(".err", f); if (e) e.textContent = msg || ""; }
     return !msg;
   }
   function validate(step) {
-    if (step === 0) {
-      if (!state.start) return "Pick a start date on the calendar.";
-      if (climberCount() < 1) return "Add at least one full kit or lanyard. Each climber needs one.";
-      return "";
-    }
-    if (step === 1) {
+    if (step === 0) return state.start ? "" : "Pick a day on the calendar.";
+    if (step === 1) return climberCount() >= 1 ? "" : "Add at least one full kit or lanyard. Each climber needs one.";
+    if (step === 2) {
       let ok = true;
       ok = setErr($("#lead-name"), state.lead.name.trim().split(/\s+/).length < 2 ? "Enter your first and last name." : "") && ok;
       ok = setErr($("#lead-email"), /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.lead.email) ? "" : "Enter a valid email.") && ok;
       ok = setErr($("#lead-phone"), state.lead.phone.replace(/\D/g, "").length >= 10 ? "" : "Enter a 10-digit phone number.") && ok;
       state.climbers.forEach((c, i) => { if (i) ok = setErr($(`#c-name-${i}`), c.name.trim().split(/\s+/).length < 2 ? "Enter first and last name." : "") && ok; });
-      if (!ok) return "Fix the highlighted fields.";
-      if (state.climbers[0] && state.climbers[0].age !== "adult") return "The person booking has to be 18 or older. A parent or guardian should book and add the 14 to 17 year old as a climber.";
-      if (state.climbers.some((c) => !c.weightOk)) return "Confirm the weight and reach requirement for every climber.";
+      if (!ok) return "Check the highlighted fields.";
+      if (state.climbers.some((c) => !c.weightOk)) return "Confirm weight and reach for every climber.";
       return "";
     }
-    if (step === 2) {
-      if (!state.videoDone) return "Watch the safety video all the way through.";
-      const list = signers();
-      const left = list.filter((s) => !state.signatures[sigKey(s)]);
-      if (left.length) return `Still waiting on ${left.map((s) => s.name).join(", ")} to sign.`;
-      return "";
+    if (step === 3) {
+      if (!state.videoDone) return "Watch the safety video to the end.";
+      const left = signers().filter((s) => !state.signatures[sigKey(s)]);
+      return left.length ? `Waiting on ${left.map((s) => s.name.split(" ")[0]).join(", ")} to sign.` : "";
     }
     return "";
   }
+  function showError(msg) {
+    const box = $(`.a-step[data-step="${state.step}"] .a-error`);
+    if (!box) return;
+    box.textContent = msg; box.hidden = false;
+    box.classList.remove("shake"); void box.offsetWidth; box.classList.add("shake");
+    box.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+  }
+  function clearError() { $$(".a-error").forEach((b) => (b.hidden = true)); }
 
   /* ---------- navigation ---------- */
-  function go(step, initial) {
+  function go(step, opts = {}) {
+    const back = step < state.step;
     state.step = step;
-    $$(".step-panel").forEach((p) => p.classList.toggle("is-active", Number(p.dataset.step) === step));
-    $("#progress").innerHTML = STEPS.map((s, i) => `<li class="${i < step ? "is-done" : i === step ? "is-current" : ""}" ${i === step ? 'aria-current="step"' : ""}><span class="bar"></span><span class="label">${i + 1}. ${s}</span></li>`).join("");
-    const done = step === 4;
-    $$("[data-act=back]").forEach((b) => (b.style.visibility = step === 0 || done ? "hidden" : "visible"));
-    $$("[data-act=next]").forEach((b) => (b.textContent = step === 3 ? "Confirm booking" : step === 2 ? "Continue to review" : "Continue"));
-    $(".summary .step-actions").style.display = done ? "none" : "";
-    $("#mobile-bar").style.display = done ? "none" : "";
-    $("#step-error").hidden = true;
-    if (step === 1) renderClimbers();
-    if (step === 2) renderSigners();
-    if (step === 3) renderReview();
-    if (done) confirmBooking();
-    if (!initial) window.scrollTo({ top: $("#progress").offsetTop - 100, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-  }
-  function next() {
-    const msg = validate(state.step);
-    const box = $("#step-error");
-    if (msg) {
-      box.textContent = msg; box.hidden = false;
-      if (window.innerWidth < 1000) alertMobile(msg);
-      return;
-    }
-    go(state.step + 1);
-  }
-  function alertMobile(msg) {
-    // the summary panel is far down on phones, so show the message near the top of the step
-    let n = $("#m-err");
-    if (!n) { n = document.createElement("p"); n.id = "m-err"; n.className = "form-error"; n.setAttribute("role", "alert"); $("#progress").after(n); }
-    n.textContent = msg;
-    n.scrollIntoView({ block: "center" });
-    setTimeout(() => n.remove(), 6000);
-  }
-
-  function clearError() {
-    $("#step-error").hidden = true;
-    const m = $("#m-err"); if (m) m.remove();
-  }
-  function renderAll() {
+    $$(".a-step").forEach((p) => { const on = Number(p.dataset.step) === step; p.classList.toggle("is-on", on); p.classList.toggle("is-back", on && back); });
+    $("#a-steps").innerHTML = step < PROGRESS ? Array.from({ length: PROGRESS }, (_, i) => `<i class="${i <= step ? "on" : ""}"></i>`).join("") : "";
+    $("#a-back-label").textContent = step === 0 || step === 5 ? "Home" : NAMES[step - 1];
+    $("#a-title").textContent = step === 5 ? "Confirmed" : step === 3 ? "Agreement" : step === 4 ? "Review" : "Book";
+    $("#a-bar").classList.toggle("hide", step >= 4);
     clearError();
-    renderCalendar(); renderLength(); renderItems(); renderSummary();
+    if (step === 0) { renderCalendar(); renderLength(); }
+    if (step === 1) renderItems();
+    if (step === 2) renderClimbers();
+    if (step === 3) renderSigners();
+    if (step === 4) renderReview();
+    renderBar();
+    if (!opts.initial) window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  }
+  async function next() {
+    const msg = validate(state.step);
+    if (msg) { showError(msg); return; }
+    go(state.step + 1);
   }
 
   /* ---------- events ---------- */
   document.addEventListener("DOMContentLoaded", () => {
-    $("#cal").addEventListener("click", (e) => { const b = e.target.closest("[data-day]"); if (b && !b.disabled) selectDay(b.dataset.day); });
+    $("#cal").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-day]"); if (!b || b.disabled) return;
+      state.start = b.dataset.day;
+      if (nextDayOk(state.start) !== true) state.days = 1;
+      clampQty(); clearError(); renderCalendar(); renderLength(); renderBar();
+    });
     $("#cal-prev").onclick = () => { state.view = new Date(state.view.getFullYear(), state.view.getMonth() - 1, 1); renderCalendar(); };
     $("#cal-next").onclick = () => { state.view = new Date(state.view.getFullYear(), state.view.getMonth() + 1, 1); renderCalendar(); };
-    $("#length-row").addEventListener("click", (e) => { const b = e.target.closest("[data-days]"); if (b && !b.disabled) { state.days = Number(b.dataset.days); clampQty(); renderAll(); } });
+    $("#len").addEventListener("click", (e) => { const b = e.target.closest("[data-days]"); if (b && !b.disabled) { state.days = Number(b.dataset.days); clampQty(); renderCalendar(); renderLength(); renderBar(); } });
     $("#items").addEventListener("click", (e) => {
       const inc = e.target.closest("[data-inc]"), dec = e.target.closest("[data-dec]");
       if (inc) state.qty[inc.dataset.inc]++;
       if (dec) state.qty[dec.dataset.dec]--;
-      if (inc || dec) { clampQty(); renderItems(); renderSummary(); clearError(); }
+      if (inc || dec) { clampQty(); renderItems(); renderBar(); clearError(); }
     });
-    $("#protection").addEventListener("change", (e) => { state.protection = e.target.value; renderSummary(); });
+    $("#protection").addEventListener("change", (e) => { state.protection = e.target.value; renderBar(); });
     ["name", "email", "phone"].forEach((f) => $(`#lead-${f}`).addEventListener("input", (e) => {
       state.lead[f] = e.target.value;
-      if (f === "name" && state.climbers[0]) { state.climbers[0].name = e.target.value; const c0 = $("#c-name-0"); if (c0) c0.value = e.target.value; refreshGuardianLabels(); }
+      if (f === "name" && state.climbers[0]) { state.climbers[0].name = e.target.value; const c0 = $("#c-name-0"); if (c0) c0.textContent = e.target.value || "Your name"; refreshGuardianLabels(); }
     }));
     $("#climbers").addEventListener("input", (e) => {
-      const row = e.target.closest("[data-i]"); if (!row) return;
-      const c = state.climbers[Number(row.dataset.i)], f = e.target.dataset.f;
-      if (f === "name") { c.name = e.target.value; refreshGuardianLabels(); }
+      const g = e.target.closest("[data-i]"); if (!g) return;
+      const c = state.climbers[Number(g.dataset.i)];
+      if (e.target.dataset.f === "name") { c.name = e.target.value; refreshGuardianLabels(); }
     });
     $("#climbers").addEventListener("change", (e) => {
-      const row = e.target.closest("[data-i]"); if (!row) return;
-      const c = state.climbers[Number(row.dataset.i)], f = e.target.dataset.f;
-      if (f === "age") { c.age = e.target.value; c.guardian = 0; renderClimbers(); }
+      const g = e.target.closest("[data-i]"); if (!g) return;
+      const c = state.climbers[Number(g.dataset.i)], f = e.target.dataset.f;
       if (f === "guardian") c.guardian = Number(e.target.value);
       if (f === "weightOk") c.weightOk = e.target.checked;
-      if (f === "name") refreshGuardianLabels();
+    });
+    $("#climbers").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-age]"); if (!b) return;
+      const c = state.climbers[Number(b.closest("[data-i]").dataset.i)];
+      c.age = b.dataset.age; c.guardian = 0; renderClimbers();
     });
     $("#signers").addEventListener("click", (e) => { const b = e.target.closest("[data-signer]"); if (b) { state.signerIdx = Number(b.dataset.signer); renderSigners(); } });
-    setupVideo();
-    $$("[data-act=next]").forEach((b) => b.addEventListener("click", next));
-    $$("[data-act=back]").forEach((b) => b.addEventListener("click", () => go(Math.max(0, state.step - 1))));
+    $("#a-next").addEventListener("click", next);
+    $("#a-back").addEventListener("click", () => { if (state.step === 0 || state.step === 5) location.href = "index.html"; else go(state.step - 1); });
+    $$("[data-pay]").forEach((b) => b.addEventListener("click", async () => { await confirmBooking(); go(5); }));
     $("#dl-signed").addEventListener("click", downloadSigned);
     $("#dl-pass").addEventListener("click", downloadPass);
-    renderAll();
-    go(0, true);
+    setupVideo();
+    go(0, { initial: true });
   });
 })();
