@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trailside — Apple-style concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Homemade+Apple&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF; --bg2:#F3F3F1; --bg3:#EAEAE7;
+  --ink:#15171A; --ink2:#5C6066; --ink3:#8B8F95;
+  --line:rgba(21,23,26,.10); --line2:rgba(21,23,26,.16);
+  --accent:#1D5C8A; --accent-hi:#174C73; --go:#2E7D4F;
+  --r-pill:980px; --r-card:22px; --r-group:14px; --r-field:12px;
+  --font:"Geist", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --ease:cubic-bezier(.2,.7,.1,1);
+}
+*{box-sizing:border-box} html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;font-size:17px;line-height:1.47;letter-spacing:-.012em}
+img{display:block;max-width:100%}
+.screen{display:none;min-height:100vh;position:relative}
+.screen.on{display:block}
+a{color:var(--accent);text-decoration:none}
+::selection{background:#CFE2F0}
+
+/* type */
+.eyebrowless{} /* no eyebrows anywhere */
+.display{font-size:clamp(44px,6.4vw,84px);line-height:1.04;font-weight:600;letter-spacing:-.035em;margin:0}
+.h2{font-size:clamp(34px,4.2vw,56px);line-height:1.07;font-weight:600;letter-spacing:-.03em;margin:0}
+.h3{font-size:24px;line-height:1.17;font-weight:600;letter-spacing:-.02em;margin:0}
+.sub{font-size:21px;line-height:1.38;color:var(--ink2);font-weight:400;letter-spacing:-.016em;margin:0}
+.small{font-size:13px;color:var(--ink3);letter-spacing:-.005em}
+
+/* controls */
+.btn{display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 22px;border-radius:var(--r-pill);font:500 17px/1 var(--font);letter-spacing:-.016em;border:0;cursor:pointer;white-space:nowrap}
+.btn-fill{background:var(--accent);color:#fff}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-quiet{background:var(--bg2);color:var(--ink)}
+.btn-lg{height:52px;font-size:17px;padding:0 28px}
+.btn-block{width:100%}
+.link{font-size:17px;color:var(--accent);display:inline-flex;align-items:center;gap:4px}
+.link svg{width:9px;height:14px}
+.row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.center{text-align:center}
+
+/* desktop nav (glass only here, over content) */
+.gnav{position:sticky;top:0;z-index:20;height:52px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
+.gnav .in{width:min(1024px,92vw);display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:17px;letter-spacing:-.02em;color:var(--ink)}
+.brand svg{width:30px;height:12px}
+.gnav nav{display:flex;gap:28px;font-size:13px;color:var(--ink2)}
+.gnav nav span.on{color:var(--ink)}
+.gnav .btn{height:30px;font-size:13px;padding:0 14px}
+
+/* 1. home hero */
+.hero-top{padding:72px 0 40px}
+.hero-photo{width:min(1240px,94vw);margin:0 auto;height:560px;border-radius:28px;overflow:hidden;position:relative}
+.hero-photo img{width:100%;height:100%;object-fit:cover}
+.chip{position:absolute;left:20px;bottom:20px;background:rgba(255,255,255,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:var(--r-pill);padding:8px 14px;font-size:13px;font-weight:500;display:flex;gap:8px;align-items:center}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--go)}
+
+/* 2. kit (store-like) */
+.kit-wrap{width:min(1024px,92vw);margin:0 auto;padding:72px 0 96px}
+.kit-hero{background:var(--bg2);border-radius:var(--r-card);display:grid;grid-template-columns:1.1fr 1fr;align-items:center;overflow:hidden;margin-top:40px}
+.kit-hero .txt{padding:56px}
+.kit-hero .img{padding:40px 40px 40px 0}
+.price{font-size:17px;color:var(--ink)}
+.kit-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.kit-tile{background:var(--bg2);border-radius:var(--r-card);padding:28px 28px 24px;display:flex;flex-direction:column}
+.kit-tile img{height:150px;object-fit:contain;margin:4px auto 20px}
+.kit-tile .h3{font-size:21px}
+.kit-tile p{margin:6px 0 16px;color:var(--ink2);font-size:15px}
+.kit-tile .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
+.btn-sm{height:30px;font-size:14px;padding:0 14px}
+
+/* 3. location */
+.loc{width:min(1024px,92vw);margin:0 auto;padding:72px 0 96px;display:grid;grid-template-columns:.85fr 1.15fr;gap:48px;align-items:start}
+.map{height:520px;border-radius:var(--r-card);overflow:hidden;background:var(--bg3);position:relative}
+.map iframe{width:100%;height:100%;border:0}
+.seg{display:inline-flex;background:rgba(118,118,128,.12);border-radius:9px;padding:2px}
+.seg span{padding:6px 16px;font-size:13px;font-weight:500;border-radius:7px;color:var(--ink)}
+.seg span.on{background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
+.map .seg{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.facts{margin-top:32px;border-top:1px solid var(--line)}
+.facts div{display:flex;justify-content:space-between;gap:24px;padding:16px 0;border-bottom:1px solid var(--line);font-size:15px}
+.facts span{color:var(--ink2)}
+.facts b{font-weight:500;text-align:right}
+
+/* ===== phone screens ===== */
+.phone{background:var(--bg2);min-height:100vh;padding-bottom:120px}
+.pnav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:17px;position:sticky;top:0;background:rgba(243,243,241,.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);z-index:5}
+.pnav .back{color:var(--accent);display:flex;align-items:center;gap:4px}
+.pnav .back svg{width:11px;height:18px}
+.pnav .title{font-weight:600}
+.steps{display:flex;gap:6px;padding:4px 16px 0}
+.steps i{flex:1;height:3px;border-radius:3px;background:var(--line2)}
+.steps i.on{background:var(--ink)}
+.ptitle{padding:20px 20px 6px;font-size:34px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.psub{padding:0 20px 18px;color:var(--ink2);font-size:15px}
+.group-label{padding:18px 32px 7px;font-size:13px;color:var(--ink3);text-transform:none}
+.group{background:#fff;margin:0 16px;border-radius:var(--r-group);overflow:hidden}
+.cell{display:flex;align-items:center;gap:14px;min-height:56px;padding:10px 16px;position:relative}
+.cell+.cell::before{content:"";position:absolute;top:0;left:16px;right:0;height:1px;background:var(--line)}
+.cell .lbl{flex:1}
+.cell .lbl b{display:block;font-weight:500}
+.cell .lbl small{display:block;font-size:13px;color:var(--ink3)}
+.cell .val{color:var(--ink2)}
+.cell img{width:46px;height:46px;object-fit:contain}
+.group-foot{padding:8px 32px 0;font-size:13px;color:var(--ink3)}
+.stepper{display:inline-flex;background:rgba(118,118,128,.12);border-radius:9px;height:32px;align-items:center}
+.stepper span{width:44px;text-align:center;font-size:20px;line-height:32px;color:var(--ink)}
+.stepper span.dis{color:var(--ink3)}
+.stepper i{width:1px;height:18px;background:var(--line2)}
+.qty{width:22px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+.check{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line2);flex:none;display:grid;place-items:center}
+.check.on{background:var(--accent);border-color:var(--accent)}
+.check.on::after{content:"";width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:translateY(-1px) rotate(-45deg)}
+.toggle{width:51px;height:31px;border-radius:31px;background:rgba(120,120,128,.16);position:relative;flex:none}
+.toggle::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 3px 1px rgba(0,0,0,.06)}
+.toggle.on{background:var(--go)}
+.toggle.on::after{left:22px}
+.chev{width:8px;height:13px;color:var(--ink3)}
+
+/* calendar */
+.cal{background:#fff;margin:0 16px;border-radius:var(--r-group);padding:16px 12px 12px}
+.cal-head{display:flex;justify-content:space-between;align-items:center;padding:0 6px 12px}
+.cal-head b{font-size:17px;font-weight:600;display:flex;align-items:center;gap:6px}
+.cal-head b svg{width:8px;height:13px;color:var(--accent)}
+.cal-head .arrows{display:flex;gap:22px;color:var(--accent)}
+.cal-head .arrows svg{width:11px;height:18px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:4px;text-align:center}
+.cal-grid .dow{font-size:13px;color:var(--ink3);font-weight:600;padding-bottom:6px}
+.d{height:46px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;font-size:19px;font-variant-numeric:tabular-nums;position:relative}
+.d span{width:36px;height:36px;line-height:36px;border-radius:50%}
+.d i{width:5px;height:5px;border-radius:50%;background:var(--go)}
+.d.low i{background:#C58A1A}
+.d.off{color:#C6C8CB}
+.d.off i{display:none}
+.d.closed span{color:#C6C8CB;text-decoration:line-through}
+.d.closed i{display:none}
+.d.sel span{background:var(--accent);color:#fff;font-weight:600}
+.d.sel i{opacity:0}
+.d.in span{background:rgba(29,92,138,.12);color:var(--accent);font-weight:600}
+.d.in i{opacity:0}
+.legend{display:flex;gap:16px;justify-content:center;font-size:12px;color:var(--ink3);padding:10px 0 2px}
+.legend em{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;font-style:normal;vertical-align:middle}
+
+/* bottom bar (glass) */
+.bar{position:fixed;left:0;right:0;bottom:0;padding:12px 16px 30px;background:rgba(255,255,255,.78);backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:9}
+.bar .t b{display:block;font-size:20px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.bar .t span{font-size:13px;color:var(--ink3)}
+.bar .btn{height:50px;padding:0 30px}
+
+/* waiver */
+.doc{background:#fff;margin:0 16px;border-radius:var(--r-group);padding:18px 18px 4px;max-height:230px;overflow:hidden;position:relative;font-family:"Times New Roman",Times,serif;font-size:15.5px;line-height:1.45;color:#1b1b1b;letter-spacing:0}
+.doc h4{margin:0 0 6px;font-size:16px}
+.doc p{margin:0 0 10px}
+.doc::after{content:"";position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(rgba(255,255,255,0),#fff)}
+.read{display:flex;align-items:center;gap:8px;padding:10px 32px 0;font-size:13px;color:var(--go);font-weight:500}
+.read svg{width:14px;height:14px}
+.sig{height:110px;border-radius:var(--r-field);background:#fff;margin:0 16px;display:flex;align-items:center;justify-content:flex-start;padding:0 20px;font-family:"Homemade Apple",cursive;font-size:28px;color:#13284a;position:relative}
+.sig::after{content:"";position:absolute;left:20px;right:20px;bottom:26px;height:1px;background:var(--line2)}
+.sig-tools{display:flex;justify-content:space-between;padding:8px 32px 0;font-size:13px;color:var(--ink3)}
+.sig-tools a{font-size:13px}
+.cell.legal .lbl{font-family:"Times New Roman",Times,serif;font-size:16px;letter-spacing:0;line-height:1.35;color:#1b1b1b}
+
+/* checkout */
+.sum-hero{display:flex;gap:16px;align-items:center;margin:0 16px;background:#fff;border-radius:var(--r-group);padding:16px}
+.sum-hero img{width:64px;height:64px;object-fit:contain;background:var(--bg2);border-radius:12px;padding:6px}
+.money{font-variant-numeric:tabular-nums}
+.total-row{display:flex;justify-content:space-between;align-items:baseline;padding:14px 32px 0}
+.total-row b{font-size:28px;font-weight:600;letter-spacing:-.02em}
+.paybtn{height:52px;border-radius:12px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:500;font-size:18px;margin:18px 16px 10px}
+.paybtn.alt{background:#fff;color:var(--ink);border:1px solid var(--line2)}
+.secure{display:flex;justify-content:center;align-items:center;gap:6px;font-size:12px;color:var(--ink3);padding-top:6px}
+.secure svg{width:11px;height:13px}
+
+/* confirmation pass */
+.done{padding:28px 20px 0;text-align:center}
+.done .ok{width:56px;height:56px;border-radius:50%;background:var(--go);display:grid;place-items:center;margin:8px auto 14px}
+.done .ok svg{width:24px;height:24px}
+.pass{margin:22px 16px 0;border-radius:20px;background:linear-gradient(180deg,#1C2B36 0%,#121A20 100%);color:#fff;padding:18px 20px 20px;box-shadow:0 18px 40px -18px rgba(18,26,32,.6)}
+.pass .top{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:600}
+.pass .top .brand{color:#fff;font-size:15px}
+.pass .lab{font-size:11px;color:rgba(255,255,255,.6);margin-top:18px}
+.pass .code{font-size:40px;font-weight:600;letter-spacing:.06em;font-variant-numeric:tabular-nums;line-height:1.1}
+.pass .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
+.pass .grid b{display:block;font-size:15px;font-weight:600}
+.pass .qr{margin:18px auto 0;width:132px;height:132px;background:#fff;border-radius:10px;padding:10px}
+.wallet{margin:16px 16px 0;height:50px;border-radius:12px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:500;font-size:16px}
+.wallet svg{width:26px;height:20px}
+</style>
+</head>
+<body>
+
+<!-- shared bits -->
+<template id="logo"><svg viewBox="0 0 220 52" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 46 L24 31 L32 35 L48 19 L56 24 L72 9 L81 13"/><path d="M81 13 H111 M81 18 H111"/><path d="M111 13 L118 6 L132 20 L142 16 L160 30 L170 26 L189 40 L198 37 L217 46"/></svg></template>
+
+<!-- 1 HOME -->
+<section class="screen" id="home">
+  <header class="gnav"><div class="in"><span class="brand" data-logo>Trailside</span><nav><span>How it works</span><span>Gear</span><span>Rates</span><span>Location</span><span>Agreement</span></nav><span class="btn btn-fill">Book</span></div></header>
+  <div class="hero-top center">
+    <h1 class="display">Gear up at the trailhead.</h1>
+    <p class="sub" style="margin:16px auto 0;max-width:640px">Certified via ferrata kits in self-serve lockers at Ashley Gorge. Book on your phone, open with your pass, climb.</p>
+    <div class="row" style="justify-content:center;margin-top:28px;gap:28px"><span class="btn btn-fill btn-lg">Book gear</span><span class="link">See rates <svg viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m1.5 1.5 5.5 5.5-5.5 5.5"/></svg></span></div>
+  </div>
+  <div class="hero-photo"><img src="../../assets/photos/hero-canyon-wide.jpg" alt=""><span class="chip"><i class="dot"></i>Opening March 2027</span></div>
+</section>
+
+<!-- 2 KIT -->
+<section class="screen" id="kit">
+  <header class="gnav"><div class="in"><span class="brand" data-logo>Trailside</span><nav><span>How it works</span><span class="on">Gear</span><span>Rates</span><span>Location</span><span>Agreement</span></nav><span class="btn btn-fill">Book</span></div></header>
+  <div class="kit-wrap">
+    <h2 class="h2">The kit.</h2>
+    <p class="sub" style="margin-top:10px">Certified gear, inspected between every rental.</p>
+    <div class="kit-hero">
+      <div class="txt">
+        <h3 class="h3" style="font-size:32px">Full kit</h3>
+        <p class="sub" style="font-size:17px;margin:10px 0 18px">Helmet, harness and energy-absorbing lanyard. Everything one climber needs.</p>
+        <p class="price">$45 for 1 day <span style="color:var(--ink3)">·</span> $60 for 2 days</p>
+        <div class="row" style="margin-top:22px;gap:24px"><span class="btn btn-fill">Book</span><span class="link">What's included <svg viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m1.5 1.5 5.5 5.5-5.5 5.5"/></svg></span></div>
+      </div>
+      <div class="img"><img src="../../assets/gear/full-kit.png" alt="" style="max-height:340px;margin:auto"></div>
+    </div>
+    <div class="kit-row">
+      <div class="kit-tile"><img src="../../assets/gear/lanyard.png" alt=""><h3 class="h3">Lanyard</h3><p>Bring your own helmet and harness.</p><div class="foot"><span class="price">From $30</span><span class="btn btn-quiet btn-sm">Add</span></div></div>
+      <div class="kit-tile"><img src="../../assets/gear/helmet.png" alt=""><h3 class="h3">Helmet</h3><p>UIAA and EN 12492 certified.</p><div class="foot"><span class="price">From $12</span><span class="btn btn-quiet btn-sm">Add</span></div></div>
+      <div class="kit-tile"><img src="../../assets/gear/harness.png" alt=""><h3 class="h3">Harness</h3><p>UIAA and EN 12277 certified.</p><div class="foot"><span class="price">From $12</span><span class="btn btn-quiet btn-sm">Add</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 LOCATION -->
+<section class="screen" id="location">
+  <header class="gnav"><div class="in"><span class="brand" data-logo>Trailside</span><nav><span>How it works</span><span>Gear</span><span>Rates</span><span class="on">Location</span><span>Agreement</span></nav><span class="btn btn-fill">Book</span></div></header>
+  <div class="loc">
+    <div>
+      <h2 class="h2">Right in the parking lot.</h2>
+      <p class="sub" style="margin-top:14px;font-size:19px">Lockers sit at the Ashley Gorge trailhead, about 15 minutes north of Vernal. Park, open, climb.</p>
+      <div class="facts">
+        <div><span>Address</span><b>7810 N Ashley Springs Rd<br>Vernal, UT 84078</b></div>
+        <div><span>Lockers</span><b>Trailhead parking lot</b></div>
+        <div><span>Cell service</span><b>None. Save your pass first.</b></div>
+        <div><span>Season</span><b>March 1 – November 30</b></div>
+      </div>
+      <div class="row" style="margin-top:28px;gap:24px"><span class="btn btn-fill">Get directions</span><span class="link">Open in Maps <svg viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m1.5 1.5 5.5 5.5-5.5 5.5"/></svg></span></div>
+    </div>
+    <div class="map"><iframe src="https://maps.google.com/maps?q=40.5689978,-109.6150586&t=k&z=16&output=embed"></iframe><div class="seg"><span class="on">Trailhead</span><span>From Vernal</span></div></div>
+  </div>
+</section>
+
+<!-- 4 CALENDAR (phone) -->
+<section class="screen phone" id="calendar">
+  <div class="pnav"><span class="back"><svg viewBox="0 0 11 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 2 2 9l7 7"/></svg>Home</span><span class="title">Book</span><span style="width:52px"></span></div>
+  <div class="steps"><i class="on"></i><i></i><i></i><i></i></div>
+  <div class="ptitle">When are you climbing?</div>
+  <div class="psub">Green dots have kits available.</div>
+  <div class="cal">
+    <div class="cal-head"><b>May 2027 <svg viewBox="0 0 8 13" fill="none" stroke="currentColor" stroke-width="2"><path d="m1.5 1.5 5 5-5 5"/></svg></b><span class="arrows"><svg viewBox="0 0 11 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 2 2 9l7 7"/></svg><svg viewBox="0 0 11 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m2 2 7 7-7 7"/></svg></span></div>
+    <div class="cal-grid" id="calgrid"></div>
+    <div class="legend"><span><em style="background:var(--go)"></em>Available</span><span><em style="background:#C58A1A"></em>A few left</span><span><em style="background:#C6C8CB"></em>Full or closed</span></div>
+  </div>
+  <div class="group-label">Rental length</div>
+  <div class="group"><div class="cell"><div class="seg" style="width:100%;display:flex"><span style="flex:1;text-align:center">1 day</span><span class="on" style="flex:1;text-align:center">2 days</span></div></div></div>
+  <div class="group-foot">Sat, May 15 to Sun, May 16. Return within 48 hours of pickup.</div>
+  <div class="bar"><div class="t"><b>Sat–Sun</b><span>May 15–16 · 9 kits left</span></div><span class="btn btn-fill">Continue</span></div>
+</section>
+
+<!-- 5 GEAR (phone) -->
+<section class="screen phone" id="gear">
+  <div class="pnav"><span class="back"><svg viewBox="0 0 11 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 2 2 9l7 7"/></svg>Dates</span><span class="title">Book</span><span style="width:52px"></span></div>
+  <div class="steps"><i class="on"></i><i class="on"></i><i></i><i></i></div>
+  <div class="ptitle">What do you need?</div>
+  <div class="psub">One kit or lanyard per climber.</div>
+  <div class="group">
+    <div class="cell"><img src="../../assets/gear/full-kit.png" alt=""><div class="lbl"><b>Full kit</b><small>$60 for 2 days</small></div><span class="stepper"><span>−</span><i></i><span>+</span></span><span class="qty">2</span></div>
+    <div class="cell"><img src="../../assets/gear/lanyard.png" alt=""><div class="lbl"><b>Lanyard</b><small>$40 for 2 days</small></div><span class="stepper"><span>−</span><i></i><span>+</span></span><span class="qty">1</span></div>
+    <div class="cell"><img src="../../assets/gear/helmet.png" alt=""><div class="lbl"><b>Helmet</b><small>$17 for 2 days</small></div><span class="stepper"><span class="dis">−</span><i></i><span>+</span></span><span class="qty" style="color:var(--ink3)">0</span></div>
+    <div class="cell"><img src="../../assets/gear/harness.png" alt=""><div class="lbl"><b>Harness</b><small>$17 for 2 days</small></div><span class="stepper"><span class="dis">−</span><i></i><span>+</span></span><span class="qty" style="color:var(--ink3)">0</span></div>
+  </div>
+  <div class="group-label">Damage cover</div>
+  <div class="group">
+    <div class="cell"><span class="check on"></span><div class="lbl"><b>Gear Protection</b><small>Covers accidental damage. No card hold.</small></div><span class="val money">$21</span></div>
+    <div class="cell"><span class="check"></span><div class="lbl"><b>Refundable card hold</b><small>Released when your gear is back.</small></div><span class="val money">$380 hold</span></div>
+  </div>
+  <div class="group-foot">Neither option covers misuse or gear that isn't returned.</div>
+  <div class="bar"><div class="t"><b class="money">$181</b><span>3 climbers · 2 days</span></div><span class="btn btn-fill">Continue</span></div>
+</section>
+
+<!-- 6 WAIVER (phone) -->
+<section class="screen phone" id="waiver">
+  <div class="pnav"><span class="back"><svg viewBox="0 0 11 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 2 2 9l7 7"/></svg>Video</span><span class="title">Agreement</span><span style="width:52px"></span></div>
+  <div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+  <div class="ptitle">Ben, please sign.</div>
+  <div class="psub">1 of 2 adults. Sam signs next.</div>
+  <div class="doc"><h4>Gear Rental Agreement and Liability Release</h4><p><b>PLEASE READ CAREFULLY BEFORE SIGNING.</b> This document contains a release of liability and assumption of risk that will affect your legal rights.</p><p>This Gear Rental Agreement and Liability Release ("Agreement") is entered into between Randall Ventures LLC dba Trailside Rentals ("Company") and the renter identified below ("Renter").</p></div>
+  <div class="read"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="m2 7.5 3 3 7-7"/></svg>Read to the end</div>
+  <div class="group-label">Confirm each statement</div>
+  <div class="group">
+    <div class="cell legal"><div class="lbl">Each climber weighs 90–265 lbs and has a 62-inch reach.</div><span class="toggle on"></span></div>
+    <div class="cell legal"><div class="lbl">I accept the risks of via ferrata, including serious injury or death.</div><span class="toggle on"></span></div>
+    <div class="cell legal"><div class="lbl">I release Trailside Rentals from claims, including negligence.</div><span class="toggle"></span></div>
+  </div>
+  <div class="group-foot">6 more statements</div>
+  <div class="group-label">Signature</div>
+  <div class="sig">Ben Randall</div>
+  <div class="sig-tools"><span>Generated from your typed name</span><a>Draw instead</a></div>
+  <div class="bar"><div class="t"><b>2 of 9</b><span>statements confirmed</span></div><span class="btn btn-fill" style="opacity:.35">Sign</span></div>
+</section>
+
+<!-- 7 CHECKOUT (phone) -->
+<section class="screen phone" id="checkout">
+  <div class="pnav"><span class="back"><svg viewBox="0 0 11 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 2 2 9l7 7"/></svg>Agreement</span><span class="title">Review</span><span style="width:52px"></span></div>
+  <div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+  <div class="ptitle">Review and pay.</div>
+  <div class="psub">Ashley Gorge trailhead lockers</div>
+  <div class="sum-hero"><img src="../../assets/gear/full-kit.png" alt=""><div><b style="font-weight:600">Sat, May 15 – Sun, May 16</b><div class="small" style="font-size:15px;color:var(--ink2)">2 full kits, 1 lanyard · 3 climbers</div></div></div>
+  <div class="group-label">Summary</div>
+  <div class="group">
+    <div class="cell"><div class="lbl">2 × Full kit, 2 days</div><span class="money">$120</span></div>
+    <div class="cell"><div class="lbl">1 × Lanyard, 2 days</div><span class="money">$40</span></div>
+    <div class="cell"><div class="lbl">Gear Protection</div><span class="money">$21</span></div>
+    <div class="cell"><div class="lbl">Agreements</div><span style="color:var(--go);font-weight:500">2 of 2 signed</span></div>
+    <div class="cell"><div class="lbl">Safety video</div><span style="color:var(--go);font-weight:500">Watched</span></div>
+  </div>
+  <div class="total-row"><span style="font-weight:600">Total</span><b class="money">$181</b></div>
+  <div class="paybtn">Pay with Apple Pay</div>
+  <div class="paybtn alt">Pay with card</div>
+  <div class="secure"><svg viewBox="0 0 11 13" fill="currentColor"><path d="M2 5V3.5a3.5 3.5 0 0 1 7 0V5h.5A1.5 1.5 0 0 1 11 6.5v5A1.5 1.5 0 0 1 9.5 13h-8A1.5 1.5 0 0 1 0 11.5v-5A1.5 1.5 0 0 1 1.5 5H2Zm1.5 0h4V3.5a2 2 0 0 0-4 0V5Z"/></svg>Secure checkout by Stripe. Card details never touch our servers.</div>
+</section>
+
+<!-- 8 CONFIRMATION / PASS (phone) -->
+<section class="screen phone" id="pass">
+  <div class="pnav"><span style="width:52px"></span><span class="title">Confirmed</span><span style="color:var(--accent);width:52px;text-align:right">Done</span></div>
+  <div class="done">
+    <div class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+    <div style="font-size:28px;font-weight:700;letter-spacing:-.03em">You're booked.</div>
+    <div class="psub" style="padding:6px 0 0">Add your pass now. There's no signal at the gorge.</div>
+  </div>
+  <div class="pass">
+    <div class="top"><span class="brand" data-logo>Trailside</span><span style="font-weight:500;opacity:.8">TR-8KQ2LM</span></div>
+    <div class="lab">Locker code</div>
+    <div class="code">482 913</div>
+    <div class="grid"><div><span class="lab" style="display:block;margin:0">Pickup</span><b>Sat, May 15</b></div><div><span class="lab" style="display:block;margin:0">Return by</span><b>48 hrs later</b></div><div><span class="lab" style="display:block;margin:0">Doors</span><b>A5 · A6 · B7</b></div></div>
+    <div class="qr" id="qr"></div>
+  </div>
+  <div class="wallet"><svg viewBox="0 0 26 20" fill="none"><rect x="1" y="1" width="24" height="18" rx="4" stroke="#fff" stroke-width="1.6"/><path d="M1 7h24" stroke="#fff" stroke-width="1.6"/><rect x="16" y="11" width="6" height="4" rx="1" fill="#fff"/></svg>Add to Wallet</div>
+  <div class="center" style="margin-top:14px"><span class="link" style="font-size:15px">Download signed agreements</span></div>
+</section>
+
+<script>
+// logo marks
+const logo = document.getElementById('logo').innerHTML;
+document.querySelectorAll('[data-logo]').forEach(el => el.insertAdjacentHTML('afterbegin', logo));
+// calendar
+const g = document.getElementById('calgrid');
+if (g) {
+  let h = ['S','M','T','W','T','F','S'].map(d => `<div class="dow">${d}</div>`).join('');
+  for (let i = 0; i < 6; i++) h += '<div></div>';
+  const low = [7, 8, 21, 22], closed = [10, 11], full = [29], past = [];
+  for (let d = 1; d <= 31; d++) {
+    let c = 'd';
+    if (closed.includes(d)) c += ' closed'; else if (full.includes(d)) c += ' off';
+    else if (low.includes(d)) c += ' low';
+    if (d === 15) c += ' sel'; if (d === 16) c += ' in';
+    h += `<div class="${c}"><span>${d}</span><i></i></div>`;
+  }
+  g.innerHTML = h;
+}
+// simple QR-like pattern (placeholder graphic, not a real code)
+const q = document.getElementById('qr');
+if (q) {
+  let s = '<svg viewBox="0 0 25 25" width="100%" height="100%" shape-rendering="crispEdges">';
+  let seed = 7;
+  const r = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const finder = (x, y) => `<rect x="${x}" y="${y}" width="7" height="7" fill="#000"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#000"/>`;
+  for (let y = 0; y < 25; y++) for (let x = 0; x < 25; x++) {
+    const inF = (x < 8 && y < 8) || (x > 16 && y < 8) || (x < 8 && y > 16);
+    if (!inF && r() > .52) s += `<rect x="${x}" y="${y}" width="1" height="1" fill="#000"/>`;
+  }
+  s += finder(0,0) + finder(18,0) + finder(0,18) + '</svg>';
+  q.innerHTML = s;
+}
+// show screen from hash
+const id = location.hash.slice(1) || 'home';
+document.getElementById(id).classList.add('on');
+</script>
+</body>
+</html>
