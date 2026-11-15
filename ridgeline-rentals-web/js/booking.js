@@ -209,7 +209,7 @@
     const duo = cfg.duoFor(state.qty.kit, state.qty.lanyard);
     if (duo.off) { lines.push([`Duo deal, ${duo.pairs} pair${duo.pairs > 1 ? "s" : ""}`, -duo.off]); total -= duo.off; }
     const prot = state.qty.kit * itemById("kit").protection + state.qty.lanyard * itemById("lanyard").protection;
-    const dep = state.qty.kit * itemById("kit").deposit + state.qty.lanyard * itemById("lanyard").deposit;
+    const dep = Math.min(cfg.depositCap, state.qty.kit * itemById("kit").deposit + state.qty.lanyard * itemById("lanyard").deposit);
     if (state.protection === "protection" && prot) { lines.push(["Gear Protection", prot]); total += prot; }
     else hold = dep;
     return { lines, total, hold, prot, dep, duo };

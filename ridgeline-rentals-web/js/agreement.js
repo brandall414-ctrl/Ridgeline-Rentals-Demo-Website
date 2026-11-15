@@ -7,7 +7,7 @@
 (function () {
   "use strict";
 
-  const VERSION = "2026-11-14.1";
+  const VERSION = "2026-11-15.1";
   const B = "Trailside Rentals";
 
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -86,7 +86,7 @@ ${table(["Rental Option", "1 or 2 Days", "Each Additional Day"], [
 
 <h3>5. Security Deposit &amp; Damage Waiver</h3>
 <p><strong>Option A — Standard Rental (Security Deposit)</strong></p>
-<p>A refundable security deposit hold of ${money(item("kit").deposit)} per kit (or ${money(item("lanyard").deposit)} for lanyard-only rentals) will be placed on Renter's payment card via Stripe on the first day of the Rental Period. This hold is not a charge. Upon confirmed return of all gear in acceptable condition, the hold will be released the same day. Renter acknowledges that actual posting of released funds may vary based on Renter's bank processing times.</p>
+<p>A refundable security deposit hold of ${money(item("kit").deposit)} per kit (or ${money(item("lanyard").deposit)} for lanyard-only rentals) will be placed on Renter's payment card via Stripe on the first day of the Rental Period, up to a maximum hold of $${cfg.depositCap}.00 per booking. This hold is not a charge. The hold limit does not limit Renter's responsibility: Renter may be charged for damaged or unreturned gear up to its full replacement cost, as set out in Sections 5–7, even where that amount exceeds the hold. Upon confirmed return of all gear in acceptable condition, the hold will be released the same day. Renter acknowledges that actual posting of released funds may vary based on Renter's bank processing times.</p>
 <p><strong>Option B — Damage Waiver (No Deposit Required)</strong></p>
 <p>Renter may purchase a Damage Waiver at the time of rental in lieu of the security deposit hold. The Damage Waiver fee is ${money(item("kit").protection)} per full kit or ${money(item("lanyard").protection)} per lanyard-only rental. By purchasing the Damage Waiver:</p>
 ${ul([

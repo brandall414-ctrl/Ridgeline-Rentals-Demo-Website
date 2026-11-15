@@ -104,6 +104,10 @@ window.TRAILSIDE.duo = { off: 10, maxPairs: 2 };
 // Cancellation rules shown at checkout and in the agreement.
 window.TRAILSIDE.cancel = { withoutProtectionDays: 7 };
 
+// The card hold is per kit / lanyard, but never more than this per booking.
+// Renters are still responsible for damage or lost gear up to its full value.
+window.TRAILSIDE.depositCap = 250;
+
 // Price for one item for a rental of `days` calendar days.
 window.TRAILSIDE.priceFor = function (item, days) {
   return item.price + item.extraDay * Math.max(0, days - window.TRAILSIDE.includedDays);

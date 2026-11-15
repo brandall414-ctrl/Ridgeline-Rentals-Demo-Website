@@ -110,7 +110,9 @@ html { scroll-behavior: smooth; }
 @media (min-width: 1500px) { .cover__wall { right: max(0px, calc((100vw - 1600px) / 2)); } }
 @media (max-width: 760px) {
   .cover { min-height: max(100svh, 680px); }
-  .cover__wall { height: 74%; top: auto; bottom: 0; right: -26px; }
+  /* phones: a taller cliff so the rock runs from the top of the screen to the bottom */
+  .cover__wall { height: 100%; top: 0; bottom: 0; right: -58px; aspect-ratio: 779 / 2260; }
+  .cover .cover__shadow { display: none; }
   .cover__copy { justify-content: space-between; padding-top: calc(var(--nav-h) + 26px); padding-bottom: 28px; }
   .cover__title { font-size: clamp(50px, 15vw, 64px); }
   .cover__lede { display: none; }
@@ -224,17 +226,28 @@ html { scroll-behavior: smooth; }
 .how__step h3::before { content: counter(s); display: block; font-size: 15px; font-weight: 600; letter-spacing: 0; color: var(--a-accent); margin-bottom: 12px; font-variant-numeric: tabular-nums; }
 .how__step p { font-size: 19px; color: var(--a-ink2); margin: 14px 0 0; line-height: 1.42; }
 .how__inline { display: none !important; }
+.how__caps { display: none; position: relative; width: 100%; height: 150px; flex: none; }
+.how__cap { position: absolute; inset: 0; opacity: 0; transform: translateY(12px); transition: opacity .5s var(--a-ease), transform .6s var(--a-ease); }
+.how__cap.is-on { opacity: 1; transform: none; }
+.how__cap span { display: block; font-size: 14px; font-weight: 600; color: var(--a-accent); font-variant-numeric: tabular-nums; }
+.how__cap h3 { font-size: 28px; font-weight: 700; letter-spacing: -.035em; line-height: 1.08; margin: 4px 0 0; }
+.how__cap p { font-size: 16px; line-height: 1.4; color: var(--a-ink2); margin: 6px 0 0; }
 .how__phone { position: sticky; top: calc(50vh - min(38vh, 380px)); height: min(76vh, 760px); align-self: start; display: grid; place-items: center; }
 .phone { position: relative; height: 100%; aspect-ratio: 390 / 844; border-radius: 52px; background: #1d1d1f; padding: 11px; box-sizing: border-box; box-shadow: 0 40px 80px -30px rgba(20,22,26,.35), inset 0 0 0 1.5px #3a3a3c; }
 .phone::before { content: ""; position: absolute; z-index: 3; top: 20px; left: 50%; width: 30%; height: 24px; translate: -50% 0; border-radius: 20px; background: #000; }
 .phone__shot { position: absolute; inset: 11px; width: calc(100% - 22px); height: calc(100% - 22px); object-fit: cover; object-position: top; border-radius: 42px; opacity: 0; transform: scale(1.03); transition: opacity .6s var(--a-ease), transform .9s var(--a-ease); }
 .phone__shot.is-on { opacity: 1; transform: none; }
 @media (max-width: 900px) {
-  .how__grid { grid-template-columns: 1fr; gap: 0; margin-top: 24px; }
-  .how__phone { display: none; }
-  .how__step { min-height: 0; opacity: 1; padding: 36px 0; border-top: 1px solid var(--a-line); }
-  .how__inline { display: block !important; width: 60%; max-width: 250px; height: auto; aspect-ratio: 390 / 560; object-fit: cover; object-position: top; border-radius: 30px; margin: 22px auto 0; box-shadow: 0 24px 50px -24px rgba(20,22,26,.4); border: 7px solid #1d1d1f; }
-  .how__step { padding: 30px 0 34px; }
+  /* phones: the phone stays put while the steps scroll past; the caption and screen fade together */
+  .how__grid { grid-template-columns: 1fr; gap: 0; margin-top: 8px; }
+  .how__steps, .how__phone { grid-area: 1 / 1; }
+  .how__steps { padding-bottom: 48svh; }
+  .how__step { min-height: 50svh; opacity: 0 !important; pointer-events: none; }
+  .how__phone { position: sticky; z-index: 1; top: calc(var(--nav-h) + 8px); height: calc(100svh - var(--nav-h) - 16px); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 14px; }
+  .how__caps { display: block; }
+  .how__phone .phone { height: auto; width: auto; flex: 1 1 0; min-height: 0; max-height: 620px; aspect-ratio: 390 / 844; border-radius: 40px; padding: 8px; }
+  .how__phone .phone::before { top: 15px; height: 18px; }
+  .how__phone .phone__shot { inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); border-radius: 33px; }
 }
 
 /* ---------- before you go (teaser) ---------- */
@@ -261,7 +274,7 @@ html { scroll-behavior: smooth; }
 .gallery__nav button:hover { background: var(--a-bg3); }
 .gallery__nav button[disabled] { opacity: .35; cursor: default; }
 .gallery__nav svg { width: 8px; height: 13px; }
-.gallery__track { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: max(var(--pad-l), calc((100vw - 1240px) / 2 + var(--pad-l))); padding: 28px var(--pad-r) 8px max(var(--pad-l), calc((100vw - 1240px) / 2 + var(--pad-l))); scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+.gallery__track { display: flex; gap: 14px; overflow-x: auto; overflow-y: hidden; touch-action: pan-x pan-y; scroll-snap-type: x proximity; scroll-padding-left: max(var(--pad-l), calc((100vw - 1240px) / 2 + var(--pad-l))); padding: 28px var(--pad-r) 8px max(var(--pad-l), calc((100vw - 1240px) / 2 + var(--pad-l))); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .gallery__track::-webkit-scrollbar { display: none; }
 .gallery__track figure { flex: none; margin: 0; height: min(58vh, 560px); aspect-ratio: 3 / 4; border-radius: 22px; overflow: hidden; background: var(--a-bg2); scroll-snap-align: start; }
 .gallery__track figure.w { aspect-ratio: 4 / 3; }

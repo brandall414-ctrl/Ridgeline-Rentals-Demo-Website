@@ -192,11 +192,19 @@
      How it works: phone follows the step in view (desktop)
      ====================================================================== */
   const shots = $$(".phone__shot");
+  // phone captions (shown above the phone on small screens), built from the step list
+  const phoneBox = $(".how__phone");
+  const caps = document.createElement("div");
+  caps.className = "how__caps";
+  caps.innerHTML = $$(".how__step").map((s, i) => `<div class="how__cap${i === 0 ? " is-on" : ""}"><span>${i + 1}</span><h3>${s.querySelector("h3").textContent}</h3><p>${s.querySelector("p").textContent}</p></div>`).join("");
+  phoneBox.prepend(caps);
+  const capEls = $$(".how__cap", caps);
   const stepIO = new IntersectionObserver((es) => es.forEach((e) => {
     if (!e.isIntersecting) return;
     $$(".how__step").forEach((s) => s.classList.toggle("is-on", s === e.target));
     const n = Number(e.target.dataset.shot);
     shots.forEach((s, i) => s.classList.toggle("is-on", i === n));
+    capEls.forEach((c, i) => c.classList.toggle("is-on", i === n));
   }), { rootMargin: "-45% 0px -45% 0px" });
   $$(".how__step").forEach((s) => stepIO.observe(s));
 

@@ -74,8 +74,11 @@
     <section class="cover" data-pitch data-tone="light" aria-labelledby="cover-title">
       <div class="cover__wall" id="cover-wall">
         <img class="cover__shadow" src="assets/route/climber-shadow.webp" alt="" aria-hidden="true" />
-        <img class="cover__climber" src="assets/route/climber-cutout.webp" width="779" height="1500"
+        <picture>
+          <source media="(max-width: 760px)" srcset="assets/route/climber-cutout-tall.webp" width="779" height="2260" />
+          <img class="cover__climber" src="assets/route/climber-cutout.webp" width="779" height="1500"
              alt="A climber clipped into the steel cable, leaning out from a sandstone wall on the Ashley Gorge via ferrata" />
+        </picture>
       </div>
       <div class="wrap cover__copy">
         <h1 class="cover__title" id="cover-title">
@@ -142,7 +145,7 @@
     <!-- ============ the kit ============ -->
     <section class="kit" id="gear" data-pitch data-tone="light" aria-labelledby="kit-title">
       <div class="wrap">
-        <h2 class="kit__title" id="kit-title" data-split>One kit. Everything you clip in with.</h2>
+        <h2 class="kit__title" id="kit-title" data-split>What the kit includes.</h2>
         <p class="kit__sub" data-rise>Certified gear, inspected between every rental.</p>
         <div class="parts">
           <figure class="part" data-rise><div class="part__img"><img src="assets/gear/helmet.png" alt="Blue climbing helmet" loading="lazy" /></div><figcaption><b>Helmet</b><span>UIAA and EN 12492 certified</span></figcaption></figure>
@@ -230,7 +233,7 @@
     <section class="end" id="contact" data-pitch data-tone="dark" aria-labelledby="end-title">
       <img class="end__bg" src="assets/route/bridge-wide.webp" alt="" loading="lazy" />
       <div class="wrap end__in">
-        <h2 class="end__title" id="end-title" data-split>See you at the trailhead.</h2>
+        <h2 class="end__title" id="end-title" data-split>See you at the trailhead!</h2>
         <a class="a-btn end__btn" href="book.html">Book gear</a>
         <div class="end__contact">
           <p><small>Call or text</small><a data-contact="phone" href="tel:+12084731751">(208) 473-1751</a></p>
