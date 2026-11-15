@@ -28,29 +28,31 @@
 
     <!-- 0 · dates -->
     <section class="a-step" data-step="0" aria-labelledby="t0">
-      <h1 class="a-title" id="t0">When are you climbing?</h1>
-      <p class="a-sub">Green dots have kits available.</p>
+      <div class="a-head"><h1 class="a-title" id="t0">When are you climbing?</h1><button class="a-btn a-head__btn" type="button" data-next>Continue</button></div>
+      <p class="a-sub">Green dots have kits available. Rent for 1 to 4 days.</p>
       <p class="a-error" role="alert" hidden></p>
       <div class="cal">
         <div class="cal-head"><b id="cal-month" aria-live="polite"></b><span class="cal-arrows"><button type="button" id="cal-prev" aria-label="Previous month"><svg viewBox="0 0 11 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2 2 9l7 7"/></svg></button><button type="button" id="cal-next" aria-label="Next month"><svg viewBox="0 0 11 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 2 7 7-7 7"/></svg></button></span></div>
         <div class="cal-grid" id="cal"></div>
+        <div class="avail" id="avail" aria-live="polite"></div>
         <div class="legend"><span><em style="background:var(--a-go)"></em>Available</span><span><em style="background:var(--a-low)"></em>A few left</span><span><em style="background:#C6C8CB"></em>Full or closed</span></div>
       </div>
       <p class="g-label">Rental length</p>
-      <div class="g"><div class="cell"><div class="seg" role="group" aria-label="Rental length" id="len"><button type="button" data-days="1" aria-pressed="true">1 day</button><button type="button" data-days="2" aria-pressed="false">2 days</button></div></div></div>
-      <p class="g-foot" id="len-note">Pick a date first.</p>
+      <div class="g"><div class="cell"><div class="seg seg--4" role="group" aria-label="Rental length" id="len"><button type="button" data-days="1" aria-pressed="true">1 day</button><button type="button" data-days="2" aria-pressed="false">2 days</button><button type="button" data-days="3" aria-pressed="false">3 days</button><button type="button" data-days="4" aria-pressed="false">4 days</button></div></div></div>
+      <p class="g-foot" id="len-note">Pick up any time on your first day. Return by 11:59 pm on your last.</p>
+      <p class="g-foot">1 or 2 days is the same price. Days 3 and 4 add a little per item. Need more than 4 days? <a data-contact="phone" href="tel:+12084731751">Call</a> or <a href="mailto:trailsiderentalsvernal@gmail.com">email</a> us.</p>
     </section>
 
     <!-- 1 · gear -->
     <section class="a-step" data-step="1" aria-labelledby="t1">
       <h1 class="a-title" id="t1">What do you need?</h1>
-      <p class="a-sub">One full kit or lanyard per climber.</p>
+      <p class="a-sub">One full kit or lanyard per climber. Every pair of kits or lanyards gets the duo deal: $10 off, up to 2 pairs.</p>
       <p class="a-error" role="alert" hidden></p>
       <div class="g" id="items"></div>
       <p class="g-label">Damage cover</p>
       <div class="g" id="protection">
-        <label class="cell tap"><input class="rc" type="radio" name="protection" value="protection"><span class="lbl"><b>Gear Protection</b><small>Covers accidental damage. No card hold.</small></span><span class="val" id="prot-amt"></span></label>
-        <label class="cell tap"><input class="rc" type="radio" name="protection" value="deposit" checked><span class="lbl"><b>Refundable card hold</b><small>Released when your gear is back.</small></span><span class="val" id="hold-amt"></span></label>
+        <label class="cell tap"><input class="rc" type="radio" name="protection" value="protection" checked><span class="lbl"><b>Gear Protection</b><small>Covers accidental damage, no card hold, and free cancellation until your first day starts.</small></span><span class="val" id="prot-amt"></span></label>
+        <label class="cell tap"><input class="rc" type="radio" name="protection" value="deposit"><span class="lbl"><b>Refundable card hold</b><small>We only hold the money on your card on the day of your rental, and release it when you return the gear. Free cancellation up to 7 days before.</small></span><span class="val" id="hold-amt"></span></label>
       </div>
       <p class="g-foot">Neither option covers misuse or gear that isn't returned.</p>
     </section>
@@ -107,7 +109,7 @@
       <div class="done-head">
         <div class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
         <h1>You're booked.</h1>
-        <p>Add your pass now. There's no signal at the gorge.</p>
+        <p>Save your pass now, before you head to the trailhead.</p>
       </div>
       <div class="wpass" id="pass"></div>
       <button class="wallet" type="button" id="dl-pass"><svg viewBox="0 0 26 20" fill="none"><rect x="1" y="1" width="24" height="18" rx="4" stroke="#fff" stroke-width="1.6"/><path d="M1 7h24" stroke="#fff" stroke-width="1.6"/><rect x="16" y="11" width="6" height="4" rx="1" fill="#fff"/></svg>Add to Wallet</button>

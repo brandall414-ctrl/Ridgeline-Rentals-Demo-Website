@@ -70,7 +70,7 @@
     start: null,
     days: 1,
     qty: { kit: 1, lanyard: 0, helmet: 0, harness: 0 },
-    protection: "deposit",
+    protection: "protection",
     lead: { name: "", email: "", phone: "" },
     climbers: [],
     videoDone: false,
@@ -109,24 +109,75 @@
     }
     $("#cal").innerHTML = html;
   }
-  function nextDayOk(startKey) {
-    const s = dayStatus(key(addDays(parse(startKey), 1)));
-    return s.state === "open" ? true : s.state === "closed" ? "The next day is closed" : s.state === "soldout" ? "The next day is sold out" : "The next day is outside the season";
+  // How many consecutive bookable days start on this date (1..maxDays), and why it stops.
+  function maxDaysFrom(startKey) {
+    let n = 1, why = "";
+    while (n < cfg.maxDays) {
+      const s = dayStatus(key(addDays(parse(startKey), n)));
+      if (s.state !== "open") { why = s.state === "closed" ? "closed" : s.state === "soldout" ? "sold out" : "outside the season"; break; }
+      n++;
+    }
+    return { n, why };
   }
   function renderLength() {
-    const ok = state.start ? nextDayOk(state.start) : true;
+    const m = state.start ? maxDaysFrom(state.start) : { n: 0 };
     $$("#len button").forEach((b) => {
       const d = Number(b.dataset.days);
       b.setAttribute("aria-pressed", String(d === state.days));
-      b.disabled = !state.start || (d === 2 && ok !== true);
+      b.disabled = !state.start || d > m.n;
     });
     const ks = rangeKeys();
-    let note = "Pick a date first.";
+    const last = ks.length ? parse(ks[ks.length - 1]) : null;
+    let note = "Pick up any time on your first day. Return by 11:59 pm on your last.";
     if (ks.length) {
-      const range = ks.length === 1 ? fmt(parse(ks[0]), { weekday: "short", month: "short", day: "numeric" }) : `${fmt(parse(ks[0]))} to ${fmt(parse(ks[1]))}`;
-      note = ok !== true ? `${range}. ${ok}, so this is a 1-day rental.` : `${range}. Return within ${state.days * 24} hours of pickup.`;
+      note = `Return by 11:59 pm on ${fmt(last, { weekday: "long", month: "short", day: "numeric" })}.`;
+      if (m.n < cfg.maxDays) note += ` ${fmt(addDays(parse(ks[0]), m.n), { weekday: "short", month: "short", day: "numeric" })} is ${m.why}, so ${m.n === 1 ? "this is a 1-day rental" : `the longest rental from this date is ${m.n} days`}.`;
     }
     $("#len-note").textContent = note;
+    renderAvail();
+  }
+  // Big, readable "what's left" line under the calendar for the chosen dates.
+  function renderAvail() {
+    const box = $("#avail");
+    if (!box) return;
+    if (!state.start) { box.innerHTML = `<span class="avail__hint">${matchMedia("(hover: hover)").matches ? "Hover over a date to see what's left, or pick one." : "Tap a date to see what's left."}</span>`; return; }
+    const ks = rangeKeys();
+    const k = rangeLeft("kit"), l = rangeLeft("lanyard");
+    const when = ks.length === 1 ? fmt(parse(ks[0]), { weekday: "short", month: "short", day: "numeric" }) : `${fmt(parse(ks[0]), { month: "short", day: "numeric" })} – ${fmt(parse(ks[ks.length - 1]), { month: "short", day: "numeric" })}`;
+    box.innerHTML = `<span class="avail__when">${when}</span><span class="avail__n"><b class="${k <= cfg.lowStockAt ? "is-low" : ""}">${k}</b> kits</span><span class="avail__n"><b class="${l <= cfg.lowStockAt ? "is-low" : ""}">${l}</b> lanyards</span><span class="avail__sub">left${ks.length > 1 ? " for all your days" : ""}</span>`;
+  }
+  // Desktop: hover a date for half a second to see what's left that day.
+  function setupCalTip() {
+    if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const tip = document.createElement("div");
+    tip.className = "cal-tip"; tip.setAttribute("role", "status"); tip.hidden = true;
+    document.body.appendChild(tip);
+    let timer = 0, cur = null;
+    const hide = () => { clearTimeout(timer); timer = 0; cur = null; tip.hidden = true; tip.classList.remove("is-on"); };
+    $("#cal").addEventListener("pointerover", (e) => {
+      const b = e.target.closest(".d[data-day]");
+      if (!b || b === cur) return;
+      hide(); cur = b;
+      timer = setTimeout(() => {
+        const k = b.dataset.day, st = dayStatus(k);
+        const day = fmt(parse(k), { weekday: "long", month: "short", day: "numeric" });
+        let body;
+        if (st.state === "open") body = `<b>${st.left.kit}</b> kits · <b>${st.left.lanyard}</b> lanyards left`;
+        else if (st.state === "closed") body = esc(st.reason);
+        else if (st.state === "soldout") body = "Sold out";
+        else body = "Not bookable";
+        tip.innerHTML = `<span>${day}</span>${body}`;
+        tip.hidden = false;
+        const r = b.getBoundingClientRect(), tr = tip.getBoundingClientRect();
+        let x = r.left + r.width / 2 - tr.width / 2;
+        x = Math.max(8, Math.min(innerWidth - tr.width - 8, x));
+        tip.style.left = x + "px"; tip.style.top = (r.top + scrollY - tr.height - 8) + "px";
+        requestAnimationFrame(() => tip.classList.add("is-on"));
+      }, 500);
+    });
+    $("#cal").addEventListener("pointerleave", hide);
+    $("#cal").addEventListener("click", hide);
+    addEventListener("scroll", hide, { passive: true });
   }
 
   /* ---------- gear ---------- */
@@ -135,7 +186,8 @@
     $("#items").innerHTML = cfg.items.map((it) => {
       const left = state.start ? rangeLeft(it.id) : 0;
       const q = state.qty[it.id];
-      const sub = `${money(cfg.priceFor(it, state.days))} for ${state.days} day${state.days > 1 ? "s" : ""}${left <= cfg.lowStockAt ? ` · ${left ? left + " left" : "none left"}` : ""}`;
+      const len = state.days <= cfg.includedDays ? `${state.days} day${state.days > 1 ? "s" : ""}` : `${state.days} days`;
+      const sub = `${money(cfg.priceFor(it, state.days))} for ${len}${left <= cfg.lowStockAt ? ` · ${left ? left + " left" : "none left"}` : ""}`;
       return `<div class="cell"><img class="thumb" src="${it.img}" alt=""><div class="lbl"><b>${it.name}</b><small>${sub}</small></div>
         <span class="stepper" role="group" aria-label="${it.name} quantity"><button type="button" data-dec="${it.id}" aria-label="Remove one ${it.name}" ${q <= 0 ? "disabled" : ""}>−</button><i></i><button type="button" data-inc="${it.id}" aria-label="Add one ${it.name}" ${q >= left ? "disabled" : ""}>+</button></span><span class="qty ${q ? "" : "zero"}" aria-live="polite">${q}</span></div>`;
     }).join("");
@@ -154,14 +206,16 @@
       total += amt;
       lines.push([`${q} × ${it.name}, ${state.days} day${state.days > 1 ? "s" : ""}`, amt]);
     });
+    const duo = cfg.duoFor(state.qty.kit, state.qty.lanyard);
+    if (duo.off) { lines.push([`Duo deal, ${duo.pairs} pair${duo.pairs > 1 ? "s" : ""}`, -duo.off]); total -= duo.off; }
     const prot = state.qty.kit * itemById("kit").protection + state.qty.lanyard * itemById("lanyard").protection;
     const dep = state.qty.kit * itemById("kit").deposit + state.qty.lanyard * itemById("lanyard").deposit;
     if (state.protection === "protection" && prot) { lines.push(["Gear Protection", prot]); total += prot; }
     else hold = dep;
-    return { lines, total, hold, prot, dep };
+    return { lines, total, hold, prot, dep, duo };
   }
-  const datesShort = () => { const ks = rangeKeys(); const s = (k) => fmt(parse(k), { month: "short", day: "numeric" }); return !ks.length ? "" : ks.length === 1 ? s(ks[0]) : `${s(ks[0])}–${parse(ks[1]).getDate()}`; };
-  const datesLong = () => { const ks = rangeKeys(); const o = { weekday: "short", month: "short", day: "numeric" }; return !ks.length ? "" : ks.length === 1 ? fmt(parse(ks[0]), o) : `${fmt(parse(ks[0]), o)} – ${fmt(parse(ks[1]), o)}`; };
+  const datesShort = () => { const ks = rangeKeys(); const s = (k) => fmt(parse(k), { month: "short", day: "numeric" }); const L = ks[ks.length - 1]; return !ks.length ? "" : ks.length === 1 ? s(ks[0]) : parse(L).getMonth() === parse(ks[0]).getMonth() ? `${s(ks[0])}–${parse(L).getDate()}` : `${s(ks[0])} – ${s(L)}`; };
+  const datesLong = () => { const ks = rangeKeys(); const o = { weekday: "short", month: "short", day: "numeric" }; return !ks.length ? "" : ks.length === 1 ? fmt(parse(ks[0]), o) : `${fmt(parse(ks[0]), o)} – ${fmt(parse(ks[ks.length - 1]), o)}`; };
   function renderBar() {
     const p = pricing();
     $("#prot-amt").textContent = p.prot ? money(p.prot) : "";
@@ -214,12 +268,19 @@
   }
   function sigKey(s) { return `${s.i}|${s.name.trim().toLowerCase()}|${s.minors.join(",")}`; }
   function pruneSignatures() { const valid = new Set(signers().map(sigKey)); Object.keys(state.signatures).forEach((k) => { if (!valid.has(k)) delete state.signatures[k]; }); }
-  const returnDeadline = () => `${state.days * 24} hours from the time gear is taken from the locker (${state.days}-day rental)`;
+  const lastDay = () => { const ks = rangeKeys(); return ks.length ? parse(ks[ks.length - 1]) : null; };
+  const returnDeadline = () => `11:59 p.m. Mountain Time on ${fmt(lastDay(), { weekday: "long", month: "long", day: "numeric", year: "numeric" })} (${state.days}-day rental)`;
+  function cancelLine() {
+    const first = parse(rangeKeys()[0]);
+    if (state.protection === "protection") return `Free until ${fmt(first, { month: "short", day: "numeric" })} starts`;
+    const cut = addDays(first, -cfg.cancel.withoutProtectionDays);
+    return cut > today ? `Free until ${fmt(cut, { month: "short", day: "numeric" })}, then date changes only` : "Date changes only";
+  }
   function fillFor(s) {
     return {
       renterName: s.name,
       contact: s.i === 0 ? `${state.lead.phone} / ${state.lead.email}` : `Booked by ${state.lead.name} (${state.lead.email})`,
-      rentalDates: rangeKeys().map((k) => fmt(parse(k), { weekday: "long", month: "long", day: "numeric", year: "numeric" })).join(" and "),
+      rentalDates: (() => { const ks = rangeKeys(), o = { weekday: "long", month: "long", day: "numeric", year: "numeric" }; return ks.length === 1 ? fmt(parse(ks[0]), o) : `${fmt(parse(ks[0]), o)} through ${fmt(parse(ks[ks.length - 1]), o)}`; })(),
       returnDeadline: returnDeadline(), gear: { ...state.qty }, protection: state.protection,
     };
   }
@@ -374,10 +435,11 @@
     const list = signers();
     $("#rv-dates").textContent = datesLong();
     $("#rv-gear").textContent = `${cfg.items.filter((i) => state.qty[i.id]).map((i) => `${state.qty[i.id]} ${i.name.toLowerCase()}`).join(", ")} · ${climberCount()} climber${climberCount() === 1 ? "" : "s"}`;
-    $("#review").innerHTML = p.lines.map(([l, a]) => `<div class="cell"><span class="lbl">${esc(l)}</span><span class="num">${money(a)}</span></div>`).join("") +
+    $("#review").innerHTML = p.lines.map(([l, a]) => `<div class="cell"><span class="lbl">${esc(l)}</span><span class="num${a < 0 ? " ok-text" : ""}">${a < 0 ? "−" + money(-a) : money(a)}</span></div>`).join("") +
       `<div class="cell"><span class="lbl">Agreements</span><span class="ok-text">${list.filter((s) => state.signatures[sigKey(s)]).length} of ${list.length} signed</span></div>` +
       `<div class="cell"><span class="lbl">Safety video</span><span class="ok-text">Watched</span></div>` +
-      `<div class="cell"><span class="lbl">Return</span><span class="val">Within ${state.days * 24} hours</span></div>`;
+      `<div class="cell"><span class="lbl">Return by</span><span class="val">11:59 pm, ${fmt(lastDay(), { weekday: "short", month: "short", day: "numeric" })}</span></div>` +
+      `<div class="cell"><span class="lbl">Cancellation</span><span class="val">${cancelLine()}</span></div>`;
     $("#rv-total").textContent = money(p.total);
     $("#rv-hold").textContent = p.hold ? `Plus a refundable ${money(p.hold)} card hold, released when your gear is back.` : "";
   }
@@ -389,7 +451,7 @@
     const L = window.TrailsideLocker;
     const startDay = parse(rangeKeys()[0]);
     const validFrom = startDay;
-    const validTo = new Date(addDays(startDay, state.days + 1).getTime() - 60000);
+    const validTo = new Date(addDays(startDay, state.days).getTime() - 60000);
     const doors = await L.assignDoors(booking);
     const access = await L.createAccessCode(booking, doors, validFrom, validTo);
     state.pass = { ref: state.ref, doors, code: access.code, validFrom, validTo, days: state.days };
@@ -415,9 +477,9 @@
     return `<div class="top"><b>${LOGO}Trailside</b><span>${esc(p.ref)}</span></div>
       <span class="lab" style="margin-top:18px">Locker code</span>
       <p class="code">${esc(p.code.slice(0, 3))} ${esc(p.code.slice(3))}</p>
-      <div class="grid"><div><span class="lab">Pickup</span><b>${d(p.validFrom)}</b></div><div><span class="lab">Return within</span><b>${p.days * 24} hours</b></div><div><span class="lab">Doors</span><b>${p.doors.map((x) => x.unit + x.door).join(" · ")}</b></div></div>
+      <div class="grid"><div><span class="lab">Pickup</span><b>${d(p.validFrom)}</b></div><div><span class="lab">Return by</span><b>${d(p.validTo)}</b></div><div><span class="lab">Doors</span><b>${p.doors.map((x) => x.unit + x.door).join(" · ")}</b></div></div>
       <div class="qr">${qrSvg(p.code)}</div>
-      <p class="note">Ashley Gorge trailhead lockers · works with no signal</p>`;
+      <p class="note">Ashley Gorge trailhead lockers · works offline</p>`;
   }
   function download(name, html) {
     const a = document.createElement("a");
@@ -501,7 +563,7 @@
     $("#cal").addEventListener("click", (e) => {
       const b = e.target.closest("[data-day]"); if (!b || b.disabled) return;
       state.start = b.dataset.day;
-      if (nextDayOk(state.start) !== true) state.days = 1;
+      state.days = Math.min(state.days, maxDaysFrom(state.start).n);
       clampQty(); clearError(); renderCalendar(); renderLength(); renderBar();
     });
     $("#cal-prev").onclick = () => { state.view = new Date(state.view.getFullYear(), state.view.getMonth() - 1, 1); renderCalendar(); };
@@ -536,6 +598,8 @@
     });
     $("#signers").addEventListener("click", (e) => { const b = e.target.closest("[data-signer]"); if (b) { state.signerIdx = Number(b.dataset.signer); renderSigners(); } });
     $("#a-next").addEventListener("click", next);
+    $$("[data-next]").forEach((b) => b.addEventListener("click", next));
+    setupCalTip();
     $("#a-back").addEventListener("click", () => { if (state.step === 0 || state.step === 5) location.href = "index.html"; else go(state.step - 1); });
     $$("[data-pay]").forEach((b) => b.addEventListener("click", async () => { await confirmBooking(); go(5); }));
     $("#dl-signed").addEventListener("click", downloadSigned);

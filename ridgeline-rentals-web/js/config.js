@@ -17,18 +17,20 @@ window.TRAILSIDE = {
   // Season and booking rules
   seasonStart: "2027-03-01",   // first bookable day (YYYY-MM-DD)
   seasonEnd: "2027-11-30",     // last bookable day
-  maxDays: 2,                  // longest rental a customer can book
+  maxDays: 4,                  // longest rental bookable online (longer = call or email)
+  includedDays: 2,             // the base price covers this many calendar days
+  lockerHours: "Open 24/7",
   lowStockAt: 4,               // show "only X left" at or below this
 
-  // price = 1-day rental. extraDay = added for each day after the first,
-  // so a 2-day kit is 45 + 15 = $60.
+  // price covers 1 or 2 calendar days. extraDay is added for day 3 and day 4,
+  // so a 3-day kit is 45 + 10 = $55 and a 4-day kit is $65.
   items: [
     {
       id: "kit",
       name: "Full kit",
       detail: "Helmet, harness and via ferrata lanyard",
       price: 45,
-      extraDay: 15,
+      extraDay: 10,
       stock: 16,
       perClimber: true,
       protection: 8,   // Gear Protection fee, per rental
@@ -40,7 +42,7 @@ window.TRAILSIDE = {
       name: "Lanyard only",
       detail: "Energy-absorbing via ferrata lanyard. Bring your own helmet and harness.",
       price: 30,
-      extraDay: 10,
+      extraDay: 8,
       stock: 8,
       perClimber: true,
       protection: 5,
@@ -94,7 +96,22 @@ window.TRAILSIDE = {
   demoBookings: true,
 };
 
-// Price for one item for a rental of `days` days.
+// Duo deal: every pair of climber items (kit + kit, lanyard + lanyard, or
+// kit + lanyard) gets $10 off, up to 2 pairs per booking.
+// 2 kits $80 · 2 lanyards $50 · kit + lanyard $65 (for 1–2 days).
+window.TRAILSIDE.duo = { off: 10, maxPairs: 2 };
+
+// Cancellation rules shown at checkout and in the agreement.
+window.TRAILSIDE.cancel = { withoutProtectionDays: 7 };
+
+// Price for one item for a rental of `days` calendar days.
 window.TRAILSIDE.priceFor = function (item, days) {
-  return item.price + item.extraDay * Math.max(0, days - 1);
+  return item.price + item.extraDay * Math.max(0, days - window.TRAILSIDE.includedDays);
+};
+
+// Number of duo pairs and the discount for a given quantity of kits + lanyards.
+window.TRAILSIDE.duoFor = function (kits, lanyards) {
+  const d = window.TRAILSIDE.duo;
+  const pairs = Math.min(d.maxPairs, Math.floor((kits + lanyards) / 2));
+  return { pairs, off: pairs * d.off };
 };

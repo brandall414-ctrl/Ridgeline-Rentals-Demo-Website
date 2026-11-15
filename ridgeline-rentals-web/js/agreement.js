@@ -7,7 +7,7 @@
 (function () {
   "use strict";
 
-  const VERSION = "2026-11-03.3";
+  const VERSION = "2026-11-14.1";
   const B = "Trailside Rentals";
 
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -52,7 +52,7 @@ ${table(null, [
   ["Phone / Email", f.contact ? esc(f.contact) : blank],
   ["Rental Date", f.rentalDates ? esc(f.rentalDates) : blank],
   ["Rental Location", "Ashley Gorge Via Ferrata Trailhead, Vernal, Utah"],
-  ["Return Deadline", f.returnDeadline ? esc(f.returnDeadline) : "24 hours from time of gear dispensing (1-day rental) or 48 hours (2-day rental)"],
+  ["Return Deadline", f.returnDeadline ? esc(f.returnDeadline) : "11:59 p.m. Mountain Time on the last day of the Rental Period"],
 ])}
 
 <h3>2. Gear Issued</h3>
@@ -75,17 +75,18 @@ ${ul([
 ])}
 
 <h3>4. Rental Terms &amp; Pricing</h3>
-<p>Standard Rental Pricing (per item). A 1-day rental runs 24 hours from dispensing; a 2-day rental runs 48 hours.</p>
-${table(["Rental Option", "1-Day Rental", "2-Day Rental"], [
+<p>The Rental Period is the calendar day or consecutive calendar days selected at booking, from 12:00 a.m. on the first day to 11:59 p.m. Mountain Time on the last day. Rentals may be booked online for 1 to ${cfg.maxDays} days; longer rentals require approval by ${B}. The standard rate covers 1 or 2 days. Each additional day is charged at the extra-day rate below (per item).</p>
+${table(["Rental Option", "1 or 2 Days", "Each Additional Day"], [
   ["Full Kit (Helmet + Harness + Lanyard)", "kit"],
   ["Lanyard Only", "lanyard"],
   ["Helmet Only", "helmet"],
   ["Harness Only", "harness"],
-].map(([label, id]) => [label, money(cfg.priceFor(item(id), 1)), money(cfg.priceFor(item(id), 2))]))}
+].map(([label, id]) => [label, money(item(id).price), money(item(id).extraDay)]))}
+<p>Duo Deal: each pair of full kits and/or lanyard-only rentals in the same booking receives a $${cfg.duo.off.toFixed(2)} discount, up to ${cfg.duo.maxPairs} pairs per booking. Additional-day charges apply to each item in a pair.</p>
 
 <h3>5. Security Deposit &amp; Damage Waiver</h3>
 <p><strong>Option A — Standard Rental (Security Deposit)</strong></p>
-<p>A refundable security deposit hold of ${money(item("kit").deposit)} per kit (or ${money(item("lanyard").deposit)} for lanyard-only rentals) will be placed on Renter's payment card at the time of rental via Stripe. This hold is not a charge. Upon confirmed return of all gear in acceptable condition, the hold will be released the same day. Renter acknowledges that actual posting of released funds may vary based on Renter's bank processing times.</p>
+<p>A refundable security deposit hold of ${money(item("kit").deposit)} per kit (or ${money(item("lanyard").deposit)} for lanyard-only rentals) will be placed on Renter's payment card via Stripe on the first day of the Rental Period. This hold is not a charge. Upon confirmed return of all gear in acceptable condition, the hold will be released the same day. Renter acknowledges that actual posting of released funds may vary based on Renter's bank processing times.</p>
 <p><strong>Option B — Damage Waiver (No Deposit Required)</strong></p>
 <p>Renter may purchase a Damage Waiver at the time of rental in lieu of the security deposit hold. The Damage Waiver fee is ${money(item("kit").protection)} per full kit or ${money(item("lanyard").protection)} per lanyard-only rental. By purchasing the Damage Waiver:</p>
 ${ul([
@@ -94,6 +95,7 @@ ${ul([
   "The Damage Waiver does NOT cover damage resulting from abuse, negligence, improper use, or intentional misuse of equipment.",
   "The Damage Waiver does NOT cover non-return of gear under any circumstances.",
   "If gear is not returned within 24 hours after the Return Deadline, Renter's payment card will be charged the full replacement cost of all unreturned items (Helmet: $50.00 | Harness: $60.00 | Lanyard: $80.00), regardless of whether the Damage Waiver was purchased.",
+  "Renter may cancel the booking for a full refund at any time before 12:00 a.m. Mountain Time on the first day of the Rental Period.",
   `By purchasing the Damage Waiver, Renter explicitly authorizes ${B} to charge their payment card on file for the full replacement cost of any unreturned gear without further notice.`,
 ])}
 <p>Renter selects (check one):<br>
@@ -102,10 +104,17 @@ ${opt("protection")} Option B — Damage Waiver purchased (${money(item("kit").p
 
 <h3>6. Return Policy</h3>
 ${ul([
-  `All gear must be returned to the ${B} smart locker at the Ashley Gorge Via Ferrata trailhead by the Return Deadline: within 24 hours of the recorded dispensing time for a 1-day rental, or within 48 hours for a 2-day rental.`,
+  `All gear must be returned to the ${B} smart locker at the Ashley Gorge Via Ferrata trailhead by the Return Deadline: 11:59 p.m. Mountain Time on the last day of the Rental Period. Gear may be picked up and returned at any time of day during the Rental Period, and may be returned early.`,
   "Renter will receive a return PIN code via email or SMS to complete the return process. Gear must be secured inside the locker and the return confirmed through the system.",
-  `Late returns will be charged an additional rental-day fee (${money(item("kit").price)} for a full kit; ${money(item("lanyard").price)} for lanyard-only) for each 24-hour period past the return deadline.`,
+  `Late returns will be charged an additional rental-day fee (${money(item("kit").price)} for a full kit; ${money(item("lanyard").price)} for lanyard-only) for each calendar day or part of a day past the Return Deadline.`,
   "No refunds will be issued once gear has been dispensed from the locker.",
+])}
+
+<h3>6A. Cancellations, Date Changes &amp; Route Closures</h3>
+${ul([
+  "With the Damage Waiver (Option B): Renter may cancel for a full refund at any time before 12:00 a.m. Mountain Time on the first day of the Rental Period.",
+  `Without the Damage Waiver (Option A): Renter may cancel for a full refund up to ${cfg.cancel.withoutProtectionDays} days before the first day of the Rental Period. After that, the booking cannot be refunded, but Renter may change the rental dates before the Rental Period begins, subject to availability.`,
+  "If Uintah County closes the Ashley Gorge Via Ferrata course on a booked day (for example, for rain, snow, lightning or maintenance), Renter may choose a full refund or new dates.",
 ])}
 
 <h3>7. Damage &amp; Replacement Fees</h3>

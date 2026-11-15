@@ -275,3 +275,22 @@
 @media (max-width: 700px) { .a-gnav nav { display: none; } }
 .a-foot { max-width: 980px; margin: 0 auto; padding: 24px 22px 40px; border-top: 1px solid var(--a-line); font-size: 12px; color: var(--a-ink3); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
 @media print { .a-gnav, .a-foot, .no-print { display: none !important; } .a-page { background: #fff; } }
+
+/* ---------- date step additions ---------- */
+.a-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding-right: 16px; }
+.a-head .a-title { flex: 1; min-width: 0; }
+.a-head__btn { flex: none; height: 40px; padding: 0 18px; font-size: 15px; margin-top: 14px; }
+@media (max-width: 420px) { .a-head__btn { height: 36px; padding: 0 14px; margin-top: 10px; } }
+.avail { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin: 12px 4px 4px; padding: 12px 14px; border-radius: var(--a-field); background: var(--a-bg2); min-height: 26px; font-size: 15px; color: var(--a-ink2); }
+.avail__hint { color: var(--a-ink2); font-size: 15px; }
+.avail__when { width: 100%; font-size: 13px; color: var(--a-ink3); font-weight: 500; }
+.avail__n { font-size: 17px; color: var(--a-ink); }
+.avail__n b { font-size: 26px; font-weight: 700; letter-spacing: -.02em; color: var(--a-go); font-variant-numeric: tabular-nums; margin-right: 3px; }
+.avail__n b.is-low { color: var(--a-low); }
+.avail__sub { color: var(--a-ink3); font-size: 15px; }
+.cal-tip { position: absolute; z-index: 60; pointer-events: none; background: rgba(21,23,26,.92); color: #fff; font-size: 13px; line-height: 1.35; padding: 8px 12px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.2); opacity: 0; transform: translateY(4px); transition: opacity .18s ease, transform .25s var(--a-ease); white-space: nowrap; }
+.cal-tip.is-on { opacity: 1; transform: none; }
+.cal-tip span { display: block; color: rgba(255,255,255,.65); font-size: 12px; }
+.cal-tip b { font-size: 15px; font-weight: 600; }
+.seg--4 button { padding-left: 4px; padding-right: 4px; }
+@media (max-width: 380px) { .seg--4 button { font-size: 13px; } }
