@@ -140,3 +140,78 @@
   .wx__day { padding: 14px 14px 12px; }
   .i-links .a-btn { width: 100%; box-sizing: border-box; }
 }
+
+/* ---------- phones: keep it short (Nov 17) ---------- */
+@media (max-width: 600px) {
+  .i-hero { padding: 36px 0 6px; }
+  .i-hero h1 { font-size: 36px; }
+  .i-hero p { font-size: 15px; margin-top: 10px; }
+  .i-jump { margin-top: 12px; }
+  .h-page .i-jump a { font-size: 13px; padding: 7px 12px; }
+  .i-sec { padding-top: 48px; }
+  .i-sec > h2, .i-split h2 { font-size: 28px; margin-bottom: 14px; }
+  .i-lead { font-size: 15px; margin: -4px 0 16px; }
+  .i-h3 { font-size: 17px; margin: 20px 0 8px; }
+
+  /* what to bring: gloves banner, then a 2-up grid of short cards */
+  .bring { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .bring__lead { grid-template-columns: 112px minmax(0, 1fr); border-radius: 18px; }
+  .bring__lead img { aspect-ratio: auto; height: 100%; min-height: 0; }
+  .bring__lead > div { padding: 16px; }
+  .bring__tag { font-size: 12px; }
+  .bring__lead h3 { font-size: 30px; margin-top: 2px; }
+  .bring__lead p { font-size: 13.5px; margin-top: 6px; line-height: 1.38; }
+  .bring__item { padding: 14px 13px; border-radius: 16px; }
+  .bring__item h3 { font-size: 15px; letter-spacing: -.015em; }
+  .bring__item p { font-size: 13px; margin-top: 4px; line-height: 1.35; }
+
+  /* photos that only decorate are dropped on phones */
+  .i-split .i-photo { display: none; }
+  .i-callout { padding: 16px; border-radius: 16px; margin-bottom: 10px; }
+  .i-callout h3 { font-size: 17px; }
+  .i-callout p { font-size: 14px; margin-top: 4px; }
+  .i-sec .cell { min-height: 46px; padding-top: 8px; padding-bottom: 8px; font-size: 15px; }
+  .i-sec .cell .val { font-size: 14px; }
+  .i-sec .cell .lbl small { font-size: 12px; }
+  .i-sec .g-foot { font-size: 12px; }
+
+  /* route maps: main map, then the three section maps swipe sideways */
+  .i-map img { border-radius: 14px; }
+  .i-maps { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x proximity; margin: 12px -16px 0; padding: 0 16px; scrollbar-width: none; }
+  .i-maps::-webkit-scrollbar { display: none; }
+  .i-maps figure { flex: none; width: 74%; scroll-snap-align: start; }
+  .i-maps img { border-radius: 12px; }
+  .i-maps figcaption { font-size: 12px; }
+  .i-tips3 { gap: 8px; margin-top: 14px; }
+  .i-tips3 > div { padding: 14px 16px; border-radius: 16px; }
+  .i-tips3 h3 { font-size: 15.5px; }
+  .i-tips3 p { font-size: 13.5px; margin-top: 4px; }
+  .i-links { margin-top: 16px; gap: 10px 20px; }
+  .i-links .h-link { font-size: 15px; }
+
+  /* grades */
+  .grades { gap: 8px; }
+  .grades__col { padding: 14px 14px 10px; border-radius: 16px; }
+  .grade-list li { grid-template-columns: 30px minmax(0, 1fr); column-gap: 10px; padding: 9px 0; }
+  .gs, .gl { width: 24px; height: 24px; }
+  .grade-list b { font-size: 15px; }
+  .grade-list p { font-size: 13px; }
+  .i-callout--blue { margin-top: 10px; }
+
+  /* weather: four compact tiles in a row */
+  .wx { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; min-height: 0; }
+  .wx__day { padding: 10px 8px; border-radius: 14px; gap: 2px; align-items: center; text-align: center; }
+  .wx__name { font-size: 12px; }
+  .wx__day svg { width: 24px; height: 24px; margin: 2px 0; }
+  .wx__label { font-size: 11px; line-height: 1.2; min-height: 2.4em; }
+  .wx__t { font-size: 11px; } .wx__t b { font-size: 18px; }
+  .wx__rain { font-size: 11px; }
+
+  .faq { padding: 2px 14px; border-radius: 16px; }
+  .faq__item summary { font-size: 15px; padding: 14px 0; gap: 10px; }
+  .faq__icon { width: 22px; height: 22px; }
+  .faq__a p { font-size: 14.5px; padding-bottom: 14px; }
+  .i-ask { font-size: 14px; }
+  .h-inner .a-cta { padding: 44px 0 40px; }
+  .h-inner .a-cta h2 { font-size: 26px; }
+}

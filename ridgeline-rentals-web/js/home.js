@@ -134,7 +134,7 @@
   /* ======================================================================
      Cover: load reveal, pointer tilt, light scroll parallax
      ====================================================================== */
-  const cover = $(".cover"), wall = $("#cover-wall"), copy = $(".cover__copy"), shadow = $(".cover__shadow");
+  const cover = $(".cover"), wall = $("#cover-wall"), copy = $(".cover__copy");
   const tilt = { x: 0, y: 0, tx: 0, ty: 0 };
   if (fine && !reduce) {
     cover.addEventListener("pointermove", (e) => { tilt.tx = (e.clientX / W - 0.5) * 2; tilt.ty = (e.clientY / H - 0.5) * 2; kick(); });
@@ -145,8 +145,6 @@
     tilt.x = lerp(tilt.x, tilt.tx, 0.08); tilt.y = lerp(tilt.y, tilt.ty, 0.08);
     const sc = reduce ? 0 : Y;
     wall.style.transform = `translate3d(${(tilt.x * -10).toFixed(2)}px, ${(-sc * 0.12 + tilt.y * -6).toFixed(2)}px, 0) rotateY(${(tilt.x * -5).toFixed(3)}deg) rotateX(${(tilt.y * 3).toFixed(3)}deg)`;
-    shadow.style.setProperty("--sx", (tilt.x * -22).toFixed(2));
-    shadow.style.setProperty("--sy", (tilt.y * -14).toFixed(2));
     copy.style.transform = `translate3d(${(tilt.x * 6).toFixed(2)}px, ${(sc * 0.18).toFixed(2)}px, 0)`;
     copy.style.opacity = String(clamp(1 - sc / (H * 0.85)));
     return Math.abs(tilt.x - tilt.tx) > 0.001 || Math.abs(tilt.y - tilt.ty) > 0.001;

@@ -30,7 +30,7 @@
         <a href="#location">Location</a>
         <a href="#gear">Gear</a>
         <a href="#how-it-works">How it works</a>
-        <a href="rates.html">Rates</a>
+        <a href="#prices">Prices</a>
         <a href="info.html">Need to know</a>
       </nav>
       <div class="h-nav__end">
@@ -42,7 +42,7 @@
       <a href="#location">Location</a>
       <a href="#gear">Gear</a>
       <a href="#how-it-works">How it works</a>
-      <a href="rates.html">Rates</a>
+      <a href="#prices">Prices</a>
       <a href="info.html">Everything you need to know</a>
       <a href="agreement.html">Rental agreement</a>
     </div>
@@ -73,7 +73,6 @@
     <!-- ============ cover ============ -->
     <section class="cover" data-pitch data-tone="light" aria-labelledby="cover-title">
       <div class="cover__wall" id="cover-wall">
-        <img class="cover__shadow" src="assets/route/climber-shadow.webp" alt="" aria-hidden="true" />
         <picture>
           <source media="(max-width: 760px)" srcset="assets/route/climber-cutout-tall.webp" width="779" height="2260" />
           <img class="cover__climber" src="assets/route/climber-cutout.webp" width="779" height="1500"
@@ -100,8 +99,8 @@
     <!-- ============ collage ============ -->
     <section class="collage" data-pitch data-tone="dark" aria-labelledby="collage-title">
       <div class="wrap collage__head">
-        <h2 class="collage__title" id="collage-title" data-split>Ladders, cable bridges and a lot of air.</h2>
-        <p class="collage__sub" data-rise>The Ashley Gorge via ferrata, 15 minutes north of Vernal. Two carabiners, one always on the cable, the whole way.</p>
+        <h2 class="collage__title" id="collage-title" data-split>Climb North America's longest public via ferrata.</h2>
+        <p class="collage__sub" data-rise>Ladders, cable bridges and a lot of air at Ashley Gorge, 15 minutes north of Vernal.</p>
       </div>
       <div class="collage__stage" id="collage">
         <div class="collage__world" id="collage-world">
@@ -152,29 +151,44 @@
           <figure class="part" data-rise><div class="part__img"><img src="assets/gear/harness.png" alt="Climbing harness with adjustable leg loops" loading="lazy" /></div><figcaption><b>Harness</b><span>UIAA and EN 12277, adjustable leg loops</span></figcaption></figure>
           <figure class="part" data-rise><div class="part__img"><img src="assets/gear/lanyard.png" alt="Via ferrata lanyard with two carabiners and an energy absorber" loading="lazy" /></div><figcaption><b>Via ferrata lanyard</b><span>Two arms and an energy absorber</span></figcaption></figure>
         </div>
-        <div class="prices" data-rise>
-          <div class="price"><b>Full kit</b><span>Helmet, harness and lanyard</span><p><em data-price="kit:1"></em></p><small>1 or 2 days · +<i data-extra="kit"></i> per extra day</small></div>
-          <div class="price"><b>Lanyard only</b><span>Bring your own helmet and harness</span><p><em data-price="lanyard:1"></em></p><small>1 or 2 days · +<i data-extra="lanyard"></i> per extra day</small></div>
-          <div class="price"><b>Helmet</b><span>Add one if you're missing it</span><p><em data-price="helmet:1"></em></p><small>1 or 2 days · +<i data-extra="helmet"></i> per extra day</small></div>
-          <div class="price"><b>Harness</b><span>Add one if you're missing it</span><p><em data-price="harness:1"></em></p><small>1 or 2 days · +<i data-extra="harness"></i> per extra day</small></div>
+        <div class="prices" id="prices" data-rise>
+          <a class="price" href="book.html"><b>Full kit</b><span>Helmet, harness and lanyard</span><p><em data-price="kit:1"></em><small>1 or 2 days</small></p><small class="price__x">+<i data-extra="kit"></i> per extra day</small><span class="price__go">Book <svg viewBox="0 0 8 13" aria-hidden="true"><path d="m1.5 1.5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+          <a class="price" href="book.html"><b>Lanyard only</b><span>Bring your own helmet and harness</span><p><em data-price="lanyard:1"></em><small>1 or 2 days</small></p><small class="price__x">+<i data-extra="lanyard"></i> per extra day</small><span class="price__go">Book <svg viewBox="0 0 8 13" aria-hidden="true"><path d="m1.5 1.5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+          <a class="price" href="book.html"><b>Helmet</b><span>Add one if you're missing it</span><p><em data-price="helmet:1"></em><small>1 or 2 days</small></p><small class="price__x">+<i data-extra="helmet"></i> per extra day</small><span class="price__go">Book <svg viewBox="0 0 8 13" aria-hidden="true"><path d="m1.5 1.5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+          <a class="price" href="book.html"><b>Harness</b><span>Add one if you're missing it</span><p><em data-price="harness:1"></em><small>1 or 2 days</small></p><small class="price__x">+<i data-extra="harness"></i> per extra day</small><span class="price__go">Book <svg viewBox="0 0 8 13" aria-hidden="true"><path d="m1.5 1.5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
         </div>
-        <div class="duo" data-rise>
+        <a class="duo" href="book.html" data-rise>
           <div class="duo__lead"><h3>Duo deal.</h3><p>Climbing with someone? Every pair saves $10, up to two pairs per booking.</p></div>
           <dl class="duo__deals">
             <div><dt>2 full kits</dt><dd>$80</dd></div>
             <div><dt>Kit + lanyard</dt><dd>$65</dd></div>
             <div><dt>2 lanyards</dt><dd>$50</dd></div>
           </dl>
+          <span class="duo__go">Book a pair <svg viewBox="0 0 8 13" aria-hidden="true"><path d="m1.5 1.5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+        <div class="kit__more" data-rise>
+          <div class="reqs" aria-labelledby="reqs-t">
+            <h3 id="reqs-t">Requirements to rent</h3>
+            <ul>
+              <li><b>90–265 lb</b><span>climber weight</span></li>
+              <li><b>62 in</b><span>reach from the ground</span></li>
+              <li><b>18+</b><span>to rent</span></li>
+              <li><b>14+</b><span>to climb, with a parent</span></li>
+            </ul>
+          </div>
+          <div class="kit__cta">
+            <a class="a-btn" href="book.html">Book gear</a>
+            <p>Rent up to 4 days. Choose Gear Protection (free cancellation until day one) or a card hold of up to $250. <a href="info.html#rental">Rental details</a></p>
+          </div>
         </div>
-        <p class="kit__foot">Prices are for 1 or 2 days. Rent up to 4 days online. Choose Gear Protection or a refundable card hold at checkout. <a href="rates.html">Rates and rules</a></p>
       </div>
     </section>
 
     <!-- ============ how it works ============ -->
     <section class="how" id="how-it-works" data-pitch data-tone="gray" aria-labelledby="how-title">
       <div class="wrap">
-        <h2 class="how__title" id="how-title" data-split>No counter. No shop hours.</h2>
-        <p class="how__sub" data-rise>Everything happens on your phone before you reach the lot.</p>
+        <h2 class="how__title" id="how-title" data-split>How to secure gear for your trip.</h2>
+        <p class="how__sub" data-rise>Book on your phone before you reach the lot. No counter, no shop hours.</p>
         <div class="how__grid">
           <ol class="how__steps">
             <li class="how__step is-on" data-shot="0"><h3>Pick your days</h3><p>Rent for 1 to 4 days. One or two days cost the same. You'll see how many kits are left before you book.</p><img class="how__inline" src="assets/screens/1-dates.jpg" alt="" loading="lazy" /></li>
@@ -199,13 +213,13 @@
     <!-- ============ need to know teaser ============ -->
     <section class="tips" data-pitch data-tone="light" aria-labelledby="tips-title">
       <div class="wrap">
-        <h2 class="tips__title" id="tips-title" data-split>Before you go.</h2>
+        <h2 class="tips__title" id="tips-title" data-split>Tips and tricks.</h2>
         <div class="tips__grid">
-          <div class="tip tip--lead" data-rise><h3>Bring gloves.</h3><p>The cable gets cold in the morning and hot by noon, and it's rough on bare hands. This is the one people regret skipping.</p></div>
-          <div class="tip" data-rise><h3>2 liters of water each.</h3><p>Most of the route is in full sun. Pack snacks, or a meal for a long day.</p></div>
-          <div class="tip" data-rise><h3>Beat the crowds.</h3><p>Be at the trailhead by sunrise. It gets busy, even on summer weekdays.</p></div>
+          <div class="tip" data-rise><span class="tip__icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M10 29v-6.5L6.6 16.8a2 2 0 0 1 3.3-2.2L12 17V6.5a2 2 0 0 1 4 0V15V4.5a2 2 0 0 1 4 0V15V6a2 2 0 0 1 4 0v9.5V9a2 2 0 0 1 4 0v11c0 4.5-2.5 9-8 9Z"/></svg></span><h3>Bring gloves.</h3><p>The cable is cold in the morning, hot by noon, and rough on bare hands. People regret skipping these most.</p></div>
+          <div class="tip" data-rise><span class="tip__icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5S7 13.4 7 19.6a9 9 0 0 0 18 0C25 13.4 16 3.5 16 3.5Z"/><path d="M11.5 20a4.5 4.5 0 0 0 4.5 4.5"/></svg></span><h3>2 liters of water each.</h3><p>Most of the route is in full sun. Pack snacks, or a meal for a long day.</p></div>
+          <div class="tip" data-rise><span class="tip__icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 23h26M7 27h18"/><path d="M9 23a7 7 0 0 1 14 0"/><path d="M16 6v4M6.1 10.1l2.8 2.8M25.9 10.1l-2.8 2.8M2.5 18H6M26 18h3.5"/></svg></span><h3>Beat the crowds.</h3><p>Be at the trailhead by sunrise. It gets busy, even on summer weekdays.</p></div>
         </div>
-        <a class="a-btn tips__btn" href="info.html">Everything you need to know</a>
+        <a class="tips__more" href="info.html" data-rise><span>Planning your trip?</span> Read the full guide <svg viewBox="0 0 8 13" aria-hidden="true"><path d="m1.5 1.5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
     </section>
 
@@ -246,7 +260,7 @@
   <footer class="h-foot">
     <div class="wrap h-foot__in">
       <nav aria-label="Footer">
-        <a href="book.html">Book gear</a><a href="rates.html">Rates</a><a href="info.html">Everything you need to know</a><a href="agreement.html">Rental agreement</a><a href="https://www.ashleygorgeviaferrata.com/waiver" target="_blank" rel="noopener">Uintah County waiver</a>
+        <a href="book.html">Book gear</a><a href="#prices">Prices</a><a href="info.html">Everything you need to know</a><a href="agreement.html">Rental agreement</a><a href="https://www.ashleygorgeviaferrata.com/waiver" target="_blank" rel="noopener">Uintah County waiver</a>
       </nav>
       <p>© <span data-year>2026</span> Randall Ventures LLC. Trailside Rentals is a Randall Ventures LLC brand. Operating under a BLM Special Recreation Permit (finalizing).</p>
     </div>
