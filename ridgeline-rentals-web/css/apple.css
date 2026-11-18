@@ -296,3 +296,4 @@
 @media (max-width: 380px) { .seg--4 button { font-size: 13px; } }
 /* keep the step slide-in from widening the page on phones */
 .a-main { overflow-x: clip; }
+.a-top__logo img { height: 30px; width: auto; display: block; }

@@ -441,3 +441,16 @@ html { scroll-behavior: smooth; }
   .a-doc td:first-child, .a-doc th:first-child { min-width: 0; overflow-wrap: break-word; }
   .h-inner main { overflow-x: clip; }
 }
+
+/* ---------- logo (Nov 17) ---------- */
+.h-brand { align-items: center; }
+.h-page .h-brand__logo { height: 50px; width: auto; display: block; }
+.h-page .h-brand__logo--white { display: none; }
+.h-page .h-nav.is-dark .h-brand__logo--ink { display: none; }
+.h-page .h-nav.is-dark .h-brand__logo--white { display: block; }
+.h-page .h-foot__logo { height: 64px; width: auto; margin-bottom: 16px; display: block; }
+.h-page .h-foot__logo--ink { display: none; }
+.h-page.h-inner .h-foot__logo--white { display: none; }
+.h-page.h-inner .h-foot__logo--ink { display: block; }
+@media (min-width: 761px) { :root { --nav-h: 60px; } }
+@media (max-width: 760px) { .h-page .h-brand__logo { height: 40px; } .h-page .h-foot__logo { height: 52px; } }
